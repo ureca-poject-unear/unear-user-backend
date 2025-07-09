@@ -1,3 +1,10 @@
 spring:
+  jpa:
+    open-in-view: false
   config:
-    import: application-local.yml, application-secret.yml, application-smtp.yml
+    import:
+      - optional:application-local.yml
+      - optional:application-secret.yml
+      - optional:application-docker.yml
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
