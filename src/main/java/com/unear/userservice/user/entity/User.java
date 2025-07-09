@@ -25,6 +25,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String tel;
     private String birth;
     private String gender;
     private String membershipCode;
