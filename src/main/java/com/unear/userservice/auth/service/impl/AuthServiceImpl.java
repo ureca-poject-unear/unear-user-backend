@@ -1,9 +1,10 @@
-package com.unear.userservice.auth.service;
+package com.unear.userservice.auth.service.impl;
 
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
 import com.unear.userservice.auth.dto.response.RefreshResponseDto;
+import com.unear.userservice.auth.service.AuthService;
 import com.unear.userservice.common.jwt.JwtTokenProvider;
 import com.unear.userservice.common.jwt.RefreshTokenService;
 import com.unear.userservice.common.response.ApiResponse;
