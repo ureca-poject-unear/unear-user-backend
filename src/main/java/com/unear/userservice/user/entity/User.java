@@ -30,6 +30,9 @@ public class User {
     private LocalDateTime birthdate;
     private String gender;
     private String membershipCode;
+    // 이거 로그인한 경로 (네이버인지 구글인지 카카오인지) 구분으로 컬럼 추가해야될거같아요 지금 임시방편으로 @Transient 달아놨습니다
+    @Transient
+    private String provider;
 
     @CreatedDate
     private LocalDateTime createdAt;
