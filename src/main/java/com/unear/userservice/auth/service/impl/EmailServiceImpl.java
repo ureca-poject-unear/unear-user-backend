@@ -44,6 +44,22 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public boolean verifyCode(String email, String code) {
         String savedCode = redisTemplate.opsForValue().get("emailCode:" + email);
-        return code.equals(savedCode);
+        boolean match = code.equals(savedCode);
+        if (match) {
+            redisTemplate.opsForValue().set("emailVerified:" + email, "true", Duration.ofMinutes(10));
+            redisTemplate.delete("emailCode:" + email);
+        }
+        return match;
     }
+
+    @Override
+    public boolean isVerified(String email) {
+        return "true".equals(redisTemplate.opsForValue().get("emailVerified:" + email));
+    }
+
+    @Override
+    public void removeVerified(String email) {
+        redisTemplate.delete("emailVerified:" + email);
+    }
+
 }

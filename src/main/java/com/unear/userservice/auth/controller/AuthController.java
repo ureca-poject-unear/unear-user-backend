@@ -1,6 +1,7 @@
 package com.unear.userservice.auth.controller;
 
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
+import com.unear.userservice.auth.dto.request.ResetPasswordRequestDto;
 import com.unear.userservice.auth.dto.request.SignupRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
@@ -66,4 +67,19 @@ public class AuthController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증 실패");
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequestDto request) {
+        if (!emailService.isVerified(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("이메일 인증이 필요합니다.");
+        }
+
+        authService.resetPassword(request);
+        emailService.removeVerified(request.getEmail());
+
+        return ResponseEntity.ok("비밀번호가 성공적으로 재설정되었습니다.");
+    }
+
+
+
 }
