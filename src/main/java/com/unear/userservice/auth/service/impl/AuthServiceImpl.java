@@ -13,6 +13,7 @@ import com.unear.userservice.common.jwt.RefreshTokenService;
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.common.security.CustomUserDetailsService;
+import com.unear.userservice.exception.exception.DuplicatedEmailException;
 import com.unear.userservice.exception.exception.InvalidPasswordException;
 import com.unear.userservice.exception.exception.InvalidTokenException;
 import com.unear.userservice.exception.exception.UserNotFoundException;
@@ -105,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
     public ApiResponse<SignupResponseDto> signup(SignupRequestDto dto) {
 
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+            throw new DuplicatedEmailException("이미 가입된 이메일입니다.");
         }
 
         User user = User.builder()
