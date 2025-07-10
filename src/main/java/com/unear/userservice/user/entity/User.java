@@ -36,4 +36,5 @@ public class User {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    private boolean isProfileComplete; // oauth 로그인시 추가 정보 입력 완료 여부, true -> oauth
 }
