@@ -1,5 +1,6 @@
-package com.unear.userservice.auth.service;
+package com.unear.userservice.auth.service.impl;
 
+import com.unear.userservice.auth.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
