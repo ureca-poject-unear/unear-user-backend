@@ -1,6 +1,7 @@
 package com.unear.userservice.auth.service;
 
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
+import com.unear.userservice.auth.dto.request.ResetPasswordRequestDto;
 import com.unear.userservice.auth.dto.request.SignupRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
@@ -17,4 +18,7 @@ public interface AuthService {
     ApiResponse<LogoutResponseDto> logout(String accessTokenHeader, HttpServletResponse response);
 
     ApiResponse<SignupResponseDto> signup(SignupRequestDto dto);
+
+    void resetPassword(ResetPasswordRequestDto request);
+
 }

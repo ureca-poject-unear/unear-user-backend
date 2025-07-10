@@ -1,6 +1,7 @@
 package com.unear.userservice.auth.service.impl;
 
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
+import com.unear.userservice.auth.dto.request.ResetPasswordRequestDto;
 import com.unear.userservice.auth.dto.request.SignupRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
@@ -127,6 +128,16 @@ public class AuthServiceImpl implements AuthService {
         );
 
         return ApiResponse.success("회원가입 성공", responseDto);
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequestDto request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+
+        String newEncodedPassword = passwordEncoder.encode(request.getNewPassword());
+        user.setPassword(newEncodedPassword);
+        userRepository.save(user);
     }
 
 }
