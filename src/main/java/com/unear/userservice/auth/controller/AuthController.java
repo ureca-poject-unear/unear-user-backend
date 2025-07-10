@@ -56,6 +56,7 @@ public class AuthController {
     public ResponseEntity<String> sendCode(@RequestParam String email) {
         String code = emailService.generateCode();
         emailService.sendEmail(email, code);
+        emailService.saveCode(email, code);
         return ResponseEntity.ok("이메일로 인증코드가 전송되었습니다.");
     }
 
