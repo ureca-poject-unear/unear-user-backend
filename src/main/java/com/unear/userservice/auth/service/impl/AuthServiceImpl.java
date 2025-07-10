@@ -1,9 +1,11 @@
 package com.unear.userservice.auth.service.impl;
 
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
+import com.unear.userservice.auth.dto.request.SignupRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
 import com.unear.userservice.auth.dto.response.RefreshResponseDto;
+import com.unear.userservice.auth.dto.response.SignupResponseDto;
 import com.unear.userservice.auth.service.AuthService;
 import com.unear.userservice.common.jwt.JwtTokenProvider;
 import com.unear.userservice.common.jwt.RefreshTokenService;
@@ -98,4 +100,33 @@ public class AuthServiceImpl implements AuthService {
         return ApiResponse.success("로그아웃이 완료되었습니다", dto);
 
     }
+
+    public ApiResponse<SignupResponseDto> signup(SignupRequestDto dto) {
+
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+        }
+
+        User user = User.builder()
+                .email(dto.getEmail())
+                .username(dto.getUsername())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .tel(dto.getTel())
+                .birthdate(dto.getBirthdate())
+                .gender(dto.getGender())
+                .membershipCode("001")
+                .isProfileComplete(false)
+                .build();
+
+        userRepository.save(user);
+
+        SignupResponseDto responseDto = new SignupResponseDto(
+                user.getUserId(),
+                user.getEmail(),
+                user.getUsername()
+        );
+
+        return ApiResponse.success("회원가입 성공", responseDto);
+    }
+
 }
