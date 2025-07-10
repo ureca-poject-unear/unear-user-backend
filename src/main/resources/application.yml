@@ -8,3 +8,20 @@ spring:
       - optional:application-docker.yml
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${oauth2.google.client-id}
+            client-secret: ${oauth2.google.client-secret}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
