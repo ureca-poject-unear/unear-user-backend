@@ -22,11 +22,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+    @Column(name= "name")
     private String username;
     private String password;
     private String email;
     private String tel;
-    private String birth;
+    private LocalDateTime birthdate;
     private String gender;
     private String membershipCode;
 
