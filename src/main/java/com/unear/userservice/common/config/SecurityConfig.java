@@ -38,13 +38,19 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final OAuth2FailureHandler oAuth2FailureHandler;
 
+    private static final String[] WHITE_LIST = {
+            "/auth/**",
+            "/oauth2/**",
+            "/api/benefits"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers(WHITE_LIST).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth

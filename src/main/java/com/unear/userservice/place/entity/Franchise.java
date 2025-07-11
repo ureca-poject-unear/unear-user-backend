@@ -12,7 +12,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Franchise {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long franchiseId;
 
     private String franchiseName;
