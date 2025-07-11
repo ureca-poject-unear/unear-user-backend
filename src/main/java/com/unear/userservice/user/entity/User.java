@@ -1,5 +1,9 @@
 package com.unear.userservice.user.entity;
 
+import com.unear.userservice.benefit.entity.RouletteResult;
+import com.unear.userservice.coupon.entity.UserCoupon;
+import com.unear.userservice.place.entity.FavoritePlace;
+import com.unear.userservice.stamp.entity.Stamp;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +14,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -40,4 +46,17 @@ public class User {
     private LocalDateTime updatedAt;
 
     private boolean isProfileComplete; // oauth 로그인시 추가 정보 입력 완료 여부, true -> oauth
+
+    @OneToMany(mappedBy = "user")
+    private List<UserCoupon> userCoupons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<FavoritePlace> favoritePlaces = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Stamp> stamps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<RouletteResult> rouletteResults = new ArrayList<>();
+
 }
