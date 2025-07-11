@@ -6,4 +6,5 @@ import org.springframework.data.domain.Page;
 
 public interface DiscountPolicyService {
     Page<DiscountPolicyDetailResponseDto> getAllBenefits( DiscountPolicyDetailRequestDto request);
+    DiscountPolicyDetailResponseDto getBenefitDetail(Long discountPolicyDetailId);
 }

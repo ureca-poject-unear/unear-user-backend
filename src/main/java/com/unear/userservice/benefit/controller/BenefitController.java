@@ -25,5 +25,13 @@ public class BenefitController {
         return ResponseEntity.ok(ApiResponse.success("혜택 목록 조회 성공", response));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<DiscountPolicyDetailResponseDto>> getBenefitDetail(
+            @PathVariable("id") Long discountPolicyDetailId
+    ) {
+        DiscountPolicyDetailResponseDto response = discountPolicyService.getBenefitDetail(discountPolicyDetailId);
+        return ResponseEntity.ok(ApiResponse.success("혜택 상세 조회 성공", response));
+    }
+
 }
 
