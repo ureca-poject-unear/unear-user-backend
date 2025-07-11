@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,8 @@ public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
 
+        String barcode = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> userRepository.save(
                         User.builder()
@@ -40,6 +43,7 @@ public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                                 .gender(null)
                                 .membershipCode("001")
                                 .isProfileComplete(true)
+                                .barcodeNumber(barcode)
                                 .build()
                 ));
 

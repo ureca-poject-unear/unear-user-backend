@@ -59,4 +59,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<RouletteResult> rouletteResults = new ArrayList<>();
 
+    @Column(name = "barcode_number", unique = true, nullable = false)
+    private String barcodeNumber;
+
 }
