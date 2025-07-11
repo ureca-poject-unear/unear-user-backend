@@ -6,8 +6,10 @@ import com.unear.userservice.benefit.entity.DiscountPolicyDetail;
 import com.unear.userservice.benefit.repository.DiscountPolicyDetailRepository;
 import com.unear.userservice.benefit.repository.DiscountPolicyDetailSpec;
 import com.unear.userservice.benefit.service.DiscountPolicyService;
+import com.unear.userservice.exception.exception.BenefitNotFoundException;
 import com.unear.userservice.place.entity.Franchise;
 import com.unear.userservice.place.entity.Place;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,24 +41,16 @@ public class DiscountPolicyServiceImpl implements DiscountPolicyService {
                 .map(detail -> {
                     Place place = detail.getPlace();
                     Franchise franchise = place.getFranchise();
-
-                    return DiscountPolicyDetailResponseDto.builder()
-                            .placeId(place.getPlacesId())
-                            .placeName(place.getPlaceName())
-                            .address(place.getAddress())
-                            .businessHours(place.getBusinessHours())
-                            .franchiseName(franchise != null ? franchise.getFranchiseName() : null)
-                            .franchiseImageUrl(franchise != null ? franchise.getImageUrl() : null)
-                            .unitBaseAmount(detail.getUnitBaseAmount())
-                            .discountValue(detail.getDiscountValue())
-                            .percent(detail.getPercent())
-                            .minPurchaseAmount(detail.getMinPurchaseAmount())
-                            .maxDiscountAmount(detail.getMaxDiscountAmount())
-                            .discountCode(detail.getDiscountCode())
-                            .membershipCode(detail.getMembershipCode())
-                            .markerCode(detail.getMarkerCode())
-                            .build();
+                    return DiscountPolicyDetailResponseDto.from(detail);
                 });
     }
+
+    @Override
+    public DiscountPolicyDetailResponseDto getBenefitDetail(Long discountPolicyDetailId) {
+        DiscountPolicyDetail detail = discountPolicyDetailRepository.findWithPlaceAndFranchiseById(discountPolicyDetailId)
+                .orElseThrow(() -> new BenefitNotFoundException("해당 혜택 정보를 찾을 수 없습니다."));
+        return DiscountPolicyDetailResponseDto.from(detail);
+    }
+
 
 }
