@@ -33,9 +33,20 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("유저 정보 없음"));
 
-        // 이미 가입 완료된 유저 → JWT 발급 후 메인 페이지로 이동
         CustomUser customUser = CustomUser.from(user);
-        String token = jwtTokenProvider.generateAccessToken(customUser);
+        String accessToken = jwtTokenProvider.generateAccessToken(customUser);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(customUser);
 
+        // JSON 응답
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        String json = String.format("""
+        {
+            "accessToken": "%s",
+            "refreshToken": "%s"
+        }
+        """, accessToken, refreshToken);
+
+        response.getWriter().write(json);
     }
 }
