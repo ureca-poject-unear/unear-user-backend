@@ -26,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -108,6 +110,7 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new DuplicatedEmailException("이미 가입된 이메일입니다.");
         }
+        String barcode = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
 
         User user = User.builder()
                 .email(dto.getEmail())
@@ -118,6 +121,7 @@ public class AuthServiceImpl implements AuthService {
                 .gender(dto.getGender())
                 .membershipCode("001")
                 .isProfileComplete(false)
+                .barcodeNumber(barcode)
                 .build();
 
         userRepository.save(user);
@@ -125,7 +129,8 @@ public class AuthServiceImpl implements AuthService {
         SignupResponseDto responseDto = new SignupResponseDto(
                 user.getUserId(),
                 user.getEmail(),
-                user.getUsername()
+                user.getUsername(),
+                user.getBarcodeNumber()
         );
 
         return ApiResponse.success("회원가입 성공", responseDto);
