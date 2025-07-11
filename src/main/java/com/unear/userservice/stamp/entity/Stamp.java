@@ -1,5 +1,7 @@
 package com.unear.userservice.stamp.entity;
 
+import com.unear.userservice.place.entity.EventPlace;
+import com.unear.userservice.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
