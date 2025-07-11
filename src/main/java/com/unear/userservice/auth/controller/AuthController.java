@@ -10,6 +10,7 @@ import com.unear.userservice.auth.dto.response.SignupResponseDto;
 import com.unear.userservice.auth.service.AuthService;
 import com.unear.userservice.auth.service.EmailService;
 import com.unear.userservice.common.response.ApiResponse;
+import com.unear.userservice.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -70,17 +71,16 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequestDto request) {
-        if (!emailService.isVerified(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("이메일 인증이 필요합니다.");
-        }
+    public ResponseEntity<ApiResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordRequestDto request) {
 
+        if (!emailService.isVerified(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.fail(ErrorCode.EMAIL_NOT_VERIFIED));
+        }
         authService.resetPassword(request);
         emailService.removeVerified(request.getEmail());
 
-        return ResponseEntity.ok("비밀번호가 성공적으로 재설정되었습니다.");
+        return ResponseEntity.ok(ApiResponse.success("비밀번호가 성공적으로 재설정되었습니다."));
     }
-
 
 
 }
