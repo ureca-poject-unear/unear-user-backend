@@ -44,5 +44,5 @@ jobs:
             echo "REDIS_PORT=6379" >> .env  # Redis도 쓰면 추가
           
             docker pull 1seyoung/unear-app:latest
-            docker compose down
-            docker compose up -d
+            docker-compose down
+            docker-compose up -d
