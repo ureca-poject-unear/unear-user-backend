@@ -37,12 +37,24 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd ~/unear-app
-          
-            echo "DB_URL=${{ secrets.DB_URL }}" > .env
+
+            echo "SPRING_PROFILES_ACTIVE=prod" > .env
+            echo "DB_URL=${{ secrets.DB_URL }}" >> .env
             echo "DB_USER=${{ secrets.DB_USER }}" >> .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-            echo "REDIS_PORT=6379" >> .env  # Redis도 쓰면 추가
-          
+
+            echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+            echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+            echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
+            echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
+
+            echo "oauth2.google.client-id=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+            echo "oauth2.google.client-secret=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "oauth2.kakao.client-id=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+            echo "oauth2.kakao.client-secret=${{ secrets.KAKAO_CLIENT_SECRET }}" >> .env
+
+            echo "REDIS_PORT=6379" >> .env
+
             docker pull 1seyoung/unear-app:latest
             docker-compose down
             docker-compose up -d
