@@ -13,7 +13,8 @@ public class DiscountPolicyDetailResponseDto {
     private Long placeId;
     private String placeName;
     private String address;
-    private String businessHours;
+    private Integer startTime;
+    private Integer endTime;
     private String franchiseName;
     private String franchiseImageUrl;
 
@@ -35,7 +36,8 @@ public class DiscountPolicyDetailResponseDto {
                 .placeId(place.getPlacesId())
                 .placeName(place.getPlaceName())
                 .address(place.getAddress())
-                .businessHours(place.getBusinessHours())
+                .startTime(place.getStartTime())
+                .endTime(place.getEndTime())
                 .franchiseName(franchise != null ? franchise.getFranchiseName() : null)
                 .franchiseImageUrl(franchise != null ? franchise.getImageUrl() : null)
                 .unitBaseAmount(detail.getUnitBaseAmount())
@@ -48,6 +50,7 @@ public class DiscountPolicyDetailResponseDto {
                 .markerCode(detail.getMarkerCode())
                 .build();
     }
+
 
 }
 
