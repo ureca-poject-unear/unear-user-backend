@@ -13,7 +13,9 @@ import java.util.List;
 @Table(name = "places")
 @Getter @Setter
 public class Place {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long placesId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,7 +25,6 @@ public class Place {
     private String placeName;
     private String placeDesc;
     private String address;
-    private String businessHours;
 
     @Column(precision = 10, scale = 7)
     private BigDecimal latitude;
@@ -31,9 +32,12 @@ public class Place {
     @Column(precision = 10, scale = 7)
     private BigDecimal longitude;
 
+    private String benefitCategory;
+    private Integer startTime;
+    private Integer endTime;
+    private String categoryCode;
     private String markerCode;
     private String eventCode;
-    private String categoryCode;
 
     @OneToMany(mappedBy = "place")
     private List<EventPlace> eventPlaces = new ArrayList<>();

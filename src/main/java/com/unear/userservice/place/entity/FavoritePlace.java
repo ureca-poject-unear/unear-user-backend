@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 public class FavoritePlace {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long favoritePlacesId;
 
     @ManyToOne(fetch = FetchType.LAZY)
