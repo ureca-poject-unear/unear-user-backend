@@ -41,7 +41,8 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST = {
             "/auth/**",
             "/oauth2/**",
-            "/api/benefits/**"
+            "/api/benefits/**",
+            "/api/places/**"
     };
 
     @Bean

@@ -9,7 +9,6 @@ import com.unear.userservice.benefit.service.DiscountPolicyService;
 import com.unear.userservice.exception.exception.BenefitNotFoundException;
 import com.unear.userservice.place.entity.Franchise;
 import com.unear.userservice.place.entity.Place;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

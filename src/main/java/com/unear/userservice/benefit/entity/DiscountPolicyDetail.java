@@ -4,7 +4,6 @@ import com.unear.userservice.place.entity.Place;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "discount_policy_detail")
