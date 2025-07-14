@@ -6,7 +6,7 @@ import com.unear.userservice.exception.exception.UserNotFoundException;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
