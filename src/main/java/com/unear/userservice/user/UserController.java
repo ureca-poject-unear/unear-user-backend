@@ -15,14 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+    private static final String USER_NOT_FOUND_MESSAGE = "사용자를 찾을 수 없습니다.";
+    private static final String BARCODE_SUCCESS_MESSAGE = "바코드 조회 성공";
+
     private final UserRepository userRepository;
 
     @GetMapping("/me/barcode")
     public ApiResponse<String> getMyBarcode(@AuthenticationPrincipal CustomUser user) {
 
         User dbuser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
-        return ApiResponse.success("바코드 조회 성공", dbuser.getBarcodeNumber());
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
+        return ApiResponse.success(BARCODE_SUCCESS_MESSAGE, dbuser.getBarcodeNumber());
     }
 
 
