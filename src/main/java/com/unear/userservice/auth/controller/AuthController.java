@@ -11,6 +11,7 @@ import com.unear.userservice.auth.service.AuthService;
 import com.unear.userservice.auth.service.EmailService;
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.exception.ErrorCode;
+import com.unear.userservice.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class AuthController {
     private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponseDto>> login(@Valid @RequestBody LoginRequestDto loginRequest, HttpServletResponse response) {
@@ -55,6 +57,9 @@ public class AuthController {
 
     @PostMapping("/send-code")
     public ResponseEntity<String> sendCode(@RequestParam String email) {
+        if (userRepository.existsByEmail(email)) {
+            return ResponseEntity.badRequest().body("이미 가입된 이메일입니다.");
+        }
         String code = emailService.generateCode();
         emailService.sendEmail(email, code);
         emailService.saveCode(email, code);
