@@ -4,14 +4,11 @@ import com.unear.userservice.exception.exception.PlaceNotFoundException;
 import com.unear.userservice.place.dto.request.PlaceRequestDto;
 import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
-import com.unear.userservice.place.entity.FavoritePlace;
 import com.unear.userservice.place.entity.Place;
 import com.unear.userservice.place.repository.FavoritePlaceRepository;
 import com.unear.userservice.place.repository.PlaceRepository;
 import com.unear.userservice.place.service.PlaceService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
