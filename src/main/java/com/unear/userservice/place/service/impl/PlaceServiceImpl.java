@@ -1,6 +1,7 @@
 package com.unear.userservice.place.service.impl;
 
 import com.unear.userservice.exception.exception.PlaceNotFoundException;
+import com.unear.userservice.exception.exception.UserNotFoundException;
 import com.unear.userservice.place.dto.request.PlaceRequestDto;
 import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
@@ -77,8 +78,10 @@ public class PlaceServiceImpl implements PlaceService {
             return newStatus;
         } else {
             FavoritePlace favorite = new FavoritePlace();
-            favorite.setUser(userRepository.getReferenceById(userId));
-            favorite.setPlace(placeRepository.getReferenceById(placeId));
+            favorite.setUser(userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다: " + userId)));
+            favorite.setPlace(placeRepository.findById(placeId)
+                .orElseThrow(() -> new PlaceNotFoundException("장소를 찾을 수 없습니다: " + placeId)));
             favorite.setIsFavorited(true);
             favorite.setCreatedAt(LocalDateTime.now());
             favoritePlaceRepository.save(favorite);
