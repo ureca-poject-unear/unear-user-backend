@@ -46,7 +46,7 @@ public class PlaceController {
             @PathVariable Long placeId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        Long userId = user.getUser().getUserId();
+        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
         boolean isNowFavorite = placeService.toggleFavorite(userId, placeId);
         return ResponseEntity.ok(ApiResponse.success("즐겨찾기 상태 변경 성공", isNowFavorite));
     }
