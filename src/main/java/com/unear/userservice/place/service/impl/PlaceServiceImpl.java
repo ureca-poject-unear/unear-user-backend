@@ -25,13 +25,16 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
     private final FavoritePlaceRepository favoritePlaceRepository;
 
-    @Override
     public List<PlaceRenderResponseDto> getFilteredPlaces(PlaceRequestDto requestDto, Long userId) {
         List<Place> places = placeRepository.findFilteredPlaces(
                 userId,
                 requestDto.getCategoryCode(),
                 requestDto.getBenefitCategory(),
-                requestDto.getIsFavorite()
+                requestDto.getIsFavorite(),
+                requestDto.getMinLatitude(),
+                requestDto.getMaxLatitude(),
+                requestDto.getMinLongitude(),
+                requestDto.getMaxLongitude()
         );
 
         Set<Long> favorites = (userId != null)
@@ -42,6 +45,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .map(place -> PlaceRenderResponseDto.from(place, favorites.contains(place.getPlacesId())))
                 .toList();
     }
+
 
 
     @Override
