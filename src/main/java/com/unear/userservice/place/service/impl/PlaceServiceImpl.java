@@ -4,15 +4,20 @@ import com.unear.userservice.exception.exception.PlaceNotFoundException;
 import com.unear.userservice.place.dto.request.PlaceRequestDto;
 import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
+import com.unear.userservice.place.entity.FavoritePlace;
 import com.unear.userservice.place.entity.Place;
 import com.unear.userservice.place.repository.FavoritePlaceRepository;
 import com.unear.userservice.place.repository.PlaceRepository;
 import com.unear.userservice.place.service.PlaceService;
+import com.unear.userservice.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -21,7 +26,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepository placeRepository;
     private final FavoritePlaceRepository favoritePlaceRepository;
+    private final UserRepository userRepository;
 
+    @Override
     public List<PlaceRenderResponseDto> getFilteredPlaces(PlaceRequestDto requestDto, Long userId) {
         List<Place> places = placeRepository.findFilteredPlaces(
                 userId,
@@ -44,7 +51,6 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
 
-
     @Override
     public PlaceResponseDto getPlaceDetailWithFavorite(Long placeId, Long userId) {
         Place place = placeRepository.findById(placeId)
@@ -57,5 +63,27 @@ public class PlaceServiceImpl implements PlaceService {
         return PlaceResponseDto.from(place, isFavorite);
     }
 
+
+    @Override
+    @Transactional
+    public boolean toggleFavorite(Long userId, Long placeId) {
+        Optional<FavoritePlace> optional = favoritePlaceRepository.findByUser_UserIdAndPlace_PlacesId(userId, placeId);
+
+        if (optional.isPresent()) {
+            FavoritePlace favorite = optional.get();
+            boolean newStatus = !Boolean.TRUE.equals(favorite.getIsFavorited());
+            favorite.setIsFavorited(newStatus);
+            favorite.setDeletedAt(newStatus ? null : LocalDateTime.now());
+            return newStatus;
+        } else {
+            FavoritePlace favorite = new FavoritePlace();
+            favorite.setUser(userRepository.getReferenceById(userId));
+            favorite.setPlace(placeRepository.getReferenceById(placeId));
+            favorite.setIsFavorited(true);
+            favorite.setCreatedAt(LocalDateTime.now());
+            favoritePlaceRepository.save(favorite);
+            return true;
+        }
+    }
 
 }

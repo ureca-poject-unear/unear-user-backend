@@ -9,7 +9,7 @@ import java.util.List;
 public interface PlaceService {
 
     List<PlaceRenderResponseDto> getFilteredPlaces(PlaceRequestDto requestDto, Long userId);
-
     PlaceResponseDto getPlaceDetailWithFavorite(Long placeId, Long userId);
+    boolean toggleFavorite(Long userId, Long placeId);
 
 }
