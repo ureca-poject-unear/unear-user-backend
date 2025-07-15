@@ -26,6 +26,12 @@ public class DiscountPolicyDetailResponseDto {
     private String membershipCode;
     private String markerCode;
 
+    /**
+     * DiscountPolicyDetail 엔티티에서 DiscountPolicyDetailResponseDto 객체를 생성합니다.
+     *
+     * @param detail 변환할 DiscountPolicyDetail 엔티티
+     * @return DiscountPolicyDetailResponseDto로 변환된 결과 객체
+     */
     public static DiscountPolicyDetailResponseDto from(DiscountPolicyDetail detail) {
         Place place = detail.getPlace();
 

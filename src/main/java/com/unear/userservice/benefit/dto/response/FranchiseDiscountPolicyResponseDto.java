@@ -19,6 +19,12 @@ public class FranchiseDiscountPolicyResponseDto {
     private boolean hasBasicPolicy;
     private String categoryCode;
 
+    /**
+     * 주어진 Franchise 엔티티로부터 할인 정책 정보를 추출하여 FranchiseDiscountPolicyResponseDto 인스턴스를 생성합니다.
+     *
+     * @param franchise 할인 정책 정보를 포함하는 Franchise 엔티티
+     * @return 추출된 정보로 구성된 FranchiseDiscountPolicyResponseDto 객체
+     */
     public static FranchiseDiscountPolicyResponseDto from(Franchise franchise) {
         return new FranchiseDiscountPolicyResponseDto(
                 franchise.getFranchiseName(),

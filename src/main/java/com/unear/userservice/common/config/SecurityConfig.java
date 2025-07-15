@@ -43,6 +43,15 @@ public class SecurityConfig {
             "/oauth2/**"
     };
 
+    /**
+     * Spring Security의 필터 체인을 구성하여 인증 및 인가 정책, OAuth2 로그인, JWT 인증 필터를 설정합니다.
+     *
+     * 인증이 필요 없는 URL 패턴(화이트리스트)은 모두 허용하며, 그 외 모든 요청은 인증이 필요합니다.
+     * OAuth2 로그인 시 커스텀 사용자 서비스와 성공/실패 핸들러를 사용하고, JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가합니다.
+     *
+     * @return 구성된 SecurityFilterChain 인스턴스
+     * @throws Exception 보안 설정 중 오류가 발생할 경우
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http

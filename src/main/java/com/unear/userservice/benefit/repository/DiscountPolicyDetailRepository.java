@@ -10,6 +10,12 @@ import java.util.Optional;
 
 public interface DiscountPolicyDetailRepository extends JpaRepository<DiscountPolicyDetail, Long>, JpaSpecificationExecutor<DiscountPolicyDetail> {
 
+    /**
+     * 지정된 ID에 해당하는 DiscountPolicyDetail 엔티티를 조회하며, 연관된 Place와 Place의 Franchise를 즉시 로딩합니다.
+     *
+     * @param id 조회할 DiscountPolicyDetail의 ID
+     * @return Place와 Franchise가 즉시 로딩된 DiscountPolicyDetail의 Optional 객체. 해당 ID가 없으면 빈 Optional 반환
+     */
     @Query("""
         SELECT d 
         FROM DiscountPolicyDetail d
