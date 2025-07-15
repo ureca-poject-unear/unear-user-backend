@@ -15,8 +15,6 @@ public class DiscountPolicyDetailResponseDto {
     private String address;
     private Integer startTime;
     private Integer endTime;
-    private String franchiseName;
-    private String franchiseImageUrl;
 
     private Integer unitBaseAmount;
     private Integer discountValue;
@@ -30,7 +28,6 @@ public class DiscountPolicyDetailResponseDto {
 
     public static DiscountPolicyDetailResponseDto from(DiscountPolicyDetail detail) {
         Place place = detail.getPlace();
-        Franchise franchise = place.getFranchise();
 
         return DiscountPolicyDetailResponseDto.builder()
                 .placeId(place.getPlacesId())
@@ -38,8 +35,6 @@ public class DiscountPolicyDetailResponseDto {
                 .address(place.getAddress())
                 .startTime(place.getStartTime())
                 .endTime(place.getEndTime())
-                .franchiseName(franchise != null ? franchise.getFranchiseName() : null)
-                .franchiseImageUrl(franchise != null ? franchise.getImageUrl() : null)
                 .unitBaseAmount(detail.getUnitBaseAmount())
                 .discountValue(detail.getDiscountValue())
                 .percent(detail.getPercent())
