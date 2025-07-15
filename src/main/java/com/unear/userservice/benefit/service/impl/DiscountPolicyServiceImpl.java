@@ -1,6 +1,5 @@
 package com.unear.userservice.benefit.service.impl;
 
-import com.unear.userservice.benefit.dto.request.DiscountPolicyDetailRequestDto;
 import com.unear.userservice.benefit.dto.request.FranchiseDiscountPolicyRequestDto;
 import com.unear.userservice.benefit.dto.response.DiscountPolicyDetailResponseDto;
 import com.unear.userservice.benefit.dto.response.FranchiseDiscountPolicyDetailResponseDto;
@@ -11,13 +10,11 @@ import com.unear.userservice.benefit.repository.FranchiseRepository;
 import com.unear.userservice.benefit.service.DiscountPolicyService;
 import com.unear.userservice.exception.exception.BenefitNotFoundException;
 import com.unear.userservice.place.entity.Franchise;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 

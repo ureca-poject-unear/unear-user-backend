@@ -5,6 +5,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
 import java.util.Set;
 
 public interface FavoritePlaceRepository extends JpaRepository<FavoritePlace, Long> {
@@ -14,5 +15,8 @@ public interface FavoritePlaceRepository extends JpaRepository<FavoritePlace, Lo
     Set<Long> findPlaceIdsByUserId(@Param("userId") Long userId);
 
     boolean existsByUser_UserIdAndPlace_PlacesIdAndIsFavoritedTrue(Long userId, Long placeId);
+
+    Optional<FavoritePlace> findByUser_UserIdAndPlace_PlacesId(Long userId, Long placeId);
+
 
 }
