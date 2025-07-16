@@ -6,16 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "discount_policy_detail")
+@Table(name = "general_discount_policy")
 @Getter
 @NoArgsConstructor
-public class DiscountPolicyDetail {
+public class GeneralDiscountPolicy {
 
     @Id
-    private Long discountPolicyDetailId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long generalDiscountPolicyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "places_id")
+    @JoinColumn(name = "place_id")
     private Place place;
 
     private Integer unitBaseAmount;

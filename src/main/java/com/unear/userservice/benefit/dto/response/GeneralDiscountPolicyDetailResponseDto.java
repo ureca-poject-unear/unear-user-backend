@@ -1,14 +1,13 @@
 package com.unear.userservice.benefit.dto.response;
 
-import com.unear.userservice.benefit.entity.DiscountPolicyDetail;
-import com.unear.userservice.place.entity.Franchise;
+import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
 import com.unear.userservice.place.entity.Place;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class DiscountPolicyDetailResponseDto {
+public class GeneralDiscountPolicyDetailResponseDto {
 
     private Long placeId;
     private String placeName;
@@ -26,10 +25,10 @@ public class DiscountPolicyDetailResponseDto {
     private String membershipCode;
     private String markerCode;
 
-    public static DiscountPolicyDetailResponseDto from(DiscountPolicyDetail detail) {
+    public static GeneralDiscountPolicyDetailResponseDto from(GeneralDiscountPolicy detail) {
         Place place = detail.getPlace();
 
-        return DiscountPolicyDetailResponseDto.builder()
+        return GeneralDiscountPolicyDetailResponseDto.builder()
                 .placeId(place.getPlacesId())
                 .placeName(place.getPlaceName())
                 .address(place.getAddress())
@@ -45,7 +44,5 @@ public class DiscountPolicyDetailResponseDto {
                 .markerCode(detail.getMarkerCode())
                 .build();
     }
-
-
 }
 
