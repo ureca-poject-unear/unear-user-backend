@@ -7,8 +7,8 @@ body:
     id: parentKey
     attributes:
       label: '🎟️ 상위 작업 (Ticket Number)'
-      description: '상위 작업의 Ticket Number를 기입해주세요'
-      placeholder: 'PRJ-00'
+      placeholder: 'WL7-123'
+      description: '상위 작업의 Ticket Number를 WL7-XXX 형식으로 기입해주세요'
     validations:
       required: true
 
