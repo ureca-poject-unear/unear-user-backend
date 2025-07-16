@@ -1,6 +1,6 @@
 package com.unear.userservice.place.entity;
 
-import com.unear.userservice.benefit.entity.DiscountPolicyDetail;
+import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,6 +43,6 @@ public class Place {
     private List<EventPlace> eventPlaces = new ArrayList<>();
 
     @OneToMany(mappedBy = "place")
-    private List<DiscountPolicyDetail> discountPolicies = new ArrayList<>();
+    private List<GeneralDiscountPolicy> discountPolicies = new ArrayList<>();
 }
 
