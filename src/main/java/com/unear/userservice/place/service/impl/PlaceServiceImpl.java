@@ -36,10 +36,10 @@ public class PlaceServiceImpl implements PlaceService {
                 requestDto.getCategoryCode(),
                 requestDto.getBenefitCategory(),
                 requestDto.getIsFavorite(),
-                requestDto.getMinLatitude(),
-                requestDto.getMaxLatitude(),
-                requestDto.getMinLongitude(),
-                requestDto.getMaxLongitude()
+                requestDto.getSouthWestLatitude(),
+                requestDto.getNorthEastLatitude(),
+                requestDto.getSouthWestLongitude(),
+                requestDto.getNorthEastLongitude()
         );
 
         Set<Long> favorites = (userId != null)
