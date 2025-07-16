@@ -41,7 +41,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
             @Param("northEastLongitude") Double northEastLongitude
     );
 
-    @Query("SELECT p.franchise.franchiseId FROM Place p WHERE p.placesId = :placeId")
+    @Query("SELECT p.franchise.franchiseId FROM Place p WHERE p.placeId = :placeId")
     Optional<Long> findFranchiseIdByPlaceId(@Param("placeId") Long placeId);
 
 

@@ -16,7 +16,7 @@ public class CouponTemplate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long couponTemplatesId;
+    private Long couponTemplateId;
 
     private Long discountPolicyDetailId;
 

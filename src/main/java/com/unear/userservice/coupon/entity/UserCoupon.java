@@ -15,14 +15,14 @@ public class UserCoupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userCouponsId;
+    private Long userCouponId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "coupon_templates_id", nullable = false)
+    @JoinColumn(name = "coupon_template_id", nullable = false)
     private CouponTemplate couponTemplate;
 
     private LocalDate createdAt;

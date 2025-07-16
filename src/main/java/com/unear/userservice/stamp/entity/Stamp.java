@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @Setter
 public class Stamp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long stampsId;
+    private Long stampId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_places_id")
+    @JoinColumn(name = "event_place_id")
     private EventPlace eventPlace;
 
     private LocalDateTime stampedAt;

@@ -26,7 +26,7 @@ public class PlaceResponseDto {
 
     public static PlaceResponseDto from(Place place, boolean isFavorite) {
         return PlaceResponseDto.builder()
-                .placeId(place.getPlacesId())
+                .placeId(place.getPlaceId())
                 .placeName(place.getPlaceName())
                 .placeDesc(place.getPlaceDesc())
                 .address(place.getAddress())

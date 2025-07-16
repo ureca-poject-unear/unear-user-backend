@@ -13,14 +13,14 @@ import lombok.Setter;
 public class RouletteResult {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rouletteResultsId;
+    private Long rouletteResultId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unear_events_id")
+    @JoinColumn(name = "unear_event_id")
     private UnearEvent event;
 
     private String reward;
