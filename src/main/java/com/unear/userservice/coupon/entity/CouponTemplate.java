@@ -20,8 +20,9 @@ public class CouponTemplate {
 
     private Long discountPolicyDetailId;
 
+    private String markerCode;
     private String couponName;
-    private String couponDesc;
+
     private Integer remainingQuantity;
 
     private LocalDate couponStart;
@@ -29,7 +30,6 @@ public class CouponTemplate {
 
     private String discountCode;
     private String membershipCode;
-    private String markerCode;
 
     @OneToMany(mappedBy = "couponTemplate")
     private List<UserCoupon> userCoupons = new ArrayList<>();
