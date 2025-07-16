@@ -24,7 +24,8 @@ public class FranchiseDiscountPolicy {
     private Integer minPurchaseAmount;
     private Integer maxDiscountAmount;
 
-    @OneToOne(mappedBy = "franchise", fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "franchise_id")
     private Franchise franchise;
 }
 
