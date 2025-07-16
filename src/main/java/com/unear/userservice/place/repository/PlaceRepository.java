@@ -25,24 +25,24 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
       OR (:isFavorite = TRUE AND f.isFavorited = TRUE)
       OR (:isFavorite = FALSE AND (f IS NULL OR f.isFavorited = FALSE))
     )
-    AND (:minLatitude IS NULL OR p.latitude >= :minLatitude)
-    AND (:maxLatitude IS NULL OR p.latitude <= :maxLatitude)
-    AND (:minLongitude IS NULL OR p.longitude >= :minLongitude)
-    AND (:maxLongitude IS NULL OR p.longitude <= :maxLongitude)
+    AND (:southWestLatitude IS NULL OR p.latitude >= :southWestLatitude)
+    AND (:northEastLatitude IS NULL OR p.latitude <= :northEastLatitude)
+    AND (:southWestLongitude IS NULL OR p.longitude >= :southWestLongitude)
+    AND (:northEastLongitude IS NULL OR p.longitude <= :northEastLongitude)
 """)
     List<Place> findFilteredPlaces(
             @Param("userId") Long userId,
             @Param("categoryCode") String categoryCode,
             @Param("benefitCategory") String benefitCategory,
             @Param("isFavorite") Boolean isFavorite,
-            @Param("minLatitude") Double minLatitude,
-            @Param("maxLatitude") Double maxLatitude,
-            @Param("minLongitude") Double minLongitude,
-            @Param("maxLongitude") Double maxLongitude
+            @Param("southWestLatitude") Double southWestLatitude,
+            @Param("northEastLatitude") Double northEastLatitude,
+            @Param("southWestLongitude") Double southWestLongitude,
+            @Param("northEastLongitude") Double northEastLongitude
     );
 
-
-
+    @Query("SELECT p.franchise.franchiseId FROM Place p WHERE p.placesId = :placeId")
+    Optional<Long> findFranchiseIdByPlaceId(@Param("placeId") Long placeId);
 
 
 }
