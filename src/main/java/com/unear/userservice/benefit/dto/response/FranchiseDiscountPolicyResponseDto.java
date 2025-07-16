@@ -1,5 +1,7 @@
 package com.unear.userservice.benefit.dto.response;
 
+import com.unear.userservice.benefit.entity.FranchiseDiscountPolicy;
+import com.unear.userservice.common.enums.MembershipGrade;
 import com.unear.userservice.place.entity.Franchise;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,21 +16,28 @@ public class FranchiseDiscountPolicyResponseDto {
 
     private String franchiseName;
     private String franchiseImageUrl;
-    private boolean hasVvipPolicy;
-    private boolean hasVipPolicy;
-    private boolean hasBasicPolicy;
     private String categoryCode;
 
+    private boolean hasVvip;
+    private boolean hasVip;
+    private boolean hasBasic;
+
     public static FranchiseDiscountPolicyResponseDto from(Franchise franchise) {
+        List<MembershipGrade> membershipGrades = franchise.getFranchiseDiscountPolicies().stream()
+                .map(FranchiseDiscountPolicy::getMembershipCode)
+                .map(MembershipGrade::fromCode)
+                .toList();
+
         return new FranchiseDiscountPolicyResponseDto(
-                franchise.getFranchiseName(),
+                franchise.getName(),
                 franchise.getImageUrl(),
-                franchise.getVvipPolicy() != null && !franchise.getVvipPolicy().isBlank(),
-                franchise.getVipPolicy() != null && !franchise.getVipPolicy().isBlank(),
-                franchise.getBasicPolicy() != null && !franchise.getBasicPolicy().isBlank(),
-                franchise.getCategoryCode()
+                franchise.getCategoryCode(),
+                membershipGrades.contains(MembershipGrade.VVIP),
+                membershipGrades.contains(MembershipGrade.VIP),
+                membershipGrades.contains(MembershipGrade.BASIC)
         );
     }
 }
+
 
 

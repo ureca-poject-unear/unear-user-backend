@@ -1,9 +1,8 @@
 package com.unear.userservice.benefit.controller;
 
 
-import com.unear.userservice.benefit.dto.request.DiscountPolicyDetailRequestDto;
 import com.unear.userservice.benefit.dto.request.FranchiseDiscountPolicyRequestDto;
-import com.unear.userservice.benefit.dto.response.DiscountPolicyDetailResponseDto;
+import com.unear.userservice.benefit.dto.response.GeneralDiscountPolicyDetailResponseDto;
 import com.unear.userservice.benefit.dto.response.FranchiseDiscountPolicyDetailResponseDto;
 import com.unear.userservice.benefit.dto.response.FranchiseDiscountPolicyResponseDto;
 import com.unear.userservice.benefit.service.DiscountPolicyService;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/benefits")
 @RequiredArgsConstructor
@@ -23,10 +20,10 @@ public class DiscountPolicyController {
     private final DiscountPolicyService discountPolicyService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<DiscountPolicyDetailResponseDto>> getDiscountPolicyDetail(
+    public ResponseEntity<ApiResponse<GeneralDiscountPolicyDetailResponseDto>> getDiscountPolicyDetail(
             @PathVariable("id") Long discountPolicyDetailId
     ) {
-        DiscountPolicyDetailResponseDto response = discountPolicyService.getDiscountPolicyDetail(discountPolicyDetailId);
+        GeneralDiscountPolicyDetailResponseDto response = discountPolicyService.getDiscountPolicyDetail(discountPolicyDetailId);
         return ResponseEntity.ok(ApiResponse.success("혜택 상세 조회 성공", response));
     }
 
