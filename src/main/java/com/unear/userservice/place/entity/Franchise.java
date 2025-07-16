@@ -1,5 +1,6 @@
 package com.unear.userservice.place.entity;
 
+import com.unear.userservice.benefit.entity.FranchiseDiscountPolicy;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,18 +20,16 @@ public class Franchise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long franchiseId;
 
-    private String franchiseName;
-
+    private String name;
+    private String categoryCode;
     private String imageUrl;
 
-    private String vvipPolicy;
-    private String vipPolicy;
-    private String basicPolicy;
-
-    private String categoryCode;
-
-    @OneToMany(mappedBy = "franchise")
+    @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL)
     private List<Place> places = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "franchise_discount_policy_id")
+    private FranchiseDiscountPolicy franchiseDiscountPolicy;
 }
 
 

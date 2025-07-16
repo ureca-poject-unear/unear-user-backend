@@ -18,10 +18,6 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long placesId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "franchise_id")
-    private Franchise franchise;
-
     private String placeName;
     private String placeDesc;
     private String address;
@@ -38,6 +34,10 @@ public class Place {
     private String categoryCode;
     private String markerCode;
     private String eventCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "franchise_id")
+    private Franchise franchise;
 
     @OneToMany(mappedBy = "place")
     private List<EventPlace> eventPlaces = new ArrayList<>();
