@@ -4,21 +4,13 @@ labels: [feat]
 title: '이슈 이름을 작성해주세요'
 body:
   - type: input
-    id: parentKey
+    id: issueparser_parentKey
     attributes:
       label: '🎟️ 상위 작업 (Ticket Number)'
       placeholder: 'WL7-123'
       description: '상위 작업의 Ticket Number를 WL7-XXX 형식으로 기입해주세요'
     validations:
-      required: true
-
-  - type: input
-    id: branch
-    attributes:
-      label: '🌳 브랜치명 (Branch)'
-      description: '영어로 브랜치명을 작성해주세요'
-    validations:
-      required: true
+      required: false  # 선택사항으로 변경 (빈 값 처리를 위해)
       
   - type: input
     id: description
@@ -27,7 +19,7 @@ body:
       description: '이슈에 대해서 간략히 설명해주세요'
     validations:
       required: true
-
+      
   - type: textarea
     id: tasks
     attributes:
