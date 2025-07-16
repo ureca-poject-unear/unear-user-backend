@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CouponTemplateRepository extends JpaRepository<CouponTemplate, Long> {
-    List<CouponTemplate> findByDiscountPolicyDetailIdIn(List<Long> discountPolicyDetailIds);
+    List<CouponTemplate> findByDiscountPolicyDetailIdInAndMarkerCode(List<Long> discountPolicyIds, String markerCode);
 }
