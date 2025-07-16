@@ -27,5 +27,22 @@ public enum PlaceType {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid place type code: " + code));
     }
+
+    public boolean isBasic() {
+        return this == BASIC;
+    }
+
+    public boolean isFranchise() {
+        return this == FRANCHISE;
+    }
+
+    public boolean isLocal() {
+        return this == LOCAL;
+    }
+
+    public boolean isPopup() {
+        return this == POPUP;
+    }
+
 }
 
