@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "franchise")
+@Table(name = "franchises")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,9 +27,9 @@ public class Franchise {
     @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL)
     private List<Place> places = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "franchise_discount_policy_id")
-    private FranchiseDiscountPolicy franchiseDiscountPolicy;
+    @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FranchiseDiscountPolicy> franchiseDiscountPolicies = new ArrayList<>();
+
 }
 
 
