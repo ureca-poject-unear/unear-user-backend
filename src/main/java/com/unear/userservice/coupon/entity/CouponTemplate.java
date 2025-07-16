@@ -18,7 +18,7 @@ public class CouponTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long couponTemplatesId;
 
-    private Long discountPolicyDetailId; // 할인 정책 상세 id , erd 상으로는 연결 X , 추후에 연관관계 고려
+    private Long discountPolicyDetailId;
 
     private String couponName;
     private String couponDesc;
@@ -29,8 +29,10 @@ public class CouponTemplate {
 
     private String discountCode;
     private String membershipCode;
+    private String markerCode;
 
     @OneToMany(mappedBy = "couponTemplate")
     private List<UserCoupon> userCoupons = new ArrayList<>();
 }
+
 
