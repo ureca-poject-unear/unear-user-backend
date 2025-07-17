@@ -17,9 +17,9 @@ import java.util.List;
 @Setter
 public class UnearEvent {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long unearEventsId;
+    private Long unearEventId;
 
-    private Long couponTemplatesId;
+    private Long couponTemplateId;
     private String eventName;
     private String eventDescription;
 

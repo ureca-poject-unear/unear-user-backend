@@ -16,7 +16,7 @@ public class Place {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long placesId;
+    private Long placeId;
 
     private String placeName;
     private String placeDesc;

@@ -10,13 +10,13 @@ import java.util.Set;
 
 public interface FavoritePlaceRepository extends JpaRepository<FavoritePlace, Long> {
 
-    @Query("SELECT f.place.placesId FROM FavoritePlace f " +
+    @Query("SELECT f.place.placeId FROM FavoritePlace f " +
             "WHERE f.user.userId = :userId AND f.isFavorited = true")
     Set<Long> findPlaceIdsByUserId(@Param("userId") Long userId);
 
-    boolean existsByUser_UserIdAndPlace_PlacesIdAndIsFavoritedTrue(Long userId, Long placeId);
+    boolean existsByUser_UserIdAndPlace_PlaceIdAndIsFavoritedTrue(Long userId, Long placeId);
 
-    Optional<FavoritePlace> findByUser_UserIdAndPlace_PlacesId(Long userId, Long placeId);
+    Optional<FavoritePlace> findByUser_UserIdAndPlace_PlaceId(Long userId, Long placeId);
 
 
 }

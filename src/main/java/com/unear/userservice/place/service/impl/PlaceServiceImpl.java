@@ -36,10 +36,10 @@ public class PlaceServiceImpl implements PlaceService {
                 requestDto.getCategoryCode(),
                 requestDto.getBenefitCategory(),
                 requestDto.getIsFavorite(),
-                requestDto.getMinLatitude(),
-                requestDto.getMaxLatitude(),
-                requestDto.getMinLongitude(),
-                requestDto.getMaxLongitude()
+                requestDto.getSouthWestLatitude(),
+                requestDto.getNorthEastLatitude(),
+                requestDto.getSouthWestLongitude(),
+                requestDto.getNorthEastLongitude()
         );
 
         Set<Long> favorites = (userId != null)
@@ -47,7 +47,7 @@ public class PlaceServiceImpl implements PlaceService {
                 : Collections.emptySet();
 
         return places.stream()
-                .map(place -> PlaceRenderResponseDto.from(place, favorites.contains(place.getPlacesId())))
+                .map(place -> PlaceRenderResponseDto.from(place, favorites.contains(place.getPlaceId())))
                 .toList();
     }
 
@@ -59,7 +59,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         boolean isFavorite = false;
         if (userId != null) {
-            isFavorite = favoritePlaceRepository.existsByUser_UserIdAndPlace_PlacesIdAndIsFavoritedTrue(userId, placeId);
+            isFavorite = favoritePlaceRepository.existsByUser_UserIdAndPlace_PlaceIdAndIsFavoritedTrue(userId, placeId);
         }
         return PlaceResponseDto.from(place, isFavorite);
     }
@@ -68,7 +68,7 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional
     public boolean toggleFavorite(Long userId, Long placeId) {
-        Optional<FavoritePlace> optional = favoritePlaceRepository.findByUser_UserIdAndPlace_PlacesId(userId, placeId);
+        Optional<FavoritePlace> optional = favoritePlaceRepository.findByUser_UserIdAndPlace_PlaceId(userId, placeId);
 
         if (optional.isPresent()) {
             FavoritePlace favorite = optional.get();

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GeneralDiscountPolicyRepository extends JpaRepository<GeneralDiscountPolicy, Long>, JpaSpecificationExecutor<GeneralDiscountPolicy> {
@@ -18,6 +19,9 @@ public interface GeneralDiscountPolicyRepository extends JpaRepository<GeneralDi
         WHERE d.generalDiscountPolicyId = :id
     """)
     Optional<GeneralDiscountPolicy> findWithPlaceAndFranchiseById(@Param("id") Long id);
+
+    @Query("SELECT p.generalDiscountPolicyId FROM GeneralDiscountPolicy p WHERE p.place.placeId = :placeId")
+    List<Long> findPolicyIdsByPlaceId(@Param("placeId") Long placeId);
 
 }
 

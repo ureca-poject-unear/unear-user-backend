@@ -22,7 +22,7 @@ public class PlaceRenderResponseDto {
 
     public static PlaceRenderResponseDto from(Place place, boolean isFavorite) {
         return PlaceRenderResponseDto.builder()
-                .placeId(place.getPlacesId())
+                .placeId(place.getPlaceId())
                 .latitude(place.getLatitude())
                 .longitude(place.getLongitude())
                 .categoryCode(place.getCategoryCode())

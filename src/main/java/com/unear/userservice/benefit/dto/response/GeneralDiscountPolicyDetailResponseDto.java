@@ -29,7 +29,7 @@ public class GeneralDiscountPolicyDetailResponseDto {
         Place place = detail.getPlace();
 
         return GeneralDiscountPolicyDetailResponseDto.builder()
-                .placeId(place.getPlacesId())
+                .placeId(place.getPlaceId())
                 .placeName(place.getPlaceName())
                 .address(place.getAddress())
                 .startTime(place.getStartTime())

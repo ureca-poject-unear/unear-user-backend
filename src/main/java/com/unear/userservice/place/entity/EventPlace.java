@@ -15,14 +15,14 @@ import java.util.List;
 @Setter
 public class EventPlace {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long eventPlacesId;
+    private Long eventPlaceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unear_events_id")
+    @JoinColumn(name = "unear_event_id")
     private UnearEvent event;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "places_id")
+    @JoinColumn(name = "place_id")
     private Place place;
 
     private String eventCode;
