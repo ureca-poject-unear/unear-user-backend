@@ -1,5 +1,6 @@
 package com.unear.userservice.common.enums;
 
+import com.unear.userservice.exception.exception.InvalidCodeException;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -24,6 +25,6 @@ public enum MembershipGrade {
         return Arrays.stream(values())
                 .filter(g -> g.code.equalsIgnoreCase(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid membership code: " + code));
+                .orElseThrow(() -> new InvalidCodeException("Invalid membership code: " + code));
     }
 }

@@ -1,5 +1,6 @@
 package com.unear.userservice.common.enums;
 
+import com.unear.userservice.exception.exception.InvalidCodeException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -26,7 +27,7 @@ public enum DiscountPolicy {
         return Arrays.stream(values())
                 .filter(p -> p.code.equalsIgnoreCase(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid DiscountPolicy code: " + code));
+                .orElseThrow(() -> new InvalidCodeException("Invalid DiscountPolicy code: " + code));
     }
 }
 

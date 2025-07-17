@@ -1,5 +1,6 @@
 package com.unear.userservice.common.enums;
 
+import com.unear.userservice.exception.exception.InvalidCodeException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -25,7 +26,7 @@ public enum PlaceType {
         return Arrays.stream(values())
                 .filter(type -> type.code.equalsIgnoreCase(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid place type code: " + code));
+                .orElseThrow(() -> new InvalidCodeException("Invalid place type code: " + code));
     }
 
     public boolean isBasic() {
