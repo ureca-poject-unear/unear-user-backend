@@ -26,12 +26,5 @@ public enum CouponStatus {
                 .orElseThrow(() -> new InvalidCodeException("Invalid coupon status code: " + code));
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getLabel() {
-        return label;
-    }
 }
 
