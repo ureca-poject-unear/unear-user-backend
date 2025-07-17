@@ -82,6 +82,11 @@ public class CouponServiceImpl implements CouponService {
         CouponTemplate template = couponTemplateRepository.findById(couponTemplateId)
                 .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰 템플릿을 찾을 수 없습니다."));
 
+        LocalDate today = LocalDate.now();
+        if (template.getCouponStart().isAfter(today) || template.getCouponEnd().isBefore(today)) {
+            throw new CouponExpiredException("유효 기간이 지난 쿠폰입니다.");
+        }
+
         UserCoupon userCoupon = UserCoupon.builder()
                 .user(user)
                 .couponTemplate(template)
@@ -107,6 +112,11 @@ public class CouponServiceImpl implements CouponService {
 
         CouponTemplate template = couponTemplateRepository.findById(couponTemplateId)
                 .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰 템플릿을 찾을 수 없습니다."));
+
+        LocalDate today = LocalDate.now();
+        if (template.getCouponStart().isAfter(today) || template.getCouponEnd().isBefore(today)) {
+            throw new CouponExpiredException("유효 기간이 지난 쿠폰입니다.");
+        }
 
         template.decreaseQuantity();
 
