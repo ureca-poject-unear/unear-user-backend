@@ -1,5 +1,6 @@
 package com.unear.userservice.coupon.entity;
 
+import com.unear.userservice.exception.exception.CouponSoldOutException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,13 @@ public class CouponTemplate {
 
     @OneToMany(mappedBy = "couponTemplate")
     private List<UserCoupon> userCoupons = new ArrayList<>();
+
+    public void decreaseQuantity() {
+        if (this.remainingQuantity <= 0) {
+            throw new CouponSoldOutException("쿠폰 재고가 없습니다.");
+        }
+        this.remainingQuantity -= 1;
+    }
 }
 
 

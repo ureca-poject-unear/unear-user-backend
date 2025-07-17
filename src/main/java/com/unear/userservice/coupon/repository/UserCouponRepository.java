@@ -16,4 +16,6 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
     """)
     Set<Long> findCouponTemplateIdsByUserId(@Param("userId") Long userId);
 
+    boolean existsByBarcodeNumber(String barcodeNumber);
+
 }
