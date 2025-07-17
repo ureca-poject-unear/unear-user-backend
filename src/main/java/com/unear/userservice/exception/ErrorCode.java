@@ -24,7 +24,8 @@ public enum ErrorCode {
     COUPON_TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND , "COUPON_TEMPLATE_NOT_FOUND" , "쿠폰 템플릿을 찾을 수 없습니다." ),
     COUPON_ALREADY_DOWNLOADED(HttpStatus.BAD_REQUEST, "COUPON_ALREADY_DOWNLOADED", "이미 다운로드한 쿠폰입니다."),
     DUPLICATED_BARCODE(HttpStatus.BAD_REQUEST, "DUPLICATED_BARCODE" , "중복된 바코드 번호입니다."),
-    COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST, "COUPON_SOLD_OUT" , "쿠폰 재고가 없습니다.")
+    COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST, "COUPON_SOLD_OUT" , "쿠폰 재고가 없습니다."),
+    COUPON_EXPIRED(HttpStatus.BAD_REQUEST, "COUPON_EXPIRED", "유효 기간이 지난 쿠폰입니다.")
     ;
 
 
