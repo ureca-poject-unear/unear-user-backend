@@ -41,6 +41,16 @@ public class CouponController {
         return ResponseEntity.ok(ApiResponse.success("쿠폰 다운로드 성공", response));
     }
 
+    @PostMapping("/{couponTemplateId}/fcfs")
+    public ResponseEntity<ApiResponse<UserCouponResponseDto>> downloadFCFSCoupon(
+            @PathVariable Long couponTemplateId,
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        UserCouponResponseDto response = couponService.downloadFCFSCoupon(userId, couponTemplateId);
+        return ResponseEntity.ok(ApiResponse.success("쿠폰 다운로드 성공", response));
+    }
+
 }
 
 
