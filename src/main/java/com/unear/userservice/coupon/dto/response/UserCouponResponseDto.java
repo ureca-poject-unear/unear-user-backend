@@ -18,7 +18,9 @@ public class UserCouponResponseDto {
     public static UserCouponResponseDto from(UserCoupon userCoupon) {
         return UserCouponResponseDto.builder()
                 .userCouponId(userCoupon.getUserCouponId())
-                .couponName(userCoupon.getCouponTemplate().getCouponName())
+                .couponName(userCoupon.getCouponTemplate() != null
+                        ? userCoupon.getCouponTemplate().getCouponName()
+                        : null)
                 .barcodeNumber(userCoupon.getBarcodeNumber())
                 .couponStatusCode(userCoupon.getCouponStatusCode())
                 .createdAt(userCoupon.getCreatedAt())
