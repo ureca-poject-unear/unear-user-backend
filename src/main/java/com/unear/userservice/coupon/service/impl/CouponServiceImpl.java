@@ -12,10 +12,7 @@ import com.unear.userservice.coupon.entity.UserCoupon;
 import com.unear.userservice.coupon.repository.CouponTemplateRepository;
 import com.unear.userservice.coupon.repository.UserCouponRepository;
 import com.unear.userservice.coupon.service.CouponService;
-import com.unear.userservice.exception.exception.BarcodeDuplicatedException;
-import com.unear.userservice.exception.exception.CouponAlreadyDownloadedException;
-import com.unear.userservice.exception.exception.CouponTemplateNotFoundException;
-import com.unear.userservice.exception.exception.UserNotFoundException;
+import com.unear.userservice.exception.exception.*;
 import com.unear.userservice.place.repository.PlaceRepository;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
@@ -101,6 +98,35 @@ public class CouponServiceImpl implements CouponService {
 
         return UserCouponResponseDto.from(userCoupon);
     }
+
+    @Override
+    @Transactional
+    public UserCouponResponseDto downloadFCFSCoupon(Long userId, Long couponTemplateId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        CouponTemplate template = couponTemplateRepository.findById(couponTemplateId)
+                .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰 템플릿을 찾을 수 없습니다."));
+
+        template.decreaseQuantity();
+
+        UserCoupon userCoupon = UserCoupon.builder()
+                .user(user)
+                .couponTemplate(template)
+                .createdAt(LocalDate.now())
+                .couponStatusCode(CouponStatus.UNUSED.getCode())
+                .barcodeNumber(generateUniqueBarcode())
+                .build();
+
+        try {
+            userCouponRepository.save(userCoupon);
+        } catch (DataIntegrityViolationException e) {
+            throw new CouponAlreadyDownloadedException("이미 다운로드한 쿠폰입니다.");
+        }
+        return UserCouponResponseDto.from(userCoupon);
+    }
+
+
 
     private String generateUniqueBarcode() {
         for (int i = 0; i < 3; i++) {
