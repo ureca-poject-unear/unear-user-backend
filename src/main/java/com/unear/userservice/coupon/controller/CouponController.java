@@ -31,6 +31,7 @@ public class CouponController {
     }
 
     // {쿠폰템플릿 id}/download
+    // 다운로드하면, unused 인채로 user_coupon
 
 }
 
