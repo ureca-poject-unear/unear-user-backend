@@ -1,8 +1,6 @@
 package com.unear.userservice.coupon.repository;
 
-import com.unear.userservice.coupon.entity.CouponTemplate;
 import com.unear.userservice.coupon.entity.UserCoupon;
-import com.unear.userservice.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
