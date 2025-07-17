@@ -19,7 +19,8 @@ public enum ErrorCode {
     DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST, "DUPLICATED_EMAIL", "이미 가입된 이메일입니다."),
     EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "EMAIL_NOT_VERIFIED", "이메일 인증이 필요합니다."),
     BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "BENEFIT_NOT_FOUND" , "혜택 정보를 찾을 수 없습니다."),
-    PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_NOT_FOUND", "장소 정보를 찾을 수 없습니다.")
+    PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_NOT_FOUND", "장소 정보를 찾을 수 없습니다."),
+    INVALID_CODE(HttpStatus.NOT_FOUND, "INVALID_CODE", "유효하지 않은 공통코드입니다.")
     ;
 
 
