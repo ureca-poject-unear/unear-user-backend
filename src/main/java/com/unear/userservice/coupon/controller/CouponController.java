@@ -19,7 +19,6 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    // placeId & markerCode로 해당 장소의 쿠폰 템플릿 조회
     @GetMapping("/{placeId}")
     public ResponseEntity<ApiResponse<List<CouponResponseDto>>> getCouponsByPlace(
             @PathVariable("placeId") Long placeId,
