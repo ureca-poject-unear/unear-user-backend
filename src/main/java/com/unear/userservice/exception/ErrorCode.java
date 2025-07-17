@@ -20,7 +20,9 @@ public enum ErrorCode {
     EMAIL_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "EMAIL_NOT_VERIFIED", "이메일 인증이 필요합니다."),
     BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "BENEFIT_NOT_FOUND" , "혜택 정보를 찾을 수 없습니다."),
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_NOT_FOUND", "장소 정보를 찾을 수 없습니다."),
-    INVALID_CODE(HttpStatus.NOT_FOUND, "INVALID_CODE", "유효하지 않은 공통코드입니다.")
+    INVALID_CODE(HttpStatus.NOT_FOUND, "INVALID_CODE", "유효하지 않은 공통코드입니다."),
+    COUPON_TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND , "COUPON_TEMPLATE_NOT_FOUND" , "쿠폰 템플릿을 찾을 수 없습니다." ),
+    COUPON_ALREADY_DOWNLOADED(HttpStatus.BAD_REQUEST, "COUPON_ALREADY_DOWNLOADED", "이미 다운로드한 쿠폰입니다.")
     ;
 
 
