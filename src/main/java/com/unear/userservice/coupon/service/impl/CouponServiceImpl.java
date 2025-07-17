@@ -12,6 +12,7 @@ import com.unear.userservice.coupon.service.CouponService;
 import com.unear.userservice.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,7 @@ public class CouponServiceImpl implements CouponService {
     private final UserCouponRepository userCouponRepository;
 
     @Override
+    @Transactional
     public List<CouponResponseDto> getCouponsByPlaceAndMarker(Long userId, Long placeId, String markerCode) {
         PlaceType placeType = PlaceType.fromCode(markerCode);
 
@@ -55,7 +57,6 @@ public class CouponServiceImpl implements CouponService {
                 .map(template -> {
                     String discountInfo = DiscountPolicy.fromCode(template.getDiscountCode()).getLabel();
                     boolean isDownloaded = downloadedIds.contains(template.getCouponTemplateId());
-
                     return CouponResponseDto.from(template, discountInfo, isDownloaded);
                 })
                 .toList();
