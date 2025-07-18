@@ -14,4 +14,5 @@ public class FranchiseDiscountPolicyRequestDto {
     private int page = 0;
     private int size = 10;
     private String categoryCode;
+    private String franchiseName;
 }

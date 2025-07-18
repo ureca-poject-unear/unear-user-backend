@@ -46,6 +46,11 @@ public class DiscountPolicyServiceImpl implements DiscountPolicyService {
             if (requestDto.getCategoryCode() != null && !requestDto.getCategoryCode().isBlank()) {
                 predicates.add(cb.equal(root.get("categoryCode"), requestDto.getCategoryCode()));
             }
+
+            if (requestDto.getFranchiseName() != null && !requestDto.getFranchiseName().isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + requestDto.getFranchiseName().toLowerCase() + "%"));
+            }
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
