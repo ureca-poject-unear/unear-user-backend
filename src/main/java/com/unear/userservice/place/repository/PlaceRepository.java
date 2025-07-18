@@ -29,6 +29,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     AND (:northEastLatitude IS NULL OR p.latitude <= :northEastLatitude)
     AND (:southWestLongitude IS NULL OR p.longitude >= :southWestLongitude)
     AND (:northEastLongitude IS NULL OR p.longitude <= :northEastLongitude)
+    AND (:keyword IS NULL OR LOWER(p.placeName) LIKE LOWER(CONCAT('%', :keyword, '%')))
 """)
     List<Place> findFilteredPlaces(
             @Param("userId") Long userId,
@@ -38,7 +39,8 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
             @Param("southWestLatitude") Double southWestLatitude,
             @Param("northEastLatitude") Double northEastLatitude,
             @Param("southWestLongitude") Double southWestLongitude,
-            @Param("northEastLongitude") Double northEastLongitude
+            @Param("northEastLongitude") Double northEastLongitude,
+            @Param("keyword") String keyword
     );
 
     @Query("SELECT p.franchise.franchiseId FROM Place p WHERE p.placeId = :placeId")

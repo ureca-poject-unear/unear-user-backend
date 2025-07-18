@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlaceRequestDto {
+    private String keyword;
     private String categoryCode;
     private String benefitCategory;
     private Boolean isFavorite;
