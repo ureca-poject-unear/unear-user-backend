@@ -51,6 +51,15 @@ public class PlaceController {
         return ResponseEntity.ok(ApiResponse.success("즐겨찾기 상태 변경 성공", isNowFavorite));
     }
 
+    @GetMapping("/favorite")
+    public ResponseEntity<ApiResponse<List<PlaceResponseDto>>> getFavoritePlaces(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        List<PlaceResponseDto> favorites = placeService.getUserFavoritePlaces(userId);
+        return ResponseEntity.ok(ApiResponse.success("즐겨찾기 장소 목록 조회 성공", favorites));
+    }
+
 
 }
 
