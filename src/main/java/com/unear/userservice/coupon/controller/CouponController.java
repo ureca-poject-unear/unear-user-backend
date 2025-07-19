@@ -51,6 +51,17 @@ public class CouponController {
         return ResponseEntity.ok(ApiResponse.success("쿠폰 다운로드 성공", response));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<UserCouponResponseDto>>> getMyCoupons(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        List<UserCouponResponseDto> response = couponService.getMyCoupons(userId);
+        return ResponseEntity.ok(ApiResponse.success("사용자 쿠폰 목록 조회 성공", response));
+    }
+
+
+
 }
 
 
