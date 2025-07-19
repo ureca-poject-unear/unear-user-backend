@@ -7,7 +7,6 @@ import com.unear.userservice.coupon.dto.response.CouponResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
 import com.unear.userservice.coupon.service.CouponService;
 import com.unear.userservice.exception.exception.UnauthorizedException;
-import com.unear.userservice.exception.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
