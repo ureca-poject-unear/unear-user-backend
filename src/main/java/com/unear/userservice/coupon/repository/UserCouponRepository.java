@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Set;
 
 public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
@@ -17,5 +18,7 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
     Set<Long> findCouponTemplateIdsByUserId(@Param("userId") Long userId);
 
     boolean existsByBarcodeNumber(String barcodeNumber);
+
+    List<UserCoupon> findByUser_UserId(Long userId);
 
 }

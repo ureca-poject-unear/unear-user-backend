@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -88,6 +89,15 @@ public class PlaceServiceImpl implements PlaceService {
             favoritePlaceRepository.save(favorite);
             return true;
         }
+    }
+
+    @Override
+    public List<PlaceResponseDto> getUserFavoritePlaces(Long userId) {
+        List<FavoritePlace> favoritePlaces = favoritePlaceRepository.findWithPlaceAndFranchiseByUserId(userId);
+
+        return favoritePlaces.stream()
+                .map(fav -> PlaceResponseDto.from(fav.getPlace(), true))
+                .collect(Collectors.toList());
     }
 
 }

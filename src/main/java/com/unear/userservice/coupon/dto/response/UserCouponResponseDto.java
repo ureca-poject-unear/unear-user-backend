@@ -14,6 +14,7 @@ public class UserCouponResponseDto {
     private String barcodeNumber;
     private String couponStatusCode;
     private LocalDate createdAt;
+    private LocalDate couponEnd;
 
     public static UserCouponResponseDto from(UserCoupon userCoupon) {
         return UserCouponResponseDto.builder()
@@ -24,6 +25,9 @@ public class UserCouponResponseDto {
                 .barcodeNumber(userCoupon.getBarcodeNumber())
                 .couponStatusCode(userCoupon.getCouponStatusCode())
                 .createdAt(userCoupon.getCreatedAt())
+                .couponEnd(userCoupon.getCouponTemplate() != null
+                        ? userCoupon.getCouponTemplate().getCouponEnd()
+                        : null)
                 .build();
     }
 }

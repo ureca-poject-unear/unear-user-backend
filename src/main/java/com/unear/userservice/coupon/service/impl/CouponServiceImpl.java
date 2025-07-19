@@ -137,6 +137,17 @@ public class CouponServiceImpl implements CouponService {
     }
 
 
+    @Override
+    public List<UserCouponResponseDto> getMyCoupons(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserId(userId);
+        return userCoupons.stream()
+                .map(UserCouponResponseDto::from)
+                .toList();
+    }
+
 
     private String generateUniqueBarcode() {
         for (int i = 0; i < 3; i++) {

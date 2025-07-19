@@ -13,4 +13,6 @@ public interface CouponService {
 
     UserCouponResponseDto downloadFCFSCoupon(Long userId, Long couponTemplateId);
 
+    List<UserCouponResponseDto> getMyCoupons(Long userId);
+
 }

@@ -6,6 +6,7 @@ import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
 import com.unear.userservice.coupon.service.CouponService;
+import com.unear.userservice.exception.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +37,10 @@ public class CouponController {
             @PathVariable Long couponTemplateId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        if (user == null || user.getUser() == null) {
+            throw new UnauthorizedException("인증되지 않은 사용자입니다.");
+        }
+        Long userId = user.getUser().getUserId();
         UserCouponResponseDto response = couponService.downloadCoupon(userId, couponTemplateId);
         return ResponseEntity.ok(ApiResponse.success("쿠폰 다운로드 성공", response));
     }
@@ -46,9 +50,24 @@ public class CouponController {
             @PathVariable Long couponTemplateId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        if (user == null || user.getUser() == null) {
+            throw new UnauthorizedException("인증되지 않은 사용자입니다.");
+        }
+        Long userId = user.getUser().getUserId();
         UserCouponResponseDto response = couponService.downloadFCFSCoupon(userId, couponTemplateId);
         return ResponseEntity.ok(ApiResponse.success("쿠폰 다운로드 성공", response));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<UserCouponResponseDto>>> getMyCoupons(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        if (user == null || user.getUser() == null) {
+            throw new UnauthorizedException("인증되지 않은 사용자입니다.");
+        }
+        Long userId = user.getUser().getUserId();
+        List<UserCouponResponseDto> response = couponService.getMyCoupons(userId);
+        return ResponseEntity.ok(ApiResponse.success("사용자 쿠폰 목록 조회 성공", response));
     }
 
 }
