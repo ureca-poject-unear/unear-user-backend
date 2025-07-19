@@ -137,6 +137,14 @@ public class CouponServiceImpl implements CouponService {
     }
 
 
+    @Override
+    public List<UserCouponResponseDto> getMyCoupons(Long userId) {
+        List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserId(userId);
+        return userCoupons.stream()
+                .map(UserCouponResponseDto::from)
+                .toList();
+    }
+
 
     private String generateUniqueBarcode() {
         for (int i = 0; i < 3; i++) {
