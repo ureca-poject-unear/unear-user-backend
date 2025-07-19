@@ -37,7 +37,10 @@ public class CouponController {
             @PathVariable Long couponTemplateId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        if (user == null || user.getUser() == null) {
+            throw new UnauthorizedException("인증되지 않은 사용자입니다.");
+        }
+        Long userId = user.getUser().getUserId();
         UserCouponResponseDto response = couponService.downloadCoupon(userId, couponTemplateId);
         return ResponseEntity.ok(ApiResponse.success("쿠폰 다운로드 성공", response));
     }
@@ -47,7 +50,10 @@ public class CouponController {
             @PathVariable Long couponTemplateId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        if (user == null || user.getUser() == null) {
+            throw new UnauthorizedException("인증되지 않은 사용자입니다.");
+        }
+        Long userId = user.getUser().getUserId();
         UserCouponResponseDto response = couponService.downloadFCFSCoupon(userId, couponTemplateId);
         return ResponseEntity.ok(ApiResponse.success("쿠폰 다운로드 성공", response));
     }
