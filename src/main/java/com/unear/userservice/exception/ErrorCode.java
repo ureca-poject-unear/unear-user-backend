@@ -25,7 +25,8 @@ public enum ErrorCode {
     COUPON_ALREADY_DOWNLOADED(HttpStatus.BAD_REQUEST, "COUPON_ALREADY_DOWNLOADED", "이미 다운로드한 쿠폰입니다."),
     DUPLICATED_BARCODE(HttpStatus.BAD_REQUEST, "DUPLICATED_BARCODE" , "중복된 바코드 번호입니다."),
     COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST, "COUPON_SOLD_OUT" , "쿠폰 재고가 없습니다."),
-    COUPON_EXPIRED(HttpStatus.BAD_REQUEST, "COUPON_EXPIRED", "유효 기간이 지난 쿠폰입니다.")
+    COUPON_EXPIRED(HttpStatus.BAD_REQUEST, "COUPON_EXPIRED", "유효 기간이 지난 쿠폰입니다."),
+    UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_USER", "인증되지 않은 사용자입니다.")
     ;
 
 
