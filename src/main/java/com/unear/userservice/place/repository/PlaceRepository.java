@@ -51,7 +51,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     @Query(value = """
     SELECT 
         place_id AS placeId,
-        ST_Distance(location, ST_MakePoint(:longitude, :latitude)::geography) AS distance
+        ST_Distance(location, ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography) AS distance
     FROM places
     ORDER BY distance
     LIMIT :limit
@@ -65,7 +65,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     @Query(value = """
     SELECT ST_Distance(
             location,
-            ST_MakePoint(:longitude, :latitude)::geography
+            ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography
         )
         FROM places
         WHERE place_id = :placeId
