@@ -15,24 +15,24 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     @EntityGraph(attributePaths = {"franchise", "eventPlaces", "discountPolicies"})
     Optional<Place> findById(Long id);
 
-    @Query("""
-        SELECT p FROM Place p
-        LEFT JOIN FavoritePlace f 
-          ON f.place = p 
-          AND f.user.userId = :userId
-        WHERE (:categoryCode IS NULL OR p.categoryCode = :categoryCode)
-        AND (:benefitCategory IS NULL OR p.benefitCategory = :benefitCategory)
+    @Query(value = """
+        SELECT p.* FROM places p
+        LEFT JOIN favorite_places f 
+          ON f.place_id = p.place_id 
+          AND f.user_id = :userId
+        WHERE (:categoryCode IS NULL OR p.category_code = :categoryCode)
+        AND (:benefitCategory IS NULL OR p.benefit_category = :benefitCategory)
         AND (
           :isFavorite IS NULL
-          OR (:isFavorite = TRUE AND f.isFavorited = TRUE)
-          OR (:isFavorite = FALSE AND (f IS NULL OR f.isFavorited = FALSE))
+          OR (:isFavorite = TRUE AND f.is_favorited = TRUE)
+          OR (:isFavorite = FALSE AND (f.favorite_place_id IS NULL OR f.is_favorited = FALSE))
         )
         AND (:southWestLatitude IS NULL OR p.latitude >= :southWestLatitude)
         AND (:northEastLatitude IS NULL OR p.latitude <= :northEastLatitude)
         AND (:southWestLongitude IS NULL OR p.longitude >= :southWestLongitude)
         AND (:northEastLongitude IS NULL OR p.longitude <= :northEastLongitude)
-        AND (:keyword IS NULL OR LOWER(p.placeName) LIKE LOWER(CONCAT('%', :keyword, '%')))
-    """)
+    AND (:keyword IS NULL OR p.place_name ILIKE CONCAT('%', :keyword, '%'))
+    """, nativeQuery = true)
     List<Place> findFilteredPlaces(
             @Param("userId") Long userId,
             @Param("categoryCode") String categoryCode,
@@ -63,7 +63,10 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     );
 
     @Query(value = """
-        SELECT ST_Distance(location, ST_MakePoint(:longitude, :latitude) ::geography)
+    SELECT ST_Distance(
+            location,
+            ST_MakePoint(:longitude, :latitude)::geography
+        )
         FROM places
         WHERE place_id = :placeId
     """, nativeQuery = true)
