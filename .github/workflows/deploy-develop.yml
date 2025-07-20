@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd ~/unear-app-dev
+            cd ~/unear-app
 
             echo "SPRING_PROFILES_ACTIVE=prod" > .env
             echo "DB_URL=${{ secrets.DEV_DB_URL }}" >> .env
