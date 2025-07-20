@@ -23,8 +23,9 @@ public class PlaceResponseDto {
     private String eventCode;
     private String franchiseName;
     private boolean isFavorite;
+    private Double distanceKm;
 
-    public static PlaceResponseDto from(Place place, boolean isFavorite) {
+    public static PlaceResponseDto from(Place place, boolean isFavorite, Double distanceKm) {
         return PlaceResponseDto.builder()
                 .placeId(place.getPlaceId())
                 .placeName(place.getPlaceName())
@@ -40,7 +41,12 @@ public class PlaceResponseDto {
                 .eventCode(place.getEventCode())
                 .franchiseName(place.getFranchise() != null ? place.getFranchise().getName() : null)
                 .isFavorite(isFavorite)
+                .distanceKm(distanceKm != null ? distanceKm : 0.0)
                 .build();
+    }
+
+    public static PlaceResponseDto from(Place place, boolean isFavorite) {
+        return from(place, isFavorite, null);
     }
 
 }
