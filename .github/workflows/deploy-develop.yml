@@ -56,5 +56,5 @@ jobs:
             echo "REDIS_PORT=6379" >> .env
 
             docker pull 1seyoung/unear-app:develop
-            docker-compose -f docker-compose.dev.yml down
-            docker-compose -f docker-compose.dev.yml up -d
+            docker-compose -f docker-compose.yml down
+            docker-compose -f docker-compose.yml up -d
