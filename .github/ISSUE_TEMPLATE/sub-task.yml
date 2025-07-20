@@ -1,0 +1,30 @@
+name: '하위 작업 생성'
+description: '기존 작업/스토리에 하위 작업을 추가합니다'
+labels: [subtask]
+title: '하위 작업 이름'
+body:
+  - type: input
+    id: issueparser_parentKey
+    attributes:
+      label: '상위 작업 (Parent Task)'
+      placeholder: '123'
+      description: '상위 작업/스토리의 번호를 입력해주세요 (예: 123 → WL7-123으로 자동 변환)'
+    validations:
+      required: true
+
+  - type: textarea
+    id: issueparser_description
+    attributes:
+      label: '하위 작업 상세 설명 (Description)'
+      description: '이 하위 작업에 대한 자세한 설명을 작성해주세요'
+      placeholder: |
+        ## 작업 내용
+        - 
+
+        ## 완료 조건
+        - 
+
+        ## 참고사항
+        - 
+    validations:
+      required: true
