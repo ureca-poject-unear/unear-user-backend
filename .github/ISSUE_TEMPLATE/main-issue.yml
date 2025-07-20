@@ -1,0 +1,43 @@
+name: '메인 이슈 생성'
+description: '버그, 작업, 스토리를 생성합니다'
+labels: [feat]
+title: '이슈 이름을 작성해주세요'
+body:
+  - type: dropdown
+    id: issueparser_issueType
+    attributes:
+      label: '이슈 타입 (Issue Type)'
+      description: '생성할 이슈의 타입을 선택해주세요'
+      options:
+        - 작업
+        - 버그
+        - 스토리
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: issueparser_parentKey
+    attributes:
+      label: '상위 에픽 (Parent Epic)'
+      placeholder: '123'
+      description: '상위 에픽의 번호만 입력해주세요 (예: 123 → WL7-123으로 자동 변환) - 선택사항'
+    validations:
+      required: false
+
+  - type: textarea
+    id: issueparser_description
+    attributes:
+      label: '상세 내용 (Description)'
+      description: '이슈에 대해서 자세히 설명해주세요'
+      placeholder: |
+        ## 목표
+        - 
+
+        ## 상세 설명
+        - 
+
+        ## 참고사항
+        - 
+    validations:
+      required: true
