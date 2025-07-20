@@ -4,6 +4,7 @@ import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.locationtech.jts.geom.Point;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -44,5 +45,9 @@ public class Place {
 
     @OneToMany(mappedBy = "place")
     private List<GeneralDiscountPolicy> discountPolicies = new ArrayList<>();
+
+    @Column(columnDefinition = "geography(Point, 4326)")
+    private Point location;
+
 }
 

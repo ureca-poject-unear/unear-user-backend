@@ -2,7 +2,10 @@ package com.unear.userservice.place.service.impl;
 
 import com.unear.userservice.exception.exception.PlaceNotFoundException;
 import com.unear.userservice.exception.exception.UserNotFoundException;
+import com.unear.userservice.place.dto.request.NearbyPlaceRequestDto;
 import com.unear.userservice.place.dto.request.PlaceRequestDto;
+import com.unear.userservice.place.dto.response.NearestPlaceProjection;
+import com.unear.userservice.place.dto.response.NearestPlaceResponseDto;
 import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
 import com.unear.userservice.place.entity.FavoritePlace;
@@ -55,7 +58,7 @@ public class PlaceServiceImpl implements PlaceService {
 
 
     @Override
-    public PlaceResponseDto getPlaceDetailWithFavorite(Long placeId, Long userId) {
+    public PlaceResponseDto getPlaceDetail(Long placeId, Long userId, Double latitude, Double longitude) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new PlaceNotFoundException("해당 장소가 존재하지 않습니다."));
 
@@ -63,8 +66,18 @@ public class PlaceServiceImpl implements PlaceService {
         if (userId != null) {
             isFavorite = favoritePlaceRepository.existsByUser_UserIdAndPlace_PlaceIdAndIsFavoritedTrue(userId, placeId);
         }
-        return PlaceResponseDto.from(place, isFavorite);
+
+        Double distanceKm = null;
+        if (latitude != null && longitude != null && place.getLocation() != null) {
+            Double distanceMeters = placeRepository.calculateDistance(placeId, latitude, longitude);
+            if (distanceMeters != null) {
+                distanceKm = Math.round( distanceMeters / 100.0) / 10.0;
+            }
+        }
+
+        return PlaceResponseDto.from(place, isFavorite, distanceKm);
     }
+
 
 
     @Override
@@ -98,6 +111,18 @@ public class PlaceServiceImpl implements PlaceService {
         return favoritePlaces.stream()
                 .map(fav -> PlaceResponseDto.from(fav.getPlace(), true))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NearestPlaceResponseDto> getNearbyPlaces(NearbyPlaceRequestDto requestDto, Long userId) {
+        double lat = requestDto.getLatitude();
+        double lon = requestDto.getLongitude();
+
+        List<NearestPlaceProjection> projections = placeRepository.findNearestPlaceIdsByDistance(lat, lon, 5);
+
+        return projections.stream()
+                .map(NearestPlaceResponseDto::from)
+                .toList();
     }
 
 }
