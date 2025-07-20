@@ -41,7 +41,7 @@ public class PlaceResponseDto {
                 .eventCode(place.getEventCode())
                 .franchiseName(place.getFranchise() != null ? place.getFranchise().getName() : null)
                 .isFavorite(isFavorite)
-                .distanceKm(distanceKm != null ? distanceKm : 0.0)
+                .distanceKm(distanceKm)
                 .build();
     }
 
