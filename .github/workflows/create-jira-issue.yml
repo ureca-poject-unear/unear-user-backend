@@ -1,11 +1,17 @@
-name: Create Jira issue
+name: Create Jira Issue
 on:
   issues:
     types:
       - opened
+
+# 각 레포별 설정값 (레포마다 이 값들을 수정해주세요)
+env:
+  REPO_GUBUN: "백엔드"  # 각 레포의 구분값
+  REPO_NAME: "unear"  # 각 레포의 repo 필드값
+
 jobs:
-  create-issue:
-    name: Create Jira issue
+  create-jira-issue:
+    name: Create Jira Issue
     runs-on: ubuntu-latest
     steps:
       - name: Login
@@ -14,74 +20,236 @@ jobs:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+
       - name: Checkout main code
         uses: actions/checkout@v4
         with:
-          ref: main
-      - name: Issue Parser
+          ref: develop
+
+      # 메인 이슈 템플릿 파싱 시도
+      - name: Try Parse Main Issue Template
         uses: stefanbuck/github-issue-praser@v3
-        id: issue-parser
+        id: main-parser
+        continue-on-error: true
         with:
-          template-path: .github/ISSUE_TEMPLATE/issue-form.yml
-      - name: Log Issue Parser
+          template-path: .github/ISSUE_TEMPLATE/main-issue.yml
+
+      # 하위 작업 템플릿 파싱 시도
+      - name: Try Parse Sub-task Template
+        uses: stefanbuck/github-issue-praser@v3
+        id: subtask-parser
+        continue-on-error: true
+        with:
+          template-path: .github/ISSUE_TEMPLATE/sub-task.yml
+
+      - name: Determine Issue Type
+        id: determine-type
         run: |
-          echo 'parentKey: ${{ steps.issue-parser.outputs.issueparser_parentKey }}'
-          echo 'description: ${{ steps.issue-parser.outputs.issueparser_description }}'
-          echo 'tasks: ${{ steps.issue-parser.outputs.issueparser_tasks }}'
-          echo 'jsonString: ${{ steps.issue-parser.outputs.jsonString }}'
+          MAIN_JSON='${{ steps.main-parser.outputs.jsonString }}'
+          SUBTASK_JSON='${{ steps.subtask-parser.outputs.jsonString }}'
+          
+          echo "Main parser outcome: ${{ steps.main-parser.outcome }}"
+          echo "Subtask parser outcome: ${{ steps.subtask-parser.outcome }}"
+          echo "Main JSON length: ${#MAIN_JSON}"
+          echo "Subtask JSON length: ${#SUBTASK_JSON}"
+          
+          # JSON에서 특정 필드 확인으로 템플릿 구분
+          if echo "$MAIN_JSON" | grep -q "issueparser_issueType" && [ "${{ steps.main-parser.outcome }}" == "success" ]; then
+            echo "issue_type=main" >> $GITHUB_OUTPUT
+            echo "Detected: Main Issue (has issueparser_issueType)"
+          elif echo "$SUBTASK_JSON" | grep -q "issueparser_parentKey" && [ "${{ steps.subtask-parser.outcome }}" == "success" ]; then
+            echo "issue_type=subtask" >> $GITHUB_OUTPUT
+            echo "Detected: Sub-task (has issueparser_parentKey)"
+          elif [ ${#MAIN_JSON} -gt 10 ] && [ "${{ steps.main-parser.outcome }}" == "success" ]; then
+            echo "issue_type=main" >> $GITHUB_OUTPUT
+            echo "Detected: Main Issue (fallback by JSON length)"
+          elif [ ${#SUBTASK_JSON} -gt 10 ] && [ "${{ steps.subtask-parser.outcome }}" == "success" ]; then
+            echo "issue_type=subtask" >> $GITHUB_OUTPUT
+            echo "Detected: Sub-task (fallback by JSON length)"
+          else
+            echo "issue_type=unknown" >> $GITHUB_OUTPUT
+            echo "Could not determine issue type"
+            echo "Main JSON: $MAIN_JSON"
+            echo "Subtask JSON: $SUBTASK_JSON"
+          fi
+
+      # 메인 이슈 처리
+      - name: Process Main Issue
+        if: ${{ steps.determine-type.outputs.issue_type == 'main' }}
+        id: process-main
+        run: |
+          echo "issueType=${{ fromJson(steps.main-parser.outputs.jsonString).issueparser_issueType }}" >> $GITHUB_OUTPUT
+          echo "description=${{ fromJson(steps.main-parser.outputs.jsonString).issueparser_description }}" >> $GITHUB_OUTPUT
+          
+          # 상위 에픽 번호 처리
+          PARENT_INPUT="${{ fromJson(steps.main-parser.outputs.jsonString).issueparser_parentKey }}"
+          if [ ! -z "$PARENT_INPUT" ]; then
+            if [[ "$PARENT_INPUT" =~ ^[0-9]+$ ]]; then
+              PARENT_KEY="WL7-$PARENT_INPUT"
+            elif [[ "$PARENT_INPUT" =~ ^WL7-[0-9]+$ ]]; then
+              PARENT_KEY="$PARENT_INPUT"
+            else
+              PARENT_KEY=""
+            fi
+          else
+            PARENT_KEY=""
+          fi
+          
+          echo "parentKey=$PARENT_KEY" >> $GITHUB_OUTPUT
+
+      # 하위 작업 처리
+      - name: Process Sub-task
+        if: ${{ steps.determine-type.outputs.issue_type == 'subtask' }}
+        id: process-subtask
+        run: |
+          echo "description=${{ fromJson(steps.subtask-parser.outputs.jsonString).issueparser_description }}" >> $GITHUB_OUTPUT
+          
+          # 상위 작업 번호 처리
+          PARENT_INPUT="${{ fromJson(steps.subtask-parser.outputs.jsonString).issueparser_parentKey }}"
+          if [ ! -z "$PARENT_INPUT" ]; then
+            if [[ "$PARENT_INPUT" =~ ^[0-9]+$ ]]; then
+              PARENT_KEY="WL7-$PARENT_INPUT"
+            elif [[ "$PARENT_INPUT" =~ ^WL7-[0-9]+$ ]]; then
+              PARENT_KEY="$PARENT_INPUT"
+            else
+              PARENT_KEY=""
+            fi
+          else
+            PARENT_KEY=""
+          fi
+          
+          echo "parentKey=$PARENT_KEY" >> $GITHUB_OUTPUT
+
+      - name: Map Main Issue Type to Jira
+        if: ${{ steps.determine-type.outputs.issue_type == 'main' }}
+        id: map-main-type
+        run: |
+          case "${{ steps.process-main.outputs.issueType }}" in
+            "버그") echo "jira_type=버그" >> $GITHUB_OUTPUT ;;
+            "작업") echo "jira_type=작업" >> $GITHUB_OUTPUT ;;
+            "스토리") echo "jira_type=스토리" >> $GITHUB_OUTPUT ;;
+            *) echo "jira_type=작업" >> $GITHUB_OUTPUT ;;
+          esac
+
       - name: Convert markdown to Jira Syntax
+        if: ${{ steps.determine-type.outputs.issue_type != 'unknown' }}
         uses: peter-evans/jira2md@v1
         id: md2jira
         with:
           input-text: |
             ### Github Issue Link
             - ${{ github.event.issue.html_url }}
+
             ${{ github.event.issue.body }}
           mode: md2jira
-      - name: Create Issue (with parent)
-        if: ${{ steps.issue-parser.outputs.issueparser_parentKey != '' }}
-        id: create-with-parent
+
+      # 메인 이슈 생성 (에픽 연결)
+      - name: Create Main Issue (with epic)
+        if: ${{ steps.determine-type.outputs.issue_type == 'main' && steps.process-main.outputs.parentKey != '' }}
+        id: create-main-with-epic
         uses: atlassian/gajira-create@v3
         with:
           project: WL7
-          issuetype: Task
-          summary: '${{ github.event.issue.title }}'
-          description: '${{ steps.md2jira.outputs.output-text }}'
+          issuetype: ${{ steps.map-main-type.outputs.jira_type }}
+          summary: "${{ github.event.issue.title }}"
+          description: "${{ steps.md2jira.outputs.output-text }}"
           fields: |
             {
               "parent": {
-                "key": "${{ steps.issue-parser.outputs.issueparser_parentKey }}"
-              }
+                "key": "${{ steps.process-main.outputs.parentKey }}"
+              },
+              "customfield_10041": { "value": "${{ env.REPO_GUBUN }}" },
+              "customfield_10042": { "value": "${{ env.REPO_NAME }}" }
             }
-      - name: Create Issue (without parent)
-        if: ${{ steps.issue-parser.outputs.issueparser_parentKey == '' }}
-        id: create-without-parent
+
+      # 메인 이슈 생성 (에픽 없음)
+      - name: Create Main Issue (no epic)
+        if: ${{ steps.determine-type.outputs.issue_type == 'main' && steps.process-main.outputs.parentKey == '' }}
+        id: create-main-no-epic
         uses: atlassian/gajira-create@v3
         with:
           project: WL7
-          issuetype: 작업
-          summary: '${{ github.event.issue.title }}'
-          description: '${{ steps.md2jira.outputs.output-text }}'
-      - name: Set issue output
-        id: create
+          issuetype: ${{ steps.map-main-type.outputs.jira_type }}
+          summary: "${{ github.event.issue.title }}"
+          description: "${{ steps.md2jira.outputs.output-text }}"
+          fields: |
+            {
+              "customfield_10041": { "value": "${{ env.REPO_GUBUN }}" },
+              "customfield_10042": { "value": "${{ env.REPO_NAME }}" }
+            }
+
+      # 하위 작업 생성
+      - name: Create Sub-task
+        if: ${{ steps.determine-type.outputs.issue_type == 'subtask' && steps.process-subtask.outputs.parentKey != '' }}
+        id: create-subtask
+        uses: atlassian/gajira-create@v3
+        with:
+          project: WL7
+          issuetype: 하위 작업
+          summary: "${{ github.event.issue.title }}"
+          description: "${{ steps.md2jira.outputs.output-text }}"
+          fields: |
+            {
+              "parent": {
+                "key": "${{ steps.process-subtask.outputs.parentKey }}"
+              }
+            }
+
+      - name: Set final issue output
+        id: final-issue
         run: |
-          if [ "${{ steps.create-with-parent.outputs.issue }}" != "" ]; then
-            echo "issue=${{ steps.create-with-parent.outputs.issue }}" >> $GITHUB_OUTPUT
-          else
-            echo "issue=${{ steps.create-without-parent.outputs.issue }}" >> $GITHUB_OUTPUT
+          if [ "${{ steps.create-main-with-epic.outputs.issue }}" != "" ]; then
+            echo "issue=${{ steps.create-main-with-epic.outputs.issue }}" >> $GITHUB_OUTPUT
+            echo "type=main" >> $GITHUB_OUTPUT
+          elif [ "${{ steps.create-main-no-epic.outputs.issue }}" != "" ]; then
+            echo "issue=${{ steps.create-main-no-epic.outputs.issue }}" >> $GITHUB_OUTPUT
+            echo "type=main" >> $GITHUB_OUTPUT
+          elif [ "${{ steps.create-subtask.outputs.issue }}" != "" ]; then
+            echo "issue=${{ steps.create-subtask.outputs.issue }}" >> $GITHUB_OUTPUT
+            echo "type=subtask" >> $GITHUB_OUTPUT
           fi
+
       - name: Log created issue
-        run: echo "Jira Issue ${{ steps.create.outputs.issue }} was created"
+        if: ${{ steps.final-issue.outputs.issue != '' }}
+        run: |
+          echo "Created Jira Issue: ${{ steps.final-issue.outputs.issue }}"
+          echo "Issue Type: ${{ steps.final-issue.outputs.type }}"
+
       - name: Update issue title
+        if: ${{ steps.final-issue.outputs.issue != '' }}
         uses: actions-cool/issues-helper@v3
         with:
-          actions: 'update-issue'
+          actions: "update-issue"
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: '[${{ steps.create.outputs.issue }}] ${{ github.event.issue.title }}'
-      - name: Add comment with Jira issue link
+          title: "[${{ steps.final-issue.outputs.issue }}] ${{ github.event.issue.title }}"
+
+      - name: Add comment for main issue
+        if: ${{ steps.final-issue.outputs.type == 'main' }}
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'create-comment'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-          body: 'Jira Issue Created: [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'
+          body: |
+            ## 🎟️ Jira 메인 이슈 생성 완료
+            
+            **Main Issue:** [${{ steps.final-issue.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.final-issue.outputs.issue }})
+            **Type:** ${{ steps.map-main-type.outputs.jira_type }}
+            **구분:** ${{ env.REPO_GUBUN }}
+            **Repo:** ${{ env.REPO_NAME }}
+            ${{ steps.process-main.outputs.parentKey != '' && format('**Parent Epic:** {0}', steps.process-main.outputs.parentKey) || '' }}
+
+      - name: Add comment for sub-task
+        if: ${{ steps.final-issue.outputs.type == 'subtask' }}
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ## ✅ Jira 하위 작업 생성 완료
+            
+            **Sub-task:** [${{ steps.final-issue.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.final-issue.outputs.issue }})
+            **Parent Issue:** [${{ steps.process-subtask.outputs.parentKey }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.process-subtask.outputs.parentKey }})
+            **구분:** ${{ env.REPO_GUBUN }}
+            **Repo:** ${{ env.REPO_NAME }}
