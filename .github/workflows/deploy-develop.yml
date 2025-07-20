@@ -1,0 +1,60 @@
+name: Deploy develop to EC2
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: 1seyoung/unear-app:develop
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEV_EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ~/unear-app-dev
+
+            echo "SPRING_PROFILES_ACTIVE=prod" > .env
+            echo "DB_URL=${{ secrets.DEV_DB_URL }}" >> .env
+            echo "DB_USER=${{ secrets.DEV_DB_USER }}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}" >> .env
+
+            echo "MAIL_HOST=${{ secrets.DEV_MAIL_HOST }}" >> .env
+            echo "MAIL_PORT=${{ secrets.DEV_MAIL_PORT }}" >> .env
+            echo "MAIL_USERNAME=${{ secrets.DEV_MAIL_USERNAME }}" >> .env
+            echo "MAIL_PASSWORD=${{ secrets.DEV_MAIL_PASSWORD }}" >> .env
+
+            echo "oauth2.google.client-id=${{ secrets.DEV_GOOGLE_CLIENT_ID }}" >> .env
+            echo "oauth2.google.client-secret=${{ secrets.DEV_GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "oauth2.kakao.client-id=${{ secrets.DEV_KAKAO_CLIENT_ID }}" >> .env
+            echo "oauth2.kakao.client-secret=${{ secrets.DEV_KAKAO_CLIENT_SECRET }}" >> .env
+
+            echo "REDIS_PORT=6379" >> .env
+
+            docker pull 1seyoung/unear-app:develop
+            docker-compose -f docker-compose.dev.yml down
+            docker-compose -f docker-compose.dev.yml up -d
