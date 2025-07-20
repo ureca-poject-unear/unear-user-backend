@@ -1,0 +1,37 @@
+name: Close Jira Issue
+on:
+  issues:
+    types:
+      - closed
+
+jobs:
+  close-jira-issue:
+    name: Close Jira Issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Jira
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+
+      - name: Extract Jira issue key from GitHub issue title
+        id: extract-key
+        run: |
+          ISSUE_TITLE="${{ github.event.issue.title }}"
+          # WL7-274 같은 패턴을 매치하도록 수정 (문자+숫자-숫자)
+          JIRA_KEY=$(echo "$ISSUE_TITLE" | grep -oE '[A-Z]+[0-9]*-[0-9]+' || echo "")
+          if [ -n "$JIRA_KEY" ]; then
+            echo "JIRA_KEY=$JIRA_KEY" >> $GITHUB_ENV
+            echo "Found Jira key: $JIRA_KEY"
+          else
+            echo "No Jira key found in title: $ISSUE_TITLE"
+          fi
+
+      - name: Close Jira issue
+        if: env.JIRA_KEY != ''
+        uses: atlassian/gajira-transition@v3
+        with:
+          issue: ${{ env.JIRA_KEY }}
+          transition: 완료
