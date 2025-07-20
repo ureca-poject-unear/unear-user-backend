@@ -10,6 +10,7 @@ import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
 import com.unear.userservice.place.entity.Place;
 import com.unear.userservice.place.service.PlaceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +28,7 @@ public class PlaceController {
     @GetMapping("/{placeId}")
     public ResponseEntity<ApiResponse<PlaceResponseDto>> getPlace(
             @PathVariable Long placeId,
-            @ModelAttribute NearbyPlaceRequestDto location,
+            @Valid @ModelAttribute NearbyPlaceRequestDto location,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
@@ -48,7 +49,7 @@ public class PlaceController {
 
     @GetMapping("/nearby")
     public ResponseEntity<ApiResponse<List<NearestPlaceResponseDto>>> getNearbyPlaces(
-            @ModelAttribute NearbyPlaceRequestDto requestDto,
+            @Valid @ModelAttribute NearbyPlaceRequestDto requestDto,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
