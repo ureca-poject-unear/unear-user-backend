@@ -39,19 +39,19 @@ jobs:
             cd ~/unear-app
 
             echo "SPRING_PROFILES_ACTIVE=prod" > .env
-            echo "DB_URL=${{ secrets.DEV_DB_URL }}" >> .env
-            echo "DB_USER=${{ secrets.DEV_DB_USER }}" >> .env
-            echo "DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}" >> .env
+            echo "DB_URL=${{ secrets.DB_URL }}" >> .env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
 
-            echo "MAIL_HOST=${{ secrets.DEV_MAIL_HOST }}" >> .env
-            echo "MAIL_PORT=${{ secrets.DEV_MAIL_PORT }}" >> .env
-            echo "MAIL_USERNAME=${{ secrets.DEV_MAIL_USERNAME }}" >> .env
-            echo "MAIL_PASSWORD=${{ secrets.DEV_MAIL_PASSWORD }}" >> .env
+            echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+            echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+            echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
+            echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
 
-            echo "oauth2.google.client-id=${{ secrets.DEV_GOOGLE_CLIENT_ID }}" >> .env
-            echo "oauth2.google.client-secret=${{ secrets.DEV_GOOGLE_CLIENT_SECRET }}" >> .env
-            echo "oauth2.kakao.client-id=${{ secrets.DEV_KAKAO_CLIENT_ID }}" >> .env
-            echo "oauth2.kakao.client-secret=${{ secrets.DEV_KAKAO_CLIENT_SECRET }}" >> .env
+            echo "oauth2.google.client-id=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+            echo "oauth2.google.client-secret=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "oauth2.kakao.client-id=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+            echo "oauth2.kakao.client-secret=${{ secrets.KAKAO_CLIENT_SECRET }}" >> .env
 
             echo "REDIS_PORT=6379" >> .env
 
