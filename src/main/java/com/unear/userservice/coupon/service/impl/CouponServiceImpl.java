@@ -7,6 +7,7 @@ import com.unear.userservice.common.enums.DiscountPolicy;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
+import com.unear.userservice.coupon.dto.response.UserCouponResponseListDto;
 import com.unear.userservice.coupon.entity.CouponTemplate;
 import com.unear.userservice.coupon.entity.UserCoupon;
 import com.unear.userservice.coupon.repository.CouponTemplateRepository;
@@ -138,14 +139,26 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public List<UserCouponResponseDto> getMyCoupons(Long userId) {
+    public UserCouponResponseListDto getMyCoupons(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserId(userId);
-        return userCoupons.stream()
+
+        List<UserCouponResponseDto> dtoList = userCoupons.stream()
                 .map(UserCouponResponseDto::from)
                 .toList();
+
+        return new UserCouponResponseListDto(dtoList);
+    }
+
+
+
+    @Override
+    public UserCouponResponseDto getMyCouponDetail(Long userId, Long userCouponId) {
+        UserCoupon coupon = userCouponRepository.findByUserCouponIdAndUser_UserId(userCouponId, userId)
+                .orElseThrow(() -> new CouponTemplateNotFoundException("해당 쿠폰을 찾을 수 없습니다."));
+        return UserCouponResponseDto.from(coupon);
     }
 
 

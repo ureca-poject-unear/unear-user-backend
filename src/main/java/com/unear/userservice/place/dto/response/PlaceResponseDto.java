@@ -38,7 +38,7 @@ public class PlaceResponseDto {
                 .endTime(place.getEndTime())
                 .categoryCode(place.getCategoryCode())
                 .markerCode(place.getMarkerCode())
-                .eventCode(place.getEventCode())
+                .eventCode(place.getEventTypeCode())
                 .franchiseName(place.getFranchise() != null ? place.getFranchise().getName() : null)
                 .isFavorite(isFavorite)
                 .distanceKm(distanceKm)
