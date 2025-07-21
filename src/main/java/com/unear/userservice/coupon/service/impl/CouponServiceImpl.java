@@ -159,7 +159,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public UserCouponDetailResponseDto getMyCouponDetail(Long userId, Long userCouponId) {
         UserCoupon userCoupon = userCouponRepository.findByUserCouponIdAndUser_UserId(userCouponId, userId)
-                .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰을 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserCouponNotFoundException("다운받은 쿠폰을 찾을 수 없습니다."));
         CouponTemplate template = userCoupon.getCouponTemplate();
         String markerCode = template.getMarkerCode();
 
