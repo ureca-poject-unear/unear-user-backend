@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
@@ -20,5 +21,8 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
     boolean existsByBarcodeNumber(String barcodeNumber);
 
     List<UserCoupon> findByUser_UserId(Long userId);
+
+    Optional<UserCoupon> findByUserCouponIdAndUser_UserId(Long userCouponId, Long userId);
+
 
 }
