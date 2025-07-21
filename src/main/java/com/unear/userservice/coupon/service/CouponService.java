@@ -2,6 +2,7 @@ package com.unear.userservice.coupon.service;
 
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
+import com.unear.userservice.coupon.dto.response.UserCouponResponseListDto;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface CouponService {
 
     UserCouponResponseDto downloadFCFSCoupon(Long userId, Long couponTemplateId);
 
-    List<UserCouponResponseDto> getMyCoupons(Long userId);
+    UserCouponResponseListDto getMyCoupons(Long userId);
 
     UserCouponResponseDto getMyCouponDetail(Long userId, Long userCouponId);
 
