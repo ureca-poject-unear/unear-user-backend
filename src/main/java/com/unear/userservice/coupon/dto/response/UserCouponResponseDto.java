@@ -4,7 +4,7 @@ import com.unear.userservice.coupon.entity.UserCoupon;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -13,8 +13,8 @@ public class UserCouponResponseDto {
     private String couponName;
     private String barcodeNumber;
     private String couponStatusCode;
-    private LocalDate createdAt;
-    private LocalDate couponEnd;
+    private LocalDateTime createdAt;
+    private LocalDateTime couponEnd;
 
     public static UserCouponResponseDto from(UserCoupon userCoupon) {
         return UserCouponResponseDto.builder()

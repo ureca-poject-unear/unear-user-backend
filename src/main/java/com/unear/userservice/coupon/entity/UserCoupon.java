@@ -4,7 +4,7 @@ import com.unear.userservice.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_coupons")
@@ -27,8 +27,8 @@ public class UserCoupon {
     @JoinColumn(name = "coupon_template_id", nullable = false)
     private CouponTemplate couponTemplate;
 
-    private LocalDate createdAt;
-    private LocalDate usedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime usedAt;
 
     private String couponStatusCode;
     private String barcodeNumber;

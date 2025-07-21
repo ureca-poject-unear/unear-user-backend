@@ -4,8 +4,7 @@ import com.unear.userservice.coupon.entity.CouponTemplate;
 import lombok.Builder;
 import lombok.Getter;
 
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -16,8 +15,8 @@ public class CouponResponseDto {
     private String discountCode;
     private String membershipCode;
     private String discountInfo;
-    private LocalDate couponStart;
-    private LocalDate couponEnd;
+    private LocalDateTime couponStart;
+    private LocalDateTime couponEnd;
 
     private boolean isDownloaded;
 

@@ -6,8 +6,9 @@ import com.unear.userservice.common.enums.CouponStatus;
 import com.unear.userservice.common.enums.DiscountPolicy;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
+import com.unear.userservice.coupon.dto.response.UserCouponDetailResponseDto;
+import com.unear.userservice.coupon.dto.response.UserCouponListResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
-import com.unear.userservice.coupon.dto.response.UserCouponResponseListDto;
 import com.unear.userservice.coupon.entity.CouponTemplate;
 import com.unear.userservice.coupon.entity.UserCoupon;
 import com.unear.userservice.coupon.repository.CouponTemplateRepository;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -83,15 +85,15 @@ public class CouponServiceImpl implements CouponService {
         CouponTemplate template = couponTemplateRepository.findById(couponTemplateId)
                 .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰 템플릿을 찾을 수 없습니다."));
 
-        LocalDate today = LocalDate.now();
-        if (template.getCouponStart().isAfter(today) || template.getCouponEnd().isBefore(today)) {
+        LocalDateTime now = LocalDateTime.now();
+        if (template.getCouponStart().isAfter(now) || template.getCouponEnd().isBefore(now)) {
             throw new CouponExpiredException("유효 기간이 지난 쿠폰입니다.");
         }
 
         UserCoupon userCoupon = UserCoupon.builder()
                 .user(user)
                 .couponTemplate(template)
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .couponStatusCode(CouponStatus.UNUSED.getCode())
                 .barcodeNumber(generateUniqueBarcode())
                 .build();
@@ -114,8 +116,8 @@ public class CouponServiceImpl implements CouponService {
         CouponTemplate template = couponTemplateRepository.findById(couponTemplateId)
                 .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰 템플릿을 찾을 수 없습니다."));
 
-        LocalDate today = LocalDate.now();
-        if (template.getCouponStart().isAfter(today) || template.getCouponEnd().isBefore(today)) {
+        LocalDateTime now = LocalDateTime.now();
+        if (template.getCouponStart().isAfter(now) || template.getCouponEnd().isBefore(now)) {
             throw new CouponExpiredException("유효 기간이 지난 쿠폰입니다.");
         }
 
@@ -124,7 +126,7 @@ public class CouponServiceImpl implements CouponService {
         UserCoupon userCoupon = UserCoupon.builder()
                 .user(user)
                 .couponTemplate(template)
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .couponStatusCode(CouponStatus.UNUSED.getCode())
                 .barcodeNumber(generateUniqueBarcode())
                 .build();
@@ -139,7 +141,7 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public UserCouponResponseListDto getMyCoupons(Long userId) {
+    public UserCouponListResponseDto getMyCoupons(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -149,17 +151,57 @@ public class CouponServiceImpl implements CouponService {
                 .map(UserCouponResponseDto::from)
                 .toList();
 
-        return new UserCouponResponseListDto(dtoList);
+        return new UserCouponListResponseDto(dtoList);
     }
 
 
 
     @Override
-    public UserCouponResponseDto getMyCouponDetail(Long userId, Long userCouponId) {
-        UserCoupon coupon = userCouponRepository.findByUserCouponIdAndUser_UserId(userCouponId, userId)
-                .orElseThrow(() -> new CouponTemplateNotFoundException("해당 쿠폰을 찾을 수 없습니다."));
-        return UserCouponResponseDto.from(coupon);
+    public UserCouponDetailResponseDto getMyCouponDetail(Long userId, Long userCouponId) {
+        UserCoupon userCoupon = userCouponRepository.findByUserCouponIdAndUser_UserId(userCouponId, userId)
+                .orElseThrow(() -> new UserCouponNotFoundException("다운받은 쿠폰을 찾을 수 없습니다."));
+        CouponTemplate template = userCoupon.getCouponTemplate();
+        String markerCode = template.getMarkerCode();
+
+        UserCouponDetailResponseDto.UserCouponDetailResponseDtoBuilder builder = UserCouponDetailResponseDto.builder()
+                .userCouponId(userCoupon.getUserCouponId())
+                .couponName(template.getCouponName())
+                .barcodeNumber(userCoupon.getBarcodeNumber())
+                .couponStatusCode(userCoupon.getCouponStatusCode())
+                .createdAt(userCoupon.getCreatedAt())
+                .couponEnd(template.getCouponEnd())
+                .markerCode(markerCode);
+
+        if (template.getDiscountPolicyDetailId() == null) {
+            return builder.build();
+        }
+
+        PlaceType placeType = PlaceType.fromCode(markerCode);
+        if (placeType.isFranchise()) {
+            franchiseDiscountPolicyRepository.findById(template.getDiscountPolicyDetailId()).ifPresent(policy ->
+                    builder
+                            .discountCode(policy.getDiscountCode())
+                            .membershipCode(policy.getMembershipCode())
+                            .fixedDiscount(policy.getFixedDiscount())
+                            .discountPercent(policy.getDiscountPercent())
+                            .minPurchaseAmount(policy.getMinPurchaseAmount())
+                            .maxDiscountAmount(policy.getMaxDiscountAmount())
+            );
+        } else if (placeType.isBasic()) {
+            generalDiscountPolicyRepository.findById(template.getDiscountPolicyDetailId()).ifPresent(policy ->
+                    builder
+                            .discountCode(policy.getDiscountCode())
+                            .membershipCode(policy.getMembershipCode())
+                            .fixedDiscount(policy.getFixedDiscount())
+                            .discountPercent(policy.getDiscountPercent())
+                            .minPurchaseAmount(policy.getMinPurchaseAmount())
+                            .maxDiscountAmount(policy.getMaxDiscountAmount())
+            );
+        }
+
+        return builder.build();
     }
+
 
 
     private String generateUniqueBarcode() {

@@ -16,8 +16,8 @@ public class GeneralDiscountPolicyDetailResponseDto {
     private Integer endTime;
 
     private Integer unitBaseAmount;
-    private Integer discountValue;
-    private Integer percent;
+    private Integer fixedDiscount;
+    private Integer discountPercent;
     private Integer minPurchaseAmount;
     private Integer maxDiscountAmount;
 
@@ -35,8 +35,8 @@ public class GeneralDiscountPolicyDetailResponseDto {
                 .startTime(place.getStartTime())
                 .endTime(place.getEndTime())
                 .unitBaseAmount(detail.getUnitBaseAmount())
-                .discountValue(detail.getDiscountValue())
-                .percent(detail.getPercent())
+                .fixedDiscount(detail.getFixedDiscount())
+                .discountPercent(detail.getDiscountPercent())
                 .minPurchaseAmount(detail.getMinPurchaseAmount())
                 .maxDiscountAmount(detail.getMaxDiscountAmount())
                 .discountCode(detail.getDiscountCode())
