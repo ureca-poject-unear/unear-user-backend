@@ -20,8 +20,8 @@ public class GeneralDiscountPolicy {
     private Place place;
 
     private Integer unitBaseAmount;
-    private Integer discountValue;
-    private Integer percent;
+    private Integer fixedDiscount;
+    private Integer discountPercent;
     private Integer minPurchaseAmount;
     private Integer maxDiscountAmount;
 
