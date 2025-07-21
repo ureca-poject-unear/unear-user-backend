@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -84,15 +85,15 @@ public class CouponServiceImpl implements CouponService {
         CouponTemplate template = couponTemplateRepository.findById(couponTemplateId)
                 .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰 템플릿을 찾을 수 없습니다."));
 
-        LocalDate today = LocalDate.now();
-        if (template.getCouponStart().isAfter(today) || template.getCouponEnd().isBefore(today)) {
+        LocalDateTime now = LocalDateTime.now();
+        if (template.getCouponStart().isAfter(now) || template.getCouponEnd().isBefore(now)) {
             throw new CouponExpiredException("유효 기간이 지난 쿠폰입니다.");
         }
 
         UserCoupon userCoupon = UserCoupon.builder()
                 .user(user)
                 .couponTemplate(template)
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .couponStatusCode(CouponStatus.UNUSED.getCode())
                 .barcodeNumber(generateUniqueBarcode())
                 .build();
@@ -115,8 +116,8 @@ public class CouponServiceImpl implements CouponService {
         CouponTemplate template = couponTemplateRepository.findById(couponTemplateId)
                 .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰 템플릿을 찾을 수 없습니다."));
 
-        LocalDate today = LocalDate.now();
-        if (template.getCouponStart().isAfter(today) || template.getCouponEnd().isBefore(today)) {
+        LocalDateTime now = LocalDateTime.now();
+        if (template.getCouponStart().isAfter(now) || template.getCouponEnd().isBefore(now)) {
             throw new CouponExpiredException("유효 기간이 지난 쿠폰입니다.");
         }
 
@@ -125,7 +126,7 @@ public class CouponServiceImpl implements CouponService {
         UserCoupon userCoupon = UserCoupon.builder()
                 .user(user)
                 .couponTemplate(template)
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .couponStatusCode(CouponStatus.UNUSED.getCode())
                 .barcodeNumber(generateUniqueBarcode())
                 .build();
