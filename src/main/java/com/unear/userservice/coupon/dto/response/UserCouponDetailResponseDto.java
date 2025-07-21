@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -13,8 +14,8 @@ public class UserCouponDetailResponseDto {
     private String couponName;
     private String barcodeNumber;
     private String couponStatusCode;
-    private LocalDate createdAt;
-    private LocalDate couponEnd;
+    private LocalDateTime createdAt;
+    private LocalDateTime couponEnd;
 
     private String discountCode;
     private String membershipCode;
