@@ -15,4 +15,6 @@ public interface CouponService {
 
     List<UserCouponResponseDto> getMyCoupons(Long userId);
 
+    UserCouponResponseDto getMyCouponDetail(Long userId, Long userCouponId);
+
 }

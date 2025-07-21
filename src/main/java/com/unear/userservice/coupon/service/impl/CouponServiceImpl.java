@@ -149,6 +149,14 @@ public class CouponServiceImpl implements CouponService {
     }
 
 
+    @Override
+    public UserCouponResponseDto getMyCouponDetail(Long userId, Long userCouponId) {
+        UserCoupon coupon = userCouponRepository.findByUserCouponIdAndUser_UserId(userCouponId, userId)
+                .orElseThrow(() -> new CouponTemplateNotFoundException("해당 쿠폰을 찾을 수 없습니다."));
+        return UserCouponResponseDto.from(coupon);
+    }
+
+
     private String generateUniqueBarcode() {
         for (int i = 0; i < 3; i++) {
             String barcode = generateBarcode();
