@@ -70,6 +70,20 @@ public class CouponController {
         return ResponseEntity.ok(ApiResponse.success("사용자 쿠폰 목록 조회 성공", response));
     }
 
+    @GetMapping("/me/{userCouponId}")
+    public ResponseEntity<ApiResponse<UserCouponResponseDto>> getMyCouponDetail(
+            @PathVariable Long userCouponId,
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        if (user == null || user.getUser() == null) {
+            throw new UnauthorizedException("인증되지 않은 사용자입니다.");
+        }
+        Long userId = user.getUser().getUserId();
+        UserCouponResponseDto response = couponService.getMyCouponDetail(userId, userCouponId);
+        return ResponseEntity.ok(ApiResponse.success("사용자 쿠폰 상세 조회 성공", response));
+    }
+
+
 }
 
 
