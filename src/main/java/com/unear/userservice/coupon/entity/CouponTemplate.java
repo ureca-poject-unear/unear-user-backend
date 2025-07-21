@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +26,8 @@ public class CouponTemplate {
 
     private Integer remainingQuantity;
 
-    private LocalDate couponStart;
-    private LocalDate couponEnd;
+    private LocalDateTime couponStart;
+    private LocalDateTime couponEnd;
 
     private String discountCode;
     private String membershipCode;
