@@ -1,6 +1,4 @@
 package com.unear.userservice.coupon.controller;
-
-
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
