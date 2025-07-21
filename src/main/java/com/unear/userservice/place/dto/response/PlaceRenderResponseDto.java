@@ -27,7 +27,7 @@ public class PlaceRenderResponseDto {
                 .longitude(place.getLongitude())
                 .categoryCode(place.getCategoryCode())
                 .markerCode(place.getMarkerCode())
-                .eventCode(place.getEventCode())
+                .eventCode(place.getEventTypeCode())
                 .benefitCategory(place.getBenefitCategory())
                 .favorite(isFavorite)
                 .build();
