@@ -6,8 +6,8 @@ import com.unear.userservice.common.enums.CouponStatus;
 import com.unear.userservice.common.enums.DiscountPolicy;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
+import com.unear.userservice.coupon.dto.response.UserCouponListResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
-import com.unear.userservice.coupon.dto.response.UserCouponResponseListDto;
 import com.unear.userservice.coupon.entity.CouponTemplate;
 import com.unear.userservice.coupon.entity.UserCoupon;
 import com.unear.userservice.coupon.repository.CouponTemplateRepository;
@@ -139,7 +139,7 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public UserCouponResponseListDto getMyCoupons(Long userId) {
+    public UserCouponListResponseDto getMyCoupons(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -149,7 +149,7 @@ public class CouponServiceImpl implements CouponService {
                 .map(UserCouponResponseDto::from)
                 .toList();
 
-        return new UserCouponResponseListDto(dtoList);
+        return new UserCouponListResponseDto(dtoList);
     }
 
 

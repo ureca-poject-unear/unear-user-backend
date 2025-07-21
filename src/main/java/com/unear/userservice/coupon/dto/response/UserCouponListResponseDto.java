@@ -7,11 +7,11 @@ import java.util.List;
 
 
 @Getter
-public class UserCouponResponseListDto {
+public class UserCouponListResponseDto {
     private int count;
     private List<UserCouponResponseDto> coupons;
 
-    public UserCouponResponseListDto(List<UserCouponResponseDto> coupons) {
+    public UserCouponListResponseDto(List<UserCouponResponseDto> coupons) {
         this.count = coupons.size();
         this.coupons = coupons;
     }
