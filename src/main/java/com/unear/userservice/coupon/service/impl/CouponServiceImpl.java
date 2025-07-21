@@ -6,6 +6,7 @@ import com.unear.userservice.common.enums.CouponStatus;
 import com.unear.userservice.common.enums.DiscountPolicy;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
+import com.unear.userservice.coupon.dto.response.UserCouponDetailResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponListResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
 import com.unear.userservice.coupon.entity.CouponTemplate;
@@ -155,11 +156,51 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public UserCouponResponseDto getMyCouponDetail(Long userId, Long userCouponId) {
-        UserCoupon coupon = userCouponRepository.findByUserCouponIdAndUser_UserId(userCouponId, userId)
-                .orElseThrow(() -> new CouponTemplateNotFoundException("해당 쿠폰을 찾을 수 없습니다."));
-        return UserCouponResponseDto.from(coupon);
+    public UserCouponDetailResponseDto getMyCouponDetail(Long userId, Long userCouponId) {
+        UserCoupon userCoupon = userCouponRepository.findByUserCouponIdAndUser_UserId(userCouponId, userId)
+                .orElseThrow(() -> new CouponTemplateNotFoundException("쿠폰을 찾을 수 없습니다."));
+        CouponTemplate template = userCoupon.getCouponTemplate();
+        String markerCode = template.getMarkerCode();
+
+        UserCouponDetailResponseDto.UserCouponDetailResponseDtoBuilder builder = UserCouponDetailResponseDto.builder()
+                .userCouponId(userCoupon.getUserCouponId())
+                .couponName(template.getCouponName())
+                .barcodeNumber(userCoupon.getBarcodeNumber())
+                .couponStatusCode(userCoupon.getCouponStatusCode())
+                .createdAt(userCoupon.getCreatedAt())
+                .couponEnd(template.getCouponEnd())
+                .markerCode(markerCode);
+
+        if (template.getDiscountPolicyDetailId() == null) {
+            return builder.build();
+        }
+
+        PlaceType placeType = PlaceType.fromCode(markerCode);
+        if (placeType.isFranchise()) {
+            franchiseDiscountPolicyRepository.findById(template.getDiscountPolicyDetailId()).ifPresent(policy ->
+                    builder
+                            .discountCode(policy.getDiscountCode())
+                            .membershipCode(policy.getMembershipCode())
+                            .fixedDiscount(policy.getFixedDiscount())
+                            .discountPercent(policy.getDiscountPercent())
+                            .minPurchaseAmount(policy.getMinPurchaseAmount())
+                            .maxDiscountAmount(policy.getMaxDiscountAmount())
+            );
+        } else if (placeType.isBasic()){
+            generalDiscountPolicyRepository.findById(template.getDiscountPolicyDetailId()).ifPresent(policy ->
+                    builder
+                            .discountCode(policy.getDiscountCode())
+                            .membershipCode(policy.getMembershipCode())
+                            .fixedDiscount(policy.getFixedDiscount())
+                            .discountPercent(policy.getDiscountPercent())
+                            .minPurchaseAmount(policy.getMinPurchaseAmount())
+                            .maxDiscountAmount(policy.getMaxDiscountAmount())
+            );
+        }
+
+        return builder.build();
     }
+
 
 
     private String generateUniqueBarcode() {

@@ -1,6 +1,7 @@
 package com.unear.userservice.coupon.service;
 
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
+import com.unear.userservice.coupon.dto.response.UserCouponDetailResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponListResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
 
@@ -16,6 +17,6 @@ public interface CouponService {
 
     UserCouponListResponseDto getMyCoupons(Long userId);
 
-    UserCouponResponseDto getMyCouponDetail(Long userId, Long userCouponId);
+    UserCouponDetailResponseDto getMyCouponDetail(Long userId, Long userCouponId);
 
 }
