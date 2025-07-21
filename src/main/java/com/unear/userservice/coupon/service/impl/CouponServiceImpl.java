@@ -186,7 +186,7 @@ public class CouponServiceImpl implements CouponService {
                             .minPurchaseAmount(policy.getMinPurchaseAmount())
                             .maxDiscountAmount(policy.getMaxDiscountAmount())
             );
-        } else if (placeType.isBasic()){
+        } else if (placeType.isBasic()) {
             generalDiscountPolicyRepository.findById(template.getDiscountPolicyDetailId()).ifPresent(policy ->
                     builder
                             .discountCode(policy.getDiscountCode())
