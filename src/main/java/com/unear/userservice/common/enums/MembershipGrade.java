@@ -27,4 +27,9 @@ public enum MembershipGrade {
                 .findFirst()
                 .orElseThrow(() -> new InvalidCodeException("Invalid membership code: " + code));
     }
+
+    public static boolean isAll(String code) {
+        return ALL.code.equalsIgnoreCase(code);
+    }
+
 }

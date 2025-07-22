@@ -4,6 +4,7 @@ import com.unear.userservice.benefit.repository.FranchiseDiscountPolicyRepositor
 import com.unear.userservice.benefit.repository.GeneralDiscountPolicyRepository;
 import com.unear.userservice.common.enums.CouponStatus;
 import com.unear.userservice.common.enums.DiscountPolicy;
+import com.unear.userservice.common.enums.MembershipGrade;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.common.exception.exception.*;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
@@ -65,7 +66,25 @@ public class CouponServiceImpl implements CouponService {
                 ? userCouponRepository.findCouponTemplateIdsByUserId(userId)
                 : Set.of();
 
+        final String userMembershipCode =
+                (userId != null && placeType.isFranchise())
+                        ? userRepository.findMembershipCodeByUserId(userId)
+                        : null;
+
         return templates.stream()
+                .filter(template -> {
+
+                    if (!placeType.isFranchise()) return true;
+
+                    String templateMembershipCode = template.getMembershipCode();
+                    if (templateMembershipCode == null) return false;
+
+                    if (MembershipGrade.isAll(templateMembershipCode)) return true;
+
+                    if (userMembershipCode == null) return false;
+
+                    return templateMembershipCode.equalsIgnoreCase(userMembershipCode);
+                })
                 .map(template -> {
                     String discountInfo = DiscountPolicy.fromCode(template.getDiscountCode()).getLabel();
                     boolean isDownloaded = downloadedIds.contains(template.getCouponTemplateId());

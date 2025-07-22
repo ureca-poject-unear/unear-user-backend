@@ -16,7 +16,8 @@ public class CouponApiDocs {
     @Documented
     @Operation(
             summary = "장소 + 마커 코드로 쿠폰 템플릿 조회",
-            description = "특정 장소 ID와 마커 코드(markerCode)에 해당하는 사용자의 쿠폰 템플릿 리스트를 조회합니다. markerCode 종류는 BASIC 과 FRANCHISE 입니다."
+            description = "특정 장소 ID와 마커 코드(markerCode)에 해당하는 사용자의 쿠폰 템플릿을 조회합니다. markerCode 종류는 BASIC 과 FRANCHISE 입니다. 이미 다운받은 쿠폰은 downloaded 가 true 입니다. \n"
+            + "현재 사용자의 멤버등급을 기준으로 해당되는 쿠폰템플릿만 조회됩니다."
     )
     @ApiResponse(
             responseCode = "200",
@@ -26,7 +27,7 @@ public class CouponApiDocs {
                     examples = {
                             @ExampleObject(
                                     name = "BasicCoupon",
-                                    summary = "기본혜택 장소 쿠폰템플릿 조회 (markerCode == BASIC ) ",
+                                    summary = "기본혜택 장소 쿠폰템플릿 조회 (place_id = 149 , markerCode = BASIC ) ",
                                     value = """
                                     {
                                         "resultCode": 200,
@@ -49,7 +50,7 @@ public class CouponApiDocs {
                             ),
                             @ExampleObject(
                                     name = "FranchiseCoupon",
-                                    summary = "프랜차이즈 장소 쿠폰템플릿 조회 (markerCode == FRANCHISE )",
+                                    summary = "프랜차이즈 장소 쿠폰템플릿 조회 ( place_id = 130 ,markerCode == FRANCHISE )",
                                     value = """
                                     {
                                         "resultCode": 200,
@@ -57,33 +58,13 @@ public class CouponApiDocs {
                                         "message": "쿠폰 템플릿 조회 성공",
                                         "data": [
                                             {
-                                                "couponTemplateId": 4,
-                                                "couponName": "GS THE FRESH",
-                                                "discountCode": "COUPON_FIXED",
-                                                "membershipCode": "VVIP",
-                                                "discountInfo": "(쿠폰) 금액 할인",
-                                                "couponStart": "2025-07-01",
-                                                "couponEnd": "2025-07-30",
-                                                "downloaded": false
-                                            },
-                                            {
                                                 "couponTemplateId": 5,
                                                 "couponName": "GS THE FRESH",
                                                 "discountCode": "COUPON_FIXED",
                                                 "membershipCode": "VIP",
                                                 "discountInfo": "(쿠폰) 금액 할인",
-                                                "couponStart": "2025-07-01",
-                                                "couponEnd": "2025-07-30",
-                                                "downloaded": false
-                                            },
-                                            {
-                                                "couponTemplateId": 6,
-                                                "couponName": "GS THE FRESH",
-                                                "discountCode": "COUPON_FIXED",
-                                                "membershipCode": "BASIC",
-                                                "discountInfo": "(쿠폰) 금액 할인",
-                                                "couponStart": "2025-07-01",
-                                                "couponEnd": "2025-07-30",
+                                                "couponStart": "2025-07-01T00:00:00",
+                                                "couponEnd": "2025-07-30T00:00:00",
                                                 "downloaded": false
                                             }
                                         ]
