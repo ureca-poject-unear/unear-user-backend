@@ -1,4 +1,4 @@
-package com.unear.userservice.exception;
+package com.unear.userservice.common.exception;
 
 import lombok.Getter;
 

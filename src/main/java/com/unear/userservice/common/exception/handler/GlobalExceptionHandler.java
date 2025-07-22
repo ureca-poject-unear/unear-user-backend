@@ -1,9 +1,9 @@
-package com.unear.userservice.exception.handler;
+package com.unear.userservice.common.exception.handler;
 
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.response.ValidationErrorResponse;
-import com.unear.userservice.exception.BusinessException;
-import com.unear.userservice.exception.ErrorCode;
+import com.unear.userservice.common.exception.BusinessException;
+import com.unear.userservice.common.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

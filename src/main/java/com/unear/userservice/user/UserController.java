@@ -2,7 +2,7 @@ package com.unear.userservice.user;
 
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
-import com.unear.userservice.exception.exception.UserNotFoundException;
+import com.unear.userservice.common.exception.exception.UserNotFoundException;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

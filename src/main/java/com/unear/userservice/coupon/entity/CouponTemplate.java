@@ -1,6 +1,6 @@
 package com.unear.userservice.coupon.entity;
 
-import com.unear.userservice.exception.exception.CouponSoldOutException;
+import com.unear.userservice.common.exception.exception.CouponSoldOutException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

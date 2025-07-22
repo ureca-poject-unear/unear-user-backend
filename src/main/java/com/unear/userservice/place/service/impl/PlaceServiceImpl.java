@@ -1,7 +1,7 @@
 package com.unear.userservice.place.service.impl;
 
-import com.unear.userservice.exception.exception.PlaceNotFoundException;
-import com.unear.userservice.exception.exception.UserNotFoundException;
+import com.unear.userservice.common.exception.exception.PlaceNotFoundException;
+import com.unear.userservice.common.exception.exception.UserNotFoundException;
 import com.unear.userservice.place.dto.request.NearbyPlaceRequestDto;
 import com.unear.userservice.place.dto.request.PlaceRequestDto;
 import com.unear.userservice.place.dto.response.NearestPlaceProjection;

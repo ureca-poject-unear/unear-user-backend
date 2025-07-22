@@ -6,6 +6,7 @@ import com.unear.userservice.benefit.dto.response.GeneralDiscountPolicyDetailRes
 import com.unear.userservice.benefit.dto.response.FranchiseDiscountPolicyDetailResponseDto;
 import com.unear.userservice.benefit.dto.response.FranchiseDiscountPolicyResponseDto;
 import com.unear.userservice.benefit.service.DiscountPolicyService;
+import com.unear.userservice.common.docs.benefit.BenefitApiDocs;
 import com.unear.userservice.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ public class DiscountPolicyController {
 
     private final DiscountPolicyService discountPolicyService;
 
+    @BenefitApiDocs.GetGeneralDiscountPolicyDetail
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<GeneralDiscountPolicyDetailResponseDto>> getDiscountPolicyDetail(
             @PathVariable("id") Long discountPolicyDetailId
@@ -27,6 +29,7 @@ public class DiscountPolicyController {
         return ResponseEntity.ok(ApiResponse.success("혜택 상세 조회 성공", response));
     }
 
+    @BenefitApiDocs.GetFranchiseDiscountPolicyList
     @GetMapping("/franchise")
     public ResponseEntity<ApiResponse<Page<FranchiseDiscountPolicyResponseDto>>> getFranchiseDiscountPolicies(
             @ModelAttribute FranchiseDiscountPolicyRequestDto requestDto
@@ -35,6 +38,7 @@ public class DiscountPolicyController {
         return ResponseEntity.ok(ApiResponse.success("프랜차이즈 혜택 리스트 조회 성공", response));
     }
 
+    @BenefitApiDocs.GetFranchiseDiscountPolicyDetail
     @GetMapping("/franchise/{id}")
     public ResponseEntity<ApiResponse<FranchiseDiscountPolicyDetailResponseDto>> getFranchiseDiscountPolicyDetail(
             @PathVariable("id") Long franchiseId

@@ -1,7 +1,6 @@
 package com.unear.userservice.common.enums;
 
-import com.unear.userservice.exception.exception.InvalidCodeException;
-import lombok.AllArgsConstructor;
+import com.unear.userservice.common.exception.exception.InvalidCodeException;
 import lombok.Getter;
 
 import java.util.Arrays;

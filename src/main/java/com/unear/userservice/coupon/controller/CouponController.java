@@ -6,7 +6,7 @@ import com.unear.userservice.coupon.dto.response.UserCouponDetailResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponListResponseDto;
 import com.unear.userservice.coupon.dto.response.UserCouponResponseDto;
 import com.unear.userservice.coupon.service.CouponService;
-import com.unear.userservice.exception.exception.UnauthorizedException;
+import com.unear.userservice.common.exception.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
