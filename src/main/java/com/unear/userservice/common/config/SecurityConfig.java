@@ -42,7 +42,10 @@ public class SecurityConfig {
     private final OAuth2FailureHandler oAuth2FailureHandler;
 
     private static final String[] WHITE_LIST = {
-            "/auth/**",
+            "/auth/login",
+            "/auth/signup",
+            "/auth/verify-code",
+            "/auth/send-code",
             "/oauth2/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
