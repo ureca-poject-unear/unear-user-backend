@@ -33,7 +33,7 @@ public class PlaceController {
     @GetMapping("/{placeId}")
     public ResponseEntity<ApiResponse<PlaceResponseDto>> getPlace(
             @PathVariable Long placeId,
-            @Valid @ModelAttribute NearbyPlaceRequestDto location,
+            @Valid @ParameterObject @ModelAttribute NearbyPlaceRequestDto location,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
@@ -56,7 +56,7 @@ public class PlaceController {
     @PlaceApiDocs.GetNearbyPlaces
     @GetMapping("/nearby")
     public ResponseEntity<ApiResponse<List<NearestPlaceResponseDto>>> getNearbyPlaces(
-            @Valid @ModelAttribute NearbyPlaceRequestDto requestDto,
+            @Valid @ParameterObject @ModelAttribute NearbyPlaceRequestDto requestDto,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
