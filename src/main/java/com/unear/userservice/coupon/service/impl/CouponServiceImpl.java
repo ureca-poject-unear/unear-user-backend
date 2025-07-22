@@ -4,6 +4,7 @@ import com.unear.userservice.benefit.repository.FranchiseDiscountPolicyRepositor
 import com.unear.userservice.benefit.repository.GeneralDiscountPolicyRepository;
 import com.unear.userservice.common.enums.CouponStatus;
 import com.unear.userservice.common.enums.DiscountPolicy;
+import com.unear.userservice.common.enums.MembershipGrade;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.common.exception.exception.*;
 import com.unear.userservice.coupon.dto.response.CouponResponseDto;
@@ -78,7 +79,7 @@ public class CouponServiceImpl implements CouponService {
                     String templateMembershipCode = template.getMembershipCode();
                     if (templateMembershipCode == null) return false;
 
-                    if ("ALL".equalsIgnoreCase(templateMembershipCode)) return true;
+                    if (MembershipGrade.isAll(templateMembershipCode)) return true;
 
                     if (userMembershipCode == null) return false;
 
