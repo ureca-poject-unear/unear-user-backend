@@ -262,8 +262,51 @@ public class PlaceApiDocs {
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @Operation(
-            summary = "주변 장소 조회",
-            description = "사용자 위치 기반으로 가까운 장소를 거리순으로 조회합니다."
+            summary = "주변 가까운 장소 리스트 조회",
+            description = "사용자 위치 기반으로 가까운 장소를 거리순으로 5개 조회합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "장소 조회 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PlaceRenderResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "DefaultFilter",
+                                    summary = "사용자 기준 가까운 장소 리스트 조회",
+                                    value = """
+                                            {
+                                                "resultCode": 200,
+                                                "codeName": "SUCCESS",
+                                                "message": "주변 매장 조회 성공",
+                                                "data": [
+                                                    {
+                                                        "placeId": 127,
+                                                        "distanceKm": 0.9
+                                                    },
+                                                    {
+                                                        "placeId": 133,
+                                                        "distanceKm": 0.9
+                                                    },
+                                                    {
+                                                        "placeId": 201,
+                                                        "distanceKm": 1.0
+                                                    },
+                                                    {
+                                                        "placeId": 128,
+                                                        "distanceKm": 1.6
+                                                    },
+                                                    {
+                                                        "placeId": 209,
+                                                        "distanceKm": 1.8
+                                                    }
+                                                ]
+                                            }
+                """
+                            )
+                    }
+            )
     )
     @SecurityRequirement(name = "BearerAuth")
     public @interface GetNearbyPlaces {
@@ -274,7 +317,29 @@ public class PlaceApiDocs {
     @Documented
     @Operation(
             summary = "즐겨찾기 토글",
-            description = "해당 장소에 대해 즐겨찾기 등록/해제 토글"
+            description = "해당 장소에 대해 즐겨찾기 등록/해제 토글입니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "장소 조회 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PlaceRenderResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "DefaultFilter",
+                                    summary = "장소에 대한 즐겨찾기 토글",
+                                    value = """
+                                    {
+                                        "resultCode": 200,
+                                        "codeName": "SUCCESS",
+                                        "message": "즐겨찾기 상태 변경 성공",
+                                        "data": true
+                                    }
+                """
+                            )
+                    }
+            )
     )
     @SecurityRequirement(name = "BearerAuth")
     public @interface ToggleFavorite {
@@ -286,6 +351,61 @@ public class PlaceApiDocs {
     @Operation(
             summary = "즐겨찾기 장소 목록 조회",
             description = "사용자의 즐겨찾기 장소 목록을 반환합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "장소 조회 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PlaceRenderResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "DefaultFilter",
+                                    summary = "사용자의 즐겨찾기 장소 목록을 반환",
+                                    value = """
+                                            {
+                                                "resultCode": 200,
+                                                "codeName": "SUCCESS",
+                                                "message": "즐겨찾기 장소 목록 조회 성공",
+                                                "data": [
+                                                    {
+                                                        "placeId": 155,
+                                                        "placeName": "SEOUL SKY",
+                                                        "placeDesc": "하늘 위 새로운 세상 (동반 3인 10%)",
+                                                        "address": "서울특별시 송파구 올림픽로 300 117~123층",
+                                                        "latitude": 37.51,
+                                                        "longitude": 127.1,
+                                                        "benefitCategory": "무료 서비스",
+                                                        "startTime": 9,
+                                                        "endTime": 20,
+                                                        "categoryCode": "ACTIVITY",
+                                                        "markerCode": "BASIC",
+                                                        "eventCode": "1",
+                                                        "franchiseName": null,
+                                                        "favorite": true
+                                                    },
+                                                    {
+                                                        "placeId": 122,
+                                                        "placeName": "GS25 화곡점",
+                                                        "placeDesc": "GS25 화곡점입니다",
+                                                        "address": "서울특별시 강서구 수명로 68-35, 웨스트엔드중정 3층 304호 (내발산동)",
+                                                        "latitude": 37.55,
+                                                        "longitude": 126.83,
+                                                        "benefitCategory": "적립",
+                                                        "startTime": 0,
+                                                        "endTime": 0,
+                                                        "categoryCode": "FOOD",
+                                                        "markerCode": "FRANCHISE",
+                                                        "eventCode": "1",
+                                                        "franchiseName": "GS 25",
+                                                        "favorite": true
+                                                    }
+                                                ]
+                                            }
+                """
+                            )
+                    }
+            )
     )
     @SecurityRequirement(name = "BearerAuth")
     public @interface GetFavorites {
