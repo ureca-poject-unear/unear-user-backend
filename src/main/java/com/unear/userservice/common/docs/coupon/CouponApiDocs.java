@@ -27,7 +27,7 @@ public class CouponApiDocs {
                     examples = {
                             @ExampleObject(
                                     name = "BasicCoupon",
-                                    summary = "기본혜택 장소 쿠폰템플릿 조회 (markerCode == BASIC ) ",
+                                    summary = "기본혜택 장소 쿠폰템플릿 조회 (place_id = 149 , markerCode = BASIC ) ",
                                     value = """
                                     {
                                         "resultCode": 200,
@@ -50,7 +50,7 @@ public class CouponApiDocs {
                             ),
                             @ExampleObject(
                                     name = "FranchiseCoupon",
-                                    summary = "프랜차이즈 장소 쿠폰템플릿 조회 (markerCode == FRANCHISE )",
+                                    summary = "프랜차이즈 장소 쿠폰템플릿 조회 ( place_id = 130 ,markerCode == FRANCHISE )",
                                     value = """
                                     {
                                         "resultCode": 200,
