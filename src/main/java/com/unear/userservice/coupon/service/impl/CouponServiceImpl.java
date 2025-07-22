@@ -65,7 +65,25 @@ public class CouponServiceImpl implements CouponService {
                 ? userCouponRepository.findCouponTemplateIdsByUserId(userId)
                 : Set.of();
 
+        final String userMembershipCode =
+                (userId != null && placeType.isFranchise())
+                        ? userRepository.findMembershipCodeByUserId(userId)
+                        : null;
+
         return templates.stream()
+                .filter(template -> {
+
+                    if (!placeType.isFranchise()) return true;
+
+                    String templateMembershipCode = template.getMembershipCode();
+                    if (templateMembershipCode == null) return false;
+
+                    if ("ALL".equalsIgnoreCase(templateMembershipCode)) return true;
+
+                    if (userMembershipCode == null) return false;
+
+                    return templateMembershipCode.equalsIgnoreCase(userMembershipCode);
+                })
                 .map(template -> {
                     String discountInfo = DiscountPolicy.fromCode(template.getDiscountCode()).getLabel();
                     boolean isDownloaded = downloadedIds.contains(template.getCouponTemplateId());
