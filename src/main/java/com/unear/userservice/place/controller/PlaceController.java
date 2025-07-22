@@ -3,7 +3,7 @@ package com.unear.userservice.place.controller;
 import com.unear.userservice.common.docs.place.PlaceApiDocs;
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
-import com.unear.userservice.exception.exception.UnauthorizedException;
+import com.unear.userservice.common.exception.exception.UnauthorizedException;
 import com.unear.userservice.place.dto.request.NearbyPlaceRequestDto;
 import com.unear.userservice.place.dto.request.PlaceRequestDto;
 import com.unear.userservice.place.dto.response.NearestPlaceResponseDto;

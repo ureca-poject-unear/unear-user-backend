@@ -10,7 +10,7 @@ import com.unear.userservice.auth.dto.response.SignupResponseDto;
 import com.unear.userservice.auth.service.AuthService;
 import com.unear.userservice.auth.service.EmailService;
 import com.unear.userservice.common.response.ApiResponse;
-import com.unear.userservice.exception.ErrorCode;
+import com.unear.userservice.common.exception.ErrorCode;
 import com.unear.userservice.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

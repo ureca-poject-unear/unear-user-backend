@@ -1,8 +1,8 @@
-package com.unear.userservice.exception.exception;
+package com.unear.userservice.common.exception.exception;
 
 
-import com.unear.userservice.exception.BusinessException;
-import com.unear.userservice.exception.ErrorCode;
+import com.unear.userservice.common.exception.BusinessException;
+import com.unear.userservice.common.exception.ErrorCode;
 
 public class EmailNotVerifiedException extends BusinessException {
     public EmailNotVerifiedException() {

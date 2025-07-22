@@ -1,6 +1,6 @@
 package com.unear.userservice.common.response;
 
-import com.unear.userservice.exception.ErrorCode;
+import com.unear.userservice.common.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

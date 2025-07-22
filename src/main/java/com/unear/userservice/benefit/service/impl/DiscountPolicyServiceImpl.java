@@ -8,7 +8,7 @@ import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
 import com.unear.userservice.benefit.repository.GeneralDiscountPolicyRepository;
 import com.unear.userservice.benefit.repository.FranchiseRepository;
 import com.unear.userservice.benefit.service.DiscountPolicyService;
-import com.unear.userservice.exception.exception.BenefitNotFoundException;
+import com.unear.userservice.common.exception.exception.BenefitNotFoundException;
 import com.unear.userservice.place.entity.Franchise;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
