@@ -29,7 +29,7 @@ public enum MembershipGrade {
     }
 
     public static boolean isAll(String code) {
-        return ALL.name().equalsIgnoreCase(code);
+        return ALL.code.equalsIgnoreCase(code);
     }
 
 }
