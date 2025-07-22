@@ -33,7 +33,7 @@ public class PlaceController {
     @GetMapping("/{placeId}")
     public ResponseEntity<ApiResponse<PlaceResponseDto>> getPlace(
             @PathVariable Long placeId,
-            @Valid @ModelAttribute NearbyPlaceRequestDto location,
+            @Valid @ParameterObject @ModelAttribute NearbyPlaceRequestDto location,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
