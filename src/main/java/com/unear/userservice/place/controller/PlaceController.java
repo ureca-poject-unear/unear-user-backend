@@ -1,5 +1,6 @@
 package com.unear.userservice.place.controller;
 
+import com.unear.userservice.common.docs.place.PlaceApiDocs;
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.exception.exception.UnauthorizedException;
@@ -8,12 +9,14 @@ import com.unear.userservice.place.dto.request.PlaceRequestDto;
 import com.unear.userservice.place.dto.response.NearestPlaceResponseDto;
 import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
-import com.unear.userservice.place.entity.Place;
 import com.unear.userservice.place.service.PlaceService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,10 +24,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/places")
 @RequiredArgsConstructor
+@Tag(name = "Place", description = "장소 관련 API")
 public class PlaceController {
 
     private final PlaceService placeService;
 
+    @PlaceApiDocs.GetPlace
     @GetMapping("/{placeId}")
     public ResponseEntity<ApiResponse<PlaceResponseDto>> getPlace(
             @PathVariable Long placeId,
@@ -36,9 +41,10 @@ public class PlaceController {
         return ResponseEntity.ok(ApiResponse.success("장소 조회 성공",dto));
     }
 
+    @PlaceApiDocs.GetFilteredPlaces
     @GetMapping
     public ResponseEntity<ApiResponse<List<PlaceRenderResponseDto>>> getFilteredPlaces(
-            @ModelAttribute PlaceRequestDto requestDto,
+            @Validated @ParameterObject @ModelAttribute PlaceRequestDto requestDto,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
@@ -47,6 +53,7 @@ public class PlaceController {
     }
 
 
+    @PlaceApiDocs.GetNearbyPlaces
     @GetMapping("/nearby")
     public ResponseEntity<ApiResponse<List<NearestPlaceResponseDto>>> getNearbyPlaces(
             @Valid @ModelAttribute NearbyPlaceRequestDto requestDto,
@@ -58,7 +65,7 @@ public class PlaceController {
     }
 
 
-
+    @PlaceApiDocs.ToggleFavorite
     @PostMapping("/{placeId}/favorite")
     public ResponseEntity<ApiResponse<Boolean>> toggleFavorite(
             @PathVariable Long placeId,
@@ -72,6 +79,7 @@ public class PlaceController {
         return ResponseEntity.ok(ApiResponse.success("즐겨찾기 상태 변경 성공", isNowFavorite));
     }
 
+    @PlaceApiDocs.GetFavorites
     @GetMapping("/favorite")
     public ResponseEntity<ApiResponse<List<PlaceResponseDto>>> getFavoritePlaces(
             @AuthenticationPrincipal CustomUser user
