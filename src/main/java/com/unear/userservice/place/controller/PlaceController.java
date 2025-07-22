@@ -9,13 +9,14 @@ import com.unear.userservice.place.dto.request.PlaceRequestDto;
 import com.unear.userservice.place.dto.response.NearestPlaceResponseDto;
 import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
-import com.unear.userservice.place.entity.Place;
 import com.unear.userservice.place.service.PlaceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class PlaceController {
     @PlaceApiDocs.GetFilteredPlaces
     @GetMapping
     public ResponseEntity<ApiResponse<List<PlaceRenderResponseDto>>> getFilteredPlaces(
-            @ModelAttribute PlaceRequestDto requestDto,
+            @Validated @ParameterObject @ModelAttribute PlaceRequestDto requestDto,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
