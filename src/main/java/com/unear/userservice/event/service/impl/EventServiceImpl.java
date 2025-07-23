@@ -32,7 +32,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDetailResponseDto findEventDetailById(Long eventId) {
         UnearEvent event = eventRepository.findEventWithPlaces(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.EVENT_NOT_FOUND));
 
         List<EventPlace> eventPlaces = event.getEventPlaces();
 
