@@ -73,11 +73,6 @@ spring:
       port: ${REDIS_PORT}
       host: ${REDIS_HOST}
 
-springdoc:
-  swagger-ui:
-    path: /api/app/swagger-ui.html   # 선택사항
-    config-url: /api/app/v3/api-docs
-
 jwt:
   secret: ${JWT_SECRET}
   access-token-expiration: 1800000       # 30분
