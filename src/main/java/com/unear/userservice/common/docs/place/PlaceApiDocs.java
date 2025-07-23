@@ -410,4 +410,93 @@ public class PlaceApiDocs {
     @SecurityRequirement(name = "BearerAuth")
     public @interface GetFavorites {
     }
+
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @Operation(
+            summary = "가까운장소 및 쿠폰 템플릿 조회",
+            description = "사용자의 위도 경도를 기준으로 가까운장소 및 쿠폰 템플릿 조회합니다. 현재 coupon_template이 없는 장소는 coupons가 비어져있는 상태로 반환됩니다. \n"
+            +"downloaded == true 인 쿠폰은 현재 사용자가 다운받은 상태입니다. 쿠폰 상세조회시에는 userCouponId를 사용하면됩니다. "
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "사용자 기준으로 가까운장소 및 쿠폰 템플릿 조회",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PlaceRenderResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "DefaultFilter",
+                                    summary = "사용자의 즐겨찾기 장소 목록을 반환",
+                                    value = """
+                                    {
+                                        "resultCode": 200,
+                                        "codeName": "SUCCESS",
+                                        "message": "주변 매장 및 쿠폰 조회 성공",
+                                        "data": [
+                                            {
+                                                "placeId": 127,
+                                                "name": "파리바게뜨 강서점",
+                                                "address": "서울특별시 강서구 남부순환로 190 (외발산동,외 2필지 (지하 2층))",
+                                                "categoryCode": "BAKERY",
+                                                "distanceKm": 0.9,
+                                                "coupons": []
+                                            },
+                                            {
+                                                "placeId": 133,
+                                                "name": "GS25 강서희망점",
+                                                "address": "서울특별시 강서구 남부순환로 222, 사무동 (외발산동,서울자동차학원 (지상 1층))",
+                                                "categoryCode": "LIFE",
+                                                "distanceKm": 0.9,
+                                                "coupons": []
+                                            },
+                                            {
+                                                "placeId": 201,
+                                                "name": "파리크라상 공항동점",
+                                                "address": "서울특별시 강서구 오정로 443-83, 지하 1층 (오쇠동, 공항동)",
+                                                "categoryCode": "BAKERY",
+                                                "distanceKm": 1.0,
+                                                "coupons": []
+                                            },
+                                            {
+                                                "placeId": 128,
+                                                "name": "파리바게뜨 성서점",
+                                                "address": "서울특별시 강서구 방화동로 지하 30, 공항시장역(9호선) 지하 1층 (공항동)",
+                                                "categoryCode": "BAKERY",
+                                                "distanceKm": 1.6,
+                                                "coupons": []
+                                            },
+                                            {
+                                                "placeId": 209,
+                                                "name": "미스터피자 화곡시장점",
+                                                "address": "서울특별시 강서구 강서로45길 45, 1층 102호 (화곡동, 3동)",
+                                                "categoryCode": "FOOD",
+                                                "distanceKm": 1.8,
+                                                "coupons": [
+                                                    {
+                                                        "couponTemplateId": 43,
+                                                        "couponName": "미스터피자 VIP 쿠폰",
+                                                        "discountCode": "COUPON_FIXED",
+                                                        "membershipCode": "VIP",
+                                                        "discountInfo": null,
+                                                        "couponStart": "2025-07-01T00:00:00",
+                                                        "couponEnd": "2025-07-31T00:00:00",
+                                                        "userCouponId": 10,
+                                                        "downloaded": true
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                """
+                            )
+                    }
+            )
+    )
+    @SecurityRequirement(name = "BearerAuth")
+    public @interface GetNearbyPlacesWithCoupons {
+    }
+
 }

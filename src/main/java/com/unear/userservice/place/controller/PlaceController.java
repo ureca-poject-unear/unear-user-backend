@@ -6,6 +6,7 @@ import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.common.exception.exception.UnauthorizedException;
 import com.unear.userservice.place.dto.request.NearbyPlaceRequestDto;
 import com.unear.userservice.place.dto.request.PlaceRequestDto;
+import com.unear.userservice.place.dto.response.NearbyPlaceWithCouponsDto;
 import com.unear.userservice.place.dto.response.NearestPlaceResponseDto;
 import com.unear.userservice.place.dto.response.PlaceRenderResponseDto;
 import com.unear.userservice.place.dto.response.PlaceResponseDto;
@@ -63,6 +64,19 @@ public class PlaceController {
         List<NearestPlaceResponseDto> result = placeService.getNearbyPlaces(requestDto, userId);
         return ResponseEntity.ok(ApiResponse.success("주변 매장 조회 성공", result));
     }
+
+    @PlaceApiDocs.GetNearbyPlacesWithCoupons
+    @GetMapping("/nearby-with-coupons")
+    public ResponseEntity<ApiResponse<List<NearbyPlaceWithCouponsDto>>> getNearbyPlacesWithCoupons(
+            @Valid @ParameterObject @ModelAttribute NearbyPlaceRequestDto requestDto,
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
+        List<NearbyPlaceWithCouponsDto> result = placeService.getNearbyPlacesWithCoupons(requestDto, userId);
+        return ResponseEntity.ok(ApiResponse.success("주변 매장 및 쿠폰 조회 성공", result));
+    }
+
+
 
 
     @PlaceApiDocs.ToggleFavorite
