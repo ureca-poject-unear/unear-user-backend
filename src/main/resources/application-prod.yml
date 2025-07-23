@@ -77,3 +77,9 @@ jwt:
   secret: ${JWT_SECRET}
   access-token-expiration: 1800000       # 30분
   refresh-token-expiration: 604800000    # 7일
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /v3/api-docs
