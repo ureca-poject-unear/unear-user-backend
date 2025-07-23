@@ -65,7 +65,7 @@ public class PlaceController {
         return ResponseEntity.ok(ApiResponse.success("주변 매장 조회 성공", result));
     }
 
-
+    @PlaceApiDocs.GetNearbyPlacesWithCoupons
     @GetMapping("/nearby-with-coupons")
     public ResponseEntity<ApiResponse<List<NearbyPlaceWithCouponsDto>>> getNearbyPlacesWithCoupons(
             @Valid @ParameterObject @ModelAttribute NearbyPlaceRequestDto requestDto,
