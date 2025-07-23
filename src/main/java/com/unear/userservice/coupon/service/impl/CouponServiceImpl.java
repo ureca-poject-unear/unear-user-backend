@@ -89,7 +89,7 @@ public class CouponServiceImpl implements CouponService {
                 .map(template -> {
                     String discountInfo = DiscountPolicy.fromCode(template.getDiscountCode()).getLabel();
                     boolean isDownloaded = downloadedIds.contains(template.getCouponTemplateId());
-                    return CouponResponseDto.from(template, discountInfo, isDownloaded);
+                    return CouponResponseDto.from(template, discountInfo, isDownloaded , null);
                 })
                 .toList();
     }
