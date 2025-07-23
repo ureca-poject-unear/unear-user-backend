@@ -139,7 +139,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<NearbyPlaceWithCouponsDto> getNearbyPlacesWithCoupons(NearbyPlaceRequestDto requestDto, Long userId) {
 
         List<NearestPlaceProjection> projections = placeRepository.findNearestPlaceIdsByDistance(
