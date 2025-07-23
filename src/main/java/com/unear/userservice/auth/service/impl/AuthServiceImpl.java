@@ -119,8 +119,8 @@ public class AuthServiceImpl implements AuthService {
                 .tel(dto.getTel())
                 .birthdate(dto.getBirthdate())
                 .gender(dto.getGender())
-                .membershipCode("001")
-                .isProfileComplete(false)
+                .membershipCode("BASIC")
+                .isProfileComplete(true)
                 .barcodeNumber(barcode)
                 .build();
 
