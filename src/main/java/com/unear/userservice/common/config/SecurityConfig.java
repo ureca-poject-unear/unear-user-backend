@@ -94,7 +94,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "https://localhost:4000" , "http://localhost:4000", "https://dev.unear.site"));
+        config.setAllowedOrigins(List.of("http://localhost:3000", "https://localhost:4000" , "http://localhost:4000", "http://dev.unear.site"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
