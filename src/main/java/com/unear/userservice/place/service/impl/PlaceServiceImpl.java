@@ -160,6 +160,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserId(userId);
         Map<Long, Long> templateToUserCouponId = userCoupons.stream()
+                .filter(uc -> uc.getCouponTemplate() != null)
                 .collect(Collectors.toMap(
                         uc -> uc.getCouponTemplate().getCouponTemplateId(),
                         UserCoupon::getUserCouponId
