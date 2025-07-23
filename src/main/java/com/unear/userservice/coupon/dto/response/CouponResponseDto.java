@@ -26,7 +26,7 @@ public class CouponResponseDto {
         return CouponResponseDto.builder()
                 .couponTemplateId(entity.getCouponTemplateId())
                 .couponName(entity.getCouponName())
-                .discountCode(entity.getDiscountCode())
+                .discountCode(entity.getDiscountCode().getCode())
                 .membershipCode(entity.getMembershipCode())
                 .discountInfo(discountInfo)
                 .couponStart(entity.getCouponStart())
