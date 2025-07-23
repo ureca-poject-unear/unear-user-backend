@@ -26,8 +26,14 @@ WHERE e.unearEventId = :eventId
 SELECT c
 FROM CouponTemplate c
 WHERE c.event.unearEventId = :eventId
-  AND c.discountCode = 'COUPON_FCFS'
+  AND c.discountCode = :discountCode
 """)
-    List<CouponTemplate> findFcfsCouponsByEventId(@Param("eventId") Long eventId);
+    List<CouponTemplate> findByEventIdAndDiscountCode(
+        @Param("eventId") Long eventId,
+        @Param("discountCode") String discountCode
+    );
+
+    // Or, if you prefer to move filtering logic into the service layer:
+    List<CouponTemplate> findByEventUnearEventId(Long eventId);
 
 }
