@@ -5,8 +5,11 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -20,12 +23,16 @@ public class SwaggerConfig {
                 .in(SecurityScheme.In.HEADER)
                 .name("Authorization");
 
+        Server server = new Server()
+                .url("https://dev.unear.site")
+                .description("배포 서버");
 
         return new OpenAPI()
-                .info(new Info().title("Todolist API")
-                        .description("Todolist Application API Documentation")
+                .info(new Info().title("API Test Document")
+                        .description("Application API Documentation")
                         .version("v1.0"))
                 .components(new Components()
-                        .addSecuritySchemes("BearerAuth", securityScheme));
+                        .addSecuritySchemes("BearerAuth", securityScheme))
+                .servers(List.of(server));
     }
 }
