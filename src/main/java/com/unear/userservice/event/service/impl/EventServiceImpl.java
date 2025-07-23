@@ -36,7 +36,6 @@ public class EventServiceImpl implements EventService {
 
         List<EventPlace> eventPlaces = event.getEventPlaces();
 
-        // 📍 팝업스토어 (REQUIRE)
         Place popupStore = eventPlaces.stream()
                 .filter(ep -> EventType.REQUIRE.name().equalsIgnoreCase(ep.getEventCode()))
                 .map(EventPlace::getPlace)
@@ -44,7 +43,6 @@ public class EventServiceImpl implements EventService {
                 .findFirst()
                 .orElse(null);
 
-        // 📍 일반 제휴처 (GENERAL, 최대 3개)
         List<Place> generalPlaces = eventPlaces.stream()
                 .filter(ep -> EventType.GENERAL.name().equalsIgnoreCase(ep.getEventCode()))
                 .map(EventPlace::getPlace)
@@ -52,7 +50,6 @@ public class EventServiceImpl implements EventService {
                 .limit(3)
                 .toList();
 
-        // 📍 쿠폰 (COUPON_FCFS) - 팝업스토어 markerCode 기준으로 필터링
         List<CouponTemplate> fcfsCoupons = couponTemplateRepository
                 .findByEventIdAndDiscountCode(eventId, DiscountPolicy.COUPON_FCFS);
 
