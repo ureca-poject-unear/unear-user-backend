@@ -19,7 +19,7 @@ FROM CouponTemplate ct
 WHERE ct.event.unearEventId = :eventId
 AND ct.discountCode = :discountCode
 """)
-List<CouponTemplate> findByEventIdAndDiscountCode(
+List<CouponTemplate> findByEventCoupon(
     @Param("eventId") Long eventId,
     @Param("discountCode") DiscountPolicy discountPolicy  
 );
@@ -49,4 +49,6 @@ List<CouponTemplate> findByPlacesAndMembership(
     @Param("franchises") List<Franchise> franchises,
     @Param("membershipCode") String membershipCode
 );
+
+
 }
