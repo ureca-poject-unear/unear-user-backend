@@ -1,6 +1,8 @@
 package com.unear.userservice.coupon.entity;
 
+import com.unear.userservice.common.enums.DiscountPolicy;
 import com.unear.userservice.common.exception.exception.CouponSoldOutException;
+import com.unear.userservice.event.entity.UnearEvent;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,11 +31,18 @@ public class CouponTemplate {
     private LocalDateTime couponStart;
     private LocalDateTime couponEnd;
 
-    private String discountCode;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "discount_code")
+    private DiscountPolicy discountCode;
+
     private String membershipCode;
 
     @OneToMany(mappedBy = "couponTemplate")
     private List<UserCoupon> userCoupons = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "unear_event_id")
+    private UnearEvent event;
 
     public void decreaseQuantity() {
         if (this.remainingQuantity <= 0) {

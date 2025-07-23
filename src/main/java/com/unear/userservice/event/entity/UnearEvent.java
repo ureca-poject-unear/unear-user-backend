@@ -1,6 +1,7 @@
 package com.unear.userservice.event.entity;
 
 import com.unear.userservice.benefit.entity.RouletteResult;
+import com.unear.userservice.coupon.entity.CouponTemplate;
 import com.unear.userservice.place.entity.EventPlace;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class UnearEvent {
     @Column(precision = 10, scale = 7)
     private BigDecimal longitude;
 
-    private BigDecimal radiusMeter;
+    private Integer radiusMeter;
     private LocalDate startAt;
     private LocalDate endAt;
 
@@ -38,6 +39,9 @@ public class UnearEvent {
 
     @OneToMany(mappedBy = "event")
     private List<RouletteResult> rouletteResults = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    private List<CouponTemplate> couponTemplates = new ArrayList<>();
 
 }
 

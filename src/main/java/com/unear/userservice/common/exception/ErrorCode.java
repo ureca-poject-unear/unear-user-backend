@@ -1,6 +1,7 @@
 package com.unear.userservice.common.exception;
 
 
+import com.unear.userservice.common.enums.EventType;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -27,7 +28,8 @@ public enum ErrorCode {
     COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST, "COUPON_SOLD_OUT" , "쿠폰 재고가 없습니다."),
     COUPON_EXPIRED(HttpStatus.BAD_REQUEST, "COUPON_EXPIRED", "유효 기간이 지난 쿠폰입니다."),
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_USER", "인증되지 않은 사용자입니다."),
-    USER_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_COUPON_NOT_FOUND", "다운받은 쿠폰을 찾을 수 없습니다.")
+    USER_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_COUPON_NOT_FOUND", "다운받은 쿠폰을 찾을 수 없습니다."),
+    EVENT_NOT_FOUND(HttpStatus.NOT_FOUND,"EVENT_NOT_FOUND","이벤트를 찾지 못했습니다.")
     ;
 
 

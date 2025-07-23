@@ -86,7 +86,7 @@ public class CouponServiceImpl implements CouponService {
                     return templateMembershipCode.equalsIgnoreCase(userMembershipCode);
                 })
                 .map(template -> {
-                    String discountInfo = DiscountPolicy.fromCode(template.getDiscountCode()).getLabel();
+                    String discountInfo = DiscountPolicy.fromCode(template.getDiscountCode().getCode()).getLabel();
                     boolean isDownloaded = downloadedIds.contains(template.getCouponTemplateId());
                     return CouponResponseDto.from(template, discountInfo, isDownloaded);
                 })
