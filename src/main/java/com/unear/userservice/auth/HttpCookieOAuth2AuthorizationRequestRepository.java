@@ -3,6 +3,7 @@ package com.unear.userservice.auth;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -10,6 +11,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import java.util.Base64;
 import java.util.Optional;
 
+@Slf4j
 public class HttpCookieOAuth2AuthorizationRequestRepository
         implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
@@ -25,6 +27,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
 
     @Override
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
+        log.info("saveAuthorizationRequest called");
         if (authorizationRequest == null) {
             deleteCookie(response);
             return;
