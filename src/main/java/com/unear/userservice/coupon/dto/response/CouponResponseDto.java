@@ -19,8 +19,10 @@ public class CouponResponseDto {
     private LocalDateTime couponEnd;
 
     private boolean isDownloaded;
+    private Long userCouponId;
 
-    public static CouponResponseDto from(CouponTemplate entity, String discountInfo, boolean isDownloaded) {
+
+    public static CouponResponseDto from(CouponTemplate entity, String discountInfo, boolean isDownloaded, Long userCouponId) {
         return CouponResponseDto.builder()
                 .couponTemplateId(entity.getCouponTemplateId())
                 .couponName(entity.getCouponName())
@@ -30,6 +32,7 @@ public class CouponResponseDto {
                 .couponStart(entity.getCouponStart())
                 .couponEnd(entity.getCouponEnd())
                 .isDownloaded(isDownloaded)
+                .userCouponId(userCouponId)
                 .build();
     }
 }
