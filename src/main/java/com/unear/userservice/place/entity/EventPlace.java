@@ -1,5 +1,6 @@
 package com.unear.userservice.place.entity;
 
+import com.unear.userservice.common.enums.EventType;
 import com.unear.userservice.event.entity.UnearEvent;
 import com.unear.userservice.stamp.entity.Stamp;
 import jakarta.persistence.*;
@@ -25,7 +26,8 @@ public class EventPlace {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    private String eventCode;
+    @Enumerated(EnumType.STRING)
+    private EventType eventCode;
 
     @OneToMany(mappedBy = "eventPlace")
     private List<Stamp> stamps = new ArrayList<>();
