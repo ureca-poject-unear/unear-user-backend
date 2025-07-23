@@ -52,6 +52,7 @@ jobs:
 
             echo "oauth2.google.client-id=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
             echo "oauth2.google.client-secret=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }}" >> .env
             echo "oauth2.kakao.client-id=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
             echo "oauth2.kakao.client-secret=${{ secrets.KAKAO_CLIENT_SECRET }}" >> .env
 
