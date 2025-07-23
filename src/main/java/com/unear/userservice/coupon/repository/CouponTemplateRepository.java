@@ -14,20 +14,23 @@ public interface CouponTemplateRepository extends JpaRepository<CouponTemplate, 
 
     @Query("""
     SELECT ct FROM CouponTemplate ct
-    WHERE ct.markerCode = 'FRANCHISE'
-      AND ct.discountPolicyDetailId IN (
-          SELECT fdp.franchiseDiscountPolicyId
-          FROM FranchiseDiscountPolicy fdp
-          WHERE fdp.franchise IN :franchises
-            AND fdp.membershipCode = :membershipCode
-      )
-    OR ct.markerCode != 'FRANCHISE'
-      AND ct.discountPolicyDetailId IN (
-          SELECT gdp.generalDiscountPolicyId
-          FROM GeneralDiscountPolicy gdp
-          WHERE gdp.place IN :places
-            AND gdp.membershipCode = :membershipCode
-      )
+    WHERE (
+        ct.markerCode = 'FRANCHISE'
+        AND ct.discountPolicyDetailId IN (
+            SELECT fdp.franchiseDiscountPolicyId
+            FROM FranchiseDiscountPolicy fdp
+            WHERE fdp.franchise IN :franchises
+              AND fdp.membershipCode = :membershipCode
+        )
+    ) OR (
+        ct.markerCode != 'FRANCHISE'
+        AND ct.discountPolicyDetailId IN (
+            SELECT gdp.generalDiscountPolicyId
+            FROM GeneralDiscountPolicy gdp
+            WHERE gdp.place IN :places
+              AND gdp.membershipCode = :membershipCode
+        )
+    )
 """)
     List<CouponTemplate> findByPlacesAndMembership(@Param("places") List<Place> places,
                                                    @Param("franchises") List<Franchise> franchises,
