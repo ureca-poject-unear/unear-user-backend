@@ -64,6 +64,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
             @Param("longitude") double longitude,
             @Param("limit") int limit
     );
+
     @Query(value = """
         SELECT ST_Distance(
             CAST(location AS geography),

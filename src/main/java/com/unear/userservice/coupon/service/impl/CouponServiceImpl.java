@@ -1,5 +1,7 @@
 package com.unear.userservice.coupon.service.impl;
 
+import com.unear.userservice.benefit.entity.FranchiseDiscountPolicy;
+import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
 import com.unear.userservice.benefit.repository.FranchiseDiscountPolicyRepository;
 import com.unear.userservice.benefit.repository.GeneralDiscountPolicyRepository;
 import com.unear.userservice.common.enums.CouponStatus;
@@ -16,6 +18,8 @@ import com.unear.userservice.coupon.entity.UserCoupon;
 import com.unear.userservice.coupon.repository.CouponTemplateRepository;
 import com.unear.userservice.coupon.repository.UserCouponRepository;
 import com.unear.userservice.coupon.service.CouponService;
+import com.unear.userservice.place.entity.Franchise;
+import com.unear.userservice.place.entity.Place;
 import com.unear.userservice.place.repository.PlaceRepository;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
@@ -25,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +89,7 @@ public class CouponServiceImpl implements CouponService {
                 .map(template -> {
                     String discountInfo = DiscountPolicy.fromCode(template.getDiscountCode().getCode()).getLabel();
                     boolean isDownloaded = downloadedIds.contains(template.getCouponTemplateId());
-                    return CouponResponseDto.from(template, discountInfo, isDownloaded);
+                    return CouponResponseDto.from(template, discountInfo, isDownloaded , null);
                 })
                 .toList();
     }
@@ -159,6 +160,7 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
+    @Transactional
     public UserCouponListResponseDto getMyCoupons(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
@@ -166,10 +168,55 @@ public class CouponServiceImpl implements CouponService {
         List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserId(userId);
 
         List<UserCouponResponseDto> dtoList = userCoupons.stream()
-                .map(UserCouponResponseDto::from)
+                .filter(uc -> CouponStatus.fromCode(uc.getCouponStatusCode()).equals(CouponStatus.UNUSED))
+                .map(uc -> {
+                    CouponTemplate template = uc.getCouponTemplate();
+                    String markerCode = template != null ? template.getMarkerCode() : null;
+
+                    Long policyId = template.getDiscountPolicyDetailId();
+                    GeneralDiscountPolicy generalPolicy = null;
+                    FranchiseDiscountPolicy franchisePolicy = null;
+                    Franchise franchise = null;
+                    Place place = null;
+                    PlaceType placeType = PlaceType.fromCode(markerCode);
+
+                    if (placeType.isFranchise()) {
+                        franchisePolicy = franchiseDiscountPolicyRepository.findById(policyId).orElse(null);
+                        franchise = franchisePolicy != null ? franchisePolicy.getFranchise() : null;
+                    } else {
+                        generalPolicy = generalDiscountPolicyRepository.findById(policyId).orElse(null);
+                        place = generalPolicy != null ? generalPolicy.getPlace() : null;
+                    }
+
+                    return UserCouponResponseDto.builder()
+                            .userCouponId(uc.getUserCouponId())
+                            .couponName(template.getCouponName())
+                            .barcodeNumber(uc.getBarcodeNumber())
+                            .couponStatusCode(uc.getCouponStatusCode())
+                            .createdAt(uc.getCreatedAt())
+                            .couponEnd(template.getCouponEnd())
+                            .name(resolveFranchiseName(place, franchise))
+                            .imageUrl(franchise != null ? franchise.getImageUrl() : null)
+                            .categoryCode(
+                                    place != null ? place.getCategoryCode() :
+                                            (franchise != null ? franchise.getCategoryCode() : null)
+                            )
+                            .markerCode(markerCode)
+                            .build();
+                })
                 .toList();
 
         return new UserCouponListResponseDto(dtoList);
+    }
+
+    private String resolveFranchiseName(Place place, Franchise franchise) {
+        if (franchise != null) {
+            return franchise.getName();
+        }
+        if (place != null) {
+            return place.getPlaceName();
+        }
+        return null;
     }
 
 
