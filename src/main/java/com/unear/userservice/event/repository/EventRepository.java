@@ -21,19 +21,4 @@ WHERE e.unearEventId = :eventId
     Optional<UnearEvent> findEventWithPlaces(@Param("eventId") Long eventId);
 
 
-
-    @Query("""
-SELECT c
-FROM CouponTemplate c
-WHERE c.event.unearEventId = :eventId
-  AND c.discountCode = :discountCode
-""")
-    List<CouponTemplate> findByEventIdAndDiscountCode(
-        @Param("eventId") Long eventId,
-        @Param("discountCode") String discountCode
-    );
-
-    // Or, if you prefer to move filtering logic into the service layer:
-    List<CouponTemplate> findByEventUnearEventId(Long eventId);
-
 }
