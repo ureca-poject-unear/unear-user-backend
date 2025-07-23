@@ -3,10 +3,12 @@ package com.unear.userservice.auth;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@Slf4j
 public class CookieUtil {
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
@@ -23,6 +25,14 @@ public class CookieUtil {
         cookie.setMaxAge(maxAge);
         cookie.setSecure(true);
         response.addCookie(cookie);
+
+        String setCookieHeader = String.format(
+                "%s=%s; Max-Age=%d; Path=/; Secure; HttpOnly; SameSite=None",
+                name, value, maxAge
+        );
+        response.addHeader("Set-Cookie", setCookieHeader);
+
+        log.info("Set-Cookie header added: {}", setCookieHeader);
     }
 
     public static void deleteCookie(HttpServletResponse response, String name) {
