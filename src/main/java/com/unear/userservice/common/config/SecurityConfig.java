@@ -1,5 +1,6 @@
 package com.unear.userservice.common.config;
 
+import com.unear.userservice.auth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.unear.userservice.auth.handler.OAuth2FailureHandler;
 import com.unear.userservice.auth.handler.OAuth2SuccessHandler;
 import com.unear.userservice.auth.service.impl.CustomOAuth2UserService;
@@ -20,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DelegatingOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -53,6 +56,11 @@ public class SecurityConfig {
     };
 
     @Bean
+    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -63,6 +71,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
+                        .authorizationEndpoint(endpoint ->
+                                endpoint.authorizationRequestRepository(authorizationRequestRepository())
+                        )
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService) // google + kakao 둘 다 지원
                         )
