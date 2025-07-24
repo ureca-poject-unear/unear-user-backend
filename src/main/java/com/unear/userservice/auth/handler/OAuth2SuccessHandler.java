@@ -57,6 +57,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         cookie.setPath("/");
         response.addCookie(cookie);
 
+        log.info("onAuthenticationSuccess 리다이렉트 지점 ");
+
         String redirectUrl = String.format("%s/login/oauth2/code/google?accessToken=%s",
                 frontendBaseUrl, accessToken);
 
