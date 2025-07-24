@@ -21,10 +21,12 @@ public class StampServiceImpl implements StampService {
 
     @Override
     public StampStatusResponseDto getStampStatus(Long userId, Long eventId) {
+        if (userId == null || eventId == null) {
+            throw new IllegalArgumentException("userId와 eventId는 null일 수 없습니다");
+        }
         List<Stamp> stamps = stampRepository.findByUser_UserIdAndEventPlace_Event_UnearEventId(userId, eventId);
         StampCollection collection = new StampCollection(stamps);
         EventStampPolicy policy = new EventStampPolicy();
-
         boolean available = policy.isSatisfiedBy(collection);
         return StampStatusResponseDto.of(collection.getStamps(), available);
     }
