@@ -23,7 +23,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         log.info("{} CustomOAuth2UserService 분기 지점" ,registrationId);
-
+        System.out.println("CustomOAuth2UserService 분기 지점");
         return switch (registrationId) {
             case "google" -> googleOAuth2UserService.loadUser(userRequest);
             case "kakao" -> kakaoOAuth2UserService.loadUser(userRequest);
