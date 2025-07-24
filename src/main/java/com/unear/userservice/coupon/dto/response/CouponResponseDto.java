@@ -35,5 +35,8 @@ public class CouponResponseDto {
                 .userCouponId(userCouponId)
                 .build();
     }
-}
 
+    public static CouponResponseDto from(CouponTemplate entity) {
+        return from(entity, null, false, null);
+    }
+}

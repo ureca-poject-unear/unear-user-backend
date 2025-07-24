@@ -50,10 +50,7 @@ public class EventServiceImpl implements EventService {
         // 4. 선착순 쿠폰 조회
         List<CouponTemplate> couponList = couponTemplateRepository.findByEventCoupon(eventId, DiscountPolicy.COUPON_FCFS);
 
-        List<EventCouponResponseDto> couponDtos = couponList.stream()
-                .map(EventCouponResponseDto::from)
-                .toList();
 
-        return EventDetailResponseDto.of(event, popupStore, partnerStores, couponDtos);
+        return EventDetailResponseDto.of(event, popupStore, partnerStores, couponList);
     }
 }
