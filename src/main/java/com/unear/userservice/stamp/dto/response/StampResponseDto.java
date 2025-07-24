@@ -20,6 +20,9 @@ public class StampResponseDto {
     private LocalDateTime stampedAt;
 
     public static StampResponseDto from(Stamp stamp) {
+        if (stamp == null || stamp.getEventPlace() == null) {
+            throw new IllegalArgumentException("Stamp and EventPlace cannot be null");
+        }
         return new StampResponseDto(
                 stamp.getStampId(),
                 stamp.getPlaceName(),
