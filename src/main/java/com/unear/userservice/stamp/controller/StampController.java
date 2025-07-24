@@ -1,6 +1,7 @@
 package com.unear.userservice.stamp.controller;
 
 import com.unear.userservice.common.response.ApiResponse;
+import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.stamp.dto.response.StampStatusResponseDto;
 import com.unear.userservice.stamp.service.StampService;
 import com.unear.userservice.user.entity.User;
@@ -21,10 +22,10 @@ public class StampController {
 
     @GetMapping("/events/{eventId}")
     public ResponseEntity<ApiResponse<StampStatusResponseDto>> getStampsByEvent(
-            @AuthenticationPrincipal(expression = "user") User user,
+            @AuthenticationPrincipal CustomUser customUser,
             @PathVariable Long eventId
     ) {
-        StampStatusResponseDto result = stampService.getStampStatus(user.getUserId(), eventId);
+        StampStatusResponseDto result = stampService.getStampStatus(customUser.getId(), eventId);
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 }
