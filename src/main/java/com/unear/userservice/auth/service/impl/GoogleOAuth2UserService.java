@@ -1,5 +1,6 @@
 package com.unear.userservice.auth.service.impl;
 
+import com.unear.userservice.common.enums.LoginProvider;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,8 @@ public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                                 .email(email)
                                 .username(name)
                                 .password(null)
+                                .provider(LoginProvider.GOOGLE)
+                                .providerId(googleId)
                                 .tel(null)
                                 .birthdate(null)
                                 .gender(null)

@@ -1,6 +1,7 @@
 package com.unear.userservice.user.entity;
 
 import com.unear.userservice.benefit.entity.RouletteResult;
+import com.unear.userservice.common.enums.LoginProvider;
 import com.unear.userservice.coupon.entity.UserCoupon;
 import com.unear.userservice.place.entity.FavoritePlace;
 import com.unear.userservice.stamp.entity.Stamp;
@@ -39,9 +40,10 @@ public class User {
     private String membershipCode;
 
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "provider")
     @Builder.Default
-    private String provider = "EMAIL";
+    private LoginProvider provider = LoginProvider.EMAIL;
 
     @Column(name = "provider_id")
     private String providerId;

@@ -1,13 +1,16 @@
 package com.unear.userservice.auth.service.impl;
 
+import com.unear.userservice.auth.dto.request.CompleteProfileRequestDto;
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
 import com.unear.userservice.auth.dto.request.ResetPasswordRequestDto;
 import com.unear.userservice.auth.dto.request.SignupRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
+import com.unear.userservice.auth.dto.response.ProfileUpdateResponseDto;
 import com.unear.userservice.auth.dto.response.RefreshResponseDto;
 import com.unear.userservice.auth.dto.response.SignupResponseDto;
 import com.unear.userservice.auth.service.AuthService;
+import com.unear.userservice.common.enums.LoginProvider;
 import com.unear.userservice.common.jwt.JwtTokenProvider;
 import com.unear.userservice.common.jwt.RefreshTokenService;
 import com.unear.userservice.common.response.ApiResponse;
@@ -155,25 +158,6 @@ public class AuthServiceImpl implements AuthService {
         return ApiResponse.success("회원가입 성공", responseDto);
     }
 
-    public ApiResponse<ProfileUpdateResponseDto> completeOAuthProfile(Long userId, CompleteProfileRequestDto dto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
-
-        if (!user.getLoginProvider().equals("GOOGLE")) {
-            throw new InvalidRequestException("OAuth 유저만 가능합니다");
-        }
-
-        user.setTel(dto.getTel());
-        user.setBirthdate(dto.getBirthdate());
-        user.setGender(dto.getGender());
-        user.setIsProfileComplete(true);
-
-        userRepository.save(user);
-
-        return ApiResponse.success("프로필 완성", new ProfileUpdateResponseDto(user));
-    }
-
-
     @Override
     public void resetPassword(ResetPasswordRequestDto request) {
 
@@ -183,6 +167,29 @@ public class AuthServiceImpl implements AuthService {
         String newEncodedPassword = passwordEncoder.encode(request.getNewPassword());
         user.setPassword(newEncodedPassword);
         userRepository.save(user);
+    }
+
+    @Override
+    public ApiResponse<ProfileUpdateResponseDto> completeOAuthProfile(Long userId, CompleteProfileRequestDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+
+        if (user.getProvider() == LoginProvider.EMAIL) {
+            throw new RuntimeException("OAuth 유저만 가능합니다");
+        }
+
+        String barcode = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+
+        user.setUsername(request.getUsername());
+        user.setTel(request.getTel());
+        user.setBirthdate(request.getBirthdate());
+        user.setGender(request.getGender());
+        user.setBarcodeNumber(barcode);
+        user.setProfileComplete(true);
+
+        userRepository.save(user);
+
+        return ApiResponse.success("프로필 완성", ProfileUpdateResponseDto.from(user));
     }
 
 }
