@@ -50,7 +50,7 @@ spring:
             client-secret: ${KAKAO_CLIENT_SECRET}
             client-name: Kakao
             provider: kakao
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: ${KAKAO_REDIRECT_URI}
             authorization-grant-type: authorization_code
             scope:
               - account_email
