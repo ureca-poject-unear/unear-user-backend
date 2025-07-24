@@ -8,5 +8,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface StampRepository extends JpaRepository<Stamp, Long> {
-    List<Stamp> findByUser_UserIdAndEventPlace_Event_UnearEventId (Long userId, Long eventPlaceId);
+    List<Stamp> findByUser_UserIdAndEventPlace_Event_UnearEventId (Long userId, Long eventId);
 }
