@@ -1,13 +1,16 @@
 package com.unear.userservice.auth.service.impl;
 
+import com.unear.userservice.auth.dto.request.CompleteProfileRequestDto;
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
 import com.unear.userservice.auth.dto.request.ResetPasswordRequestDto;
 import com.unear.userservice.auth.dto.request.SignupRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
+import com.unear.userservice.auth.dto.response.ProfileUpdateResponseDto;
 import com.unear.userservice.auth.dto.response.RefreshResponseDto;
 import com.unear.userservice.auth.dto.response.SignupResponseDto;
 import com.unear.userservice.auth.service.AuthService;
+import com.unear.userservice.common.enums.LoginProvider;
 import com.unear.userservice.common.jwt.JwtTokenProvider;
 import com.unear.userservice.common.jwt.RefreshTokenService;
 import com.unear.userservice.common.response.ApiResponse;
@@ -64,6 +67,25 @@ public class AuthServiceImpl implements AuthService {
         return ApiResponse.success("로그인 완료", dto);
 
     }
+
+    @Override
+    public ApiResponse<LoginResponseDto> oauthLogin(User user, HttpServletResponse response) {
+        CustomUser customUser = new CustomUser(user);
+        String accessToken = jwtTokenProvider.generateAccessToken(customUser);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(customUser);
+
+        refreshTokenService.saveRefreshToken(user.getUserId(), refreshToken);
+
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        LoginResponseDto dto = LoginResponseDto.of(user.getEmail(), accessToken);
+        return ApiResponse.success("로그인 완료", dto);
+    }
+
+
 
     @Override
     public ApiResponse<RefreshResponseDto> refresh(String refreshToken) {
@@ -145,6 +167,29 @@ public class AuthServiceImpl implements AuthService {
         String newEncodedPassword = passwordEncoder.encode(request.getNewPassword());
         user.setPassword(newEncodedPassword);
         userRepository.save(user);
+    }
+
+    @Override
+    public ApiResponse<ProfileUpdateResponseDto> completeOAuthProfile(Long userId, CompleteProfileRequestDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+
+        if (user.getProvider() == LoginProvider.EMAIL) {
+            throw new RuntimeException("OAuth 유저만 가능합니다");
+        }
+
+        String barcode = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+
+        user.setUsername(request.getUsername());
+        user.setTel(request.getTel());
+        user.setBirthdate(request.getBirthdate());
+        user.setGender(request.getGender());
+        user.setBarcodeNumber(barcode);
+        user.setProfileComplete(true);
+
+        userRepository.save(user);
+
+        return ApiResponse.success("프로필 완성", ProfileUpdateResponseDto.from(user));
     }
 
 }

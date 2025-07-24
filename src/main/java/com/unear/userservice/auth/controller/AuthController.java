@@ -1,22 +1,26 @@
 package com.unear.userservice.auth.controller;
 
+import com.unear.userservice.auth.dto.request.CompleteProfileRequestDto;
 import com.unear.userservice.auth.dto.request.LoginRequestDto;
 import com.unear.userservice.auth.dto.request.ResetPasswordRequestDto;
 import com.unear.userservice.auth.dto.request.SignupRequestDto;
 import com.unear.userservice.auth.dto.response.LoginResponseDto;
 import com.unear.userservice.auth.dto.response.LogoutResponseDto;
+import com.unear.userservice.auth.dto.response.ProfileUpdateResponseDto;
 import com.unear.userservice.auth.dto.response.RefreshResponseDto;
 import com.unear.userservice.auth.dto.response.SignupResponseDto;
 import com.unear.userservice.auth.service.AuthService;
 import com.unear.userservice.auth.service.EmailService;
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.exception.ErrorCode;
+import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +42,15 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto request) {
         return ResponseEntity.ok(authService.signup(request));
+    }
+
+    @PostMapping("/oauth/complete-profile")
+    public ResponseEntity<ApiResponse<ProfileUpdateResponseDto>> completeOAuthProfile (
+            @AuthenticationPrincipal CustomUser user,
+            @Valid @RequestBody CompleteProfileRequestDto request) {
+
+        Long userId = user.getUser().getUserId();
+        return ResponseEntity.ok(authService.completeOAuthProfile(userId, request));
     }
 
     @PostMapping("/refresh")
@@ -86,6 +99,5 @@ public class AuthController {
 
         return ResponseEntity.ok(ApiResponse.success("비밀번호가 성공적으로 재설정되었습니다."));
     }
-
 
 }

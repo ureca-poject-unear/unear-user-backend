@@ -1,5 +1,6 @@
 package com.unear.userservice.auth.service.impl;
 
+import com.unear.userservice.common.enums.LoginProvider;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,11 @@ public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
+        String googleId = (String) attributes.get("sub");
+
+        if (email == null || email.isEmpty()) {
+            throw new OAuth2AuthenticationException("Email not provided by Google");
+        }
 
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> userRepository.save(
@@ -36,6 +42,8 @@ public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                                 .email(email)
                                 .username(name)
                                 .password(null)
+                                .provider(LoginProvider.GOOGLE)
+                                .providerId(googleId)
                                 .tel(null)
                                 .birthdate(null)
                                 .gender(null)

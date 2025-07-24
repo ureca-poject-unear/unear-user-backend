@@ -1,7 +1,12 @@
 package com.unear.userservice.auth.handler;
 
+import com.unear.userservice.auth.CookieUtil;
+import com.unear.userservice.auth.dto.response.LoginResponseDto;
+import com.unear.userservice.auth.service.AuthService;
+import com.unear.userservice.common.exception.exception.UserNotFoundException;
 import com.unear.userservice.common.jwt.JwtTokenProvider;
 import com.unear.userservice.common.jwt.RefreshTokenService;
+import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
@@ -10,12 +15,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 @Component
@@ -26,6 +33,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
 
+    @Value("${app.frontend.base-url:http://localhost:4000}")
+    private String frontendBaseUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -34,9 +44,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String email = oAuth2User.getAttribute("email");
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("유저 정보 없음"));
+                .orElseThrow(() -> new UserNotFoundException("유저 정보 없음"));
 
-        CustomUser customUser = CustomUser.from(user);
+        CustomUser customUser = new CustomUser(user);
         String accessToken = jwtTokenProvider.generateAccessToken(customUser);
         String refreshToken = jwtTokenProvider.generateRefreshToken(customUser);
 
@@ -47,20 +57,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         cookie.setPath("/");
         response.addCookie(cookie);
 
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        String json = String.format("""
-        {
-            "accessToken": "%s"
-        }
-        """, accessToken);
-        response.getWriter().write(json);
+        String redirectUrl = String.format("%s/login/oauth2/code/google?accessToken=%s",
+                frontendBaseUrl, accessToken);
 
-        log.info("리다이렉트 진입");
-        String redirectUrl = String.format("http://localhost:4000/login/oauth2/code/google?accessToken=%s&refreshToken=%s",
-                accessToken, refreshToken);
-        log.info("리다이렉트 종료");
         response.sendRedirect(redirectUrl);
-
     }
 }
