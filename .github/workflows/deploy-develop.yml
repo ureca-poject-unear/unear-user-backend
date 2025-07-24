@@ -61,4 +61,5 @@ jobs:
             echo "REDIS_HOST=redis" >> .env
 
             docker pull 1seyoung/unear-app:develop
+            docker-compose down app
             docker-compose -f docker-compose.yml up -d app
