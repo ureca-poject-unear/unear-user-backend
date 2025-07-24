@@ -1,4 +1,6 @@
 spring:
+  forward-headers-strategy: framework
+
   config:
     activate:
       on-profile: prod
