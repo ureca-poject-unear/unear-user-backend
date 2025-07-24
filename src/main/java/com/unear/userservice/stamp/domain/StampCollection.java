@@ -12,7 +12,7 @@ public class StampCollection {
     private final List<Stamp> stamps;
 
     public StampCollection(List<Stamp> stamps) {
-        this.stamps = stamps;
+        this.stamps = Objects.requireNonNull(stamps, "stamps는 null일 수 없습니다");
     }
 
     public long countByEventType(EventType eventType) {
