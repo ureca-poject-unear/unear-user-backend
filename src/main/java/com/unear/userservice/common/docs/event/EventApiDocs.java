@@ -1,6 +1,6 @@
 package com.unear.userservice.common.docs.event;
 
-import com.unear.userservice.event.dto.response.EventPlaceResponseDto;
+import com.unear.userservice.event.dto.response.EventDetailResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +24,7 @@ public class EventApiDocs {
             description = "이벤트 정보 조회 성공",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = EventPlaceResponseDto.class),
+                    schema = @Schema(implementation = EventDetailResponseDto.class),
                     examples = {
                             @ExampleObject(
                                     name = "Event Read",
