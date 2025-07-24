@@ -4,6 +4,7 @@ import com.unear.userservice.common.enums.LoginProvider;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -17,6 +18,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -35,6 +37,8 @@ public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if (email == null || email.isEmpty()) {
             throw new OAuth2AuthenticationException("Email not provided by Google");
         }
+
+        log.info("loadUser 지점 ");
 
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> userRepository.save(
