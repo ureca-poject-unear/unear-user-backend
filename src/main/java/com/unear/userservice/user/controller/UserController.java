@@ -1,8 +1,9 @@
-package com.unear.userservice.user;
+package com.unear.userservice.user.controller;
 
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.common.exception.exception.UserNotFoundException;
+import com.unear.userservice.user.dto.response.UserInfoResponseDto;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,15 @@ public class UserController {
         User dbuser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
         return ApiResponse.success(BARCODE_SUCCESS_MESSAGE, dbuser.getBarcodeNumber());
+    }
+
+    @GetMapping("/me")
+    public ApiResponse<UserInfoResponseDto> getMyInfo(@AuthenticationPrincipal CustomUser user) {
+        User dbUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        UserInfoResponseDto dto = UserInfoResponseDto.from(dbUser);
+        return ApiResponse.success("사용자 정보 조회 성공", dto);
     }
 
 
