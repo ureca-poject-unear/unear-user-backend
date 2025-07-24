@@ -88,3 +88,8 @@ springdoc:
     path: /swagger-ui.html
     config-url: /v3/api-docs/swagger-config
     url: /v3/api-docs
+
+logging:
+  level:
+    root: INFO
+    com.unear: INFO
