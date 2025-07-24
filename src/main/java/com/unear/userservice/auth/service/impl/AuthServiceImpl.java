@@ -47,6 +47,8 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다"));
 
+        log.info("일반 로그인 로그");
+
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 올바르지 않습니다.");
         }
