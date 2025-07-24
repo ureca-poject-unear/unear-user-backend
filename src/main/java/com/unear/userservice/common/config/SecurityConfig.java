@@ -61,6 +61,14 @@ public class SecurityConfig {
     }
 
     @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+        return new DelegatingOAuth2UserService<>(List.of(
+                googleOAuth2UserService,
+                kakaoOAuth2UserService
+        ));
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -75,21 +83,13 @@ public class SecurityConfig {
                                 endpoint.authorizationRequestRepository(authorizationRequestRepository())
                         )
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService) // google + kakao 둘 다 지원
+                                .userService(this.oAuth2UserService()) // google + kakao 둘 다 지원
                         )
                         .successHandler(oAuth2SuccessHandler)
                         .failureHandler(oAuth2FailureHandler)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
-
-    @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
-        return new DelegatingOAuth2UserService<>(List.of(
-                googleOAuth2UserService,
-                kakaoOAuth2UserService
-        ));
     }
 
     @Bean

@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Map;
@@ -25,14 +26,20 @@ public class GoogleOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+
+        log.info("loadUser 시작");
+
         OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
         String googleId = (String) attributes.get("sub");
+
+        log.info("email: {}, name: {}, googleId: {}", email, name, googleId);
 
         if (email == null || email.isEmpty()) {
             throw new OAuth2AuthenticationException("Email not provided by Google");
