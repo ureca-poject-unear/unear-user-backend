@@ -37,16 +37,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String accessToken = jwtTokenProvider.generateAccessToken(customUser);
         String refreshToken = jwtTokenProvider.generateRefreshToken(customUser);
 
-        // JSON 응답
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        String json = String.format("""
-        {
-            "accessToken": "%s",
-            "refreshToken": "%s"
-        }
-        """, accessToken, refreshToken);
 
-        response.getWriter().write(json);
+        String redirectUrl = String.format("http://localhost:4000/login/oauth2/code/google?accessToken=%s&refreshToken=%s",
+                accessToken, refreshToken);
+        response.sendRedirect(redirectUrl);
+
     }
 }
