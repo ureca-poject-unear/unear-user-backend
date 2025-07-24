@@ -1,5 +1,6 @@
 package com.unear.userservice.event.controller;
 
+import com.unear.userservice.common.docs.event.EventApiDocs;
 import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.event.dto.response.EventDetailResponseDto;
 import com.unear.userservice.event.service.EventService;
@@ -14,6 +15,7 @@ public class EventController {
 
     private final EventService eventService;
 
+    @EventApiDocs.GetEventDetails
     @GetMapping("/{eventId}")
     public ResponseEntity<ApiResponse<EventDetailResponseDto>> getEventDetail(@PathVariable Long eventId) {
         EventDetailResponseDto dto = eventService.getEventDetail(eventId);
