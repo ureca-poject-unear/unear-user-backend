@@ -1,7 +1,10 @@
 package com.unear.userservice.auth.handler;
 
+import com.unear.userservice.auth.dto.response.LoginResponseDto;
+import com.unear.userservice.auth.service.AuthService;
 import com.unear.userservice.common.jwt.JwtTokenProvider;
 import com.unear.userservice.common.jwt.RefreshTokenService;
+import com.unear.userservice.common.response.ApiResponse;
 import com.unear.userservice.common.security.CustomUser;
 import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
@@ -16,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 @Component
@@ -25,6 +29,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
+    private final AuthService authService;
+
+    @Value("${app.frontend.base-url:http://localhost:4000}")
+    private String frontendBaseUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -34,32 +42,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String email = oAuth2User.getAttribute("email");
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("유저 정보 없음"));
+                .orElseThrow(() -> new RuntimeException("유저 정보 없음")); // usernotfound 로 바꾸기
 
-        CustomUser customUser = CustomUser.from(user);
-        String accessToken = jwtTokenProvider.generateAccessToken(customUser);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(customUser);
+        ApiResponse<LoginResponseDto> loginResponse = authService.oauthLogin(user, response);
+        String accessToken = loginResponse.getData().getAccessToken();
 
-        refreshTokenService.saveRefreshToken(user.getUserId(), refreshToken);
+        String redirectUrl = String.format("%s/login/oauth2/code/google?accessToken=%s",
+                frontendBaseUrl, accessToken);
 
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        String json = String.format("""
-        {
-            "accessToken": "%s"
-        }
-        """, accessToken);
-        response.getWriter().write(json);
-
-        log.info("리다이렉트 진입");
-        String redirectUrl = String.format("http://localhost:4000/login/oauth2/code/google?accessToken=%s&refreshToken=%s",
-                accessToken, refreshToken);
-        log.info("리다이렉트 종료");
         response.sendRedirect(redirectUrl);
 
     }

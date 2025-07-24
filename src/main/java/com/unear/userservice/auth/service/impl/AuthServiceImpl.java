@@ -66,6 +66,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public ApiResponse<LoginResponseDto> oauthLogin(User user, HttpServletResponse response) {
+        CustomUser customUser = new CustomUser(user);
+        String accessToken = jwtTokenProvider.generateAccessToken(customUser);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(customUser);
+
+        refreshTokenService.saveRefreshToken(user.getUserId(), refreshToken);
+
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        LoginResponseDto dto = LoginResponseDto.of(user.getEmail(), accessToken);
+        return ApiResponse.success("로그인 완료", dto);
+    }
+
+
+
+    @Override
     public ApiResponse<RefreshResponseDto> refresh(String refreshToken) {
 
         Long userId = jwtTokenProvider.extractUserId(refreshToken);
@@ -135,6 +154,25 @@ public class AuthServiceImpl implements AuthService {
 
         return ApiResponse.success("회원가입 성공", responseDto);
     }
+
+    public ApiResponse<ProfileUpdateResponseDto> completeOAuthProfile(Long userId, CompleteProfileRequestDto dto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+
+        if (!user.getLoginProvider().equals("GOOGLE")) {
+            throw new InvalidRequestException("OAuth 유저만 가능합니다");
+        }
+
+        user.setTel(dto.getTel());
+        user.setBirthdate(dto.getBirthdate());
+        user.setGender(dto.getGender());
+        user.setIsProfileComplete(true);
+
+        userRepository.save(user);
+
+        return ApiResponse.success("프로필 완성", new ProfileUpdateResponseDto(user));
+    }
+
 
     @Override
     public void resetPassword(ResetPasswordRequestDto request) {

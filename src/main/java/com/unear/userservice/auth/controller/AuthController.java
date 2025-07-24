@@ -87,5 +87,4 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("비밀번호가 성공적으로 재설정되었습니다."));
     }
 
-
 }
