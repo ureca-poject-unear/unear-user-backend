@@ -35,6 +35,7 @@ public class Place {
     private String categoryCode;
     private String markerCode;
     private String eventTypeCode;
+    private String tel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "franchise_id")
