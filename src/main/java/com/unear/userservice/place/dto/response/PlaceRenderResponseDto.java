@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class PlaceRenderResponseDto {
 
     private Long placeId;
+    private String placeName;
     private BigDecimal latitude;
     private BigDecimal longitude;
     private String categoryCode;
@@ -23,6 +24,7 @@ public class PlaceRenderResponseDto {
     public static PlaceRenderResponseDto from(Place place, boolean isFavorite) {
         return PlaceRenderResponseDto.builder()
                 .placeId(place.getPlaceId())
+                .placeName(place.getPlaceName())
                 .latitude(place.getLatitude())
                 .longitude(place.getLongitude())
                 .categoryCode(place.getCategoryCode())
