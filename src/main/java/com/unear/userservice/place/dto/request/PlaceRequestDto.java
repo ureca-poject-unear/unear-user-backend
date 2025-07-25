@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,11 +18,11 @@ public class PlaceRequestDto {
     @Schema(description = "검색어", example = "GS")
     private String keyword;
 
-    @Schema(description = "카테고리 코드", example = "FOOD")
-    private String categoryCode;
+    @Schema(description = "카테고리 코드 리스트", example = "[\"FOOD\", \"LIFE\"]")
+    private List<String> categoryCode;
 
-    @Schema(description = "혜택 카테고리", example = "할인")
-    private String benefitCategory;
+    @Schema(description = "혜택 카테고리 리스트", example = "[\"할인\", \"이벤트\"]")
+    private List<String> benefitCategory;
 
     @Schema(description = "즐겨찾기 여부", example = "true")
     private Boolean isFavorite;
