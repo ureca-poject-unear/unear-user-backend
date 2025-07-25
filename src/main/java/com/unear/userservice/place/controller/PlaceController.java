@@ -32,13 +32,13 @@ public class PlaceController {
 
     @PlaceApiDocs.GetPlace
     @GetMapping("/{placeId}")
-    public ResponseEntity<ApiResponse<PlaceResponseDto>> getPlace(
+    public ResponseEntity<ApiResponse<NearbyPlaceWithCouponsDto>> getPlace(
             @PathVariable Long placeId,
             @Valid @ParameterObject @ModelAttribute NearbyPlaceRequestDto location,
             @AuthenticationPrincipal CustomUser user
     ) {
         Long userId = (user != null && user.getUser() != null) ? user.getUser().getUserId() : null;
-        PlaceResponseDto dto = placeService.getPlaceDetail(placeId, userId, location.getLatitude(), location.getLongitude());
+        NearbyPlaceWithCouponsDto dto = placeService.getPlaceDetail(placeId, userId, location.getLatitude(), location.getLongitude());
         return ResponseEntity.ok(ApiResponse.success("장소 조회 성공",dto));
     }
 

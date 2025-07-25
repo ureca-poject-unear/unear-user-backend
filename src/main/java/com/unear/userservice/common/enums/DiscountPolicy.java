@@ -28,5 +28,26 @@ public enum DiscountPolicy {
                 .findFirst()
                 .orElseThrow(() -> new InvalidCodeException("Invalid DiscountPolicy code: " + code));
     }
+
+    public boolean isMembershipFixed() {
+        return this == MEMBERSHIP_FIXED;
+    }
+
+    public boolean isCouponFixed() {
+        return this == COUPON_FIXED;
+    }
+
+    public boolean isCouponPercent() {
+        return this == COUPON_PERCENT;
+    }
+
+    public boolean isMembershipUnit() {
+        return this == MEMBERSHIP_UNIT;
+    }
+
+    public boolean isCouponFCFS() {
+        return this == COUPON_FCFS;
+    }
+
 }
 

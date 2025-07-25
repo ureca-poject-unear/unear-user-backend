@@ -5,6 +5,7 @@ import com.unear.userservice.stamp.entity.Stamp;
 import com.unear.userservice.common.enums.EventType;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class StampCollection {

@@ -1,6 +1,7 @@
 package com.unear.userservice.benefit.repository;
 
 import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
+import com.unear.userservice.place.entity.Place;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -23,6 +24,7 @@ public interface GeneralDiscountPolicyRepository extends JpaRepository<GeneralDi
     @Query("SELECT p.generalDiscountPolicyId FROM GeneralDiscountPolicy p WHERE p.place.placeId = :placeId")
     List<Long> findPolicyIdsByPlaceId(@Param("placeId") Long placeId);
 
+    List<GeneralDiscountPolicy> findByPlaceIn(List<Place> places);
 }
 
 

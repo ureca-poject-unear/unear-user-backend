@@ -31,28 +31,42 @@ public class PlaceApiDocs {
                                     name = "DefaultFilter",
                                     summary = "사용자의 위도,경도를 기준으로 장소 상세정보 조회",
                                     value = """
-                                            {
-                                                "resultCode": 200,
-                                                "codeName": "SUCCESS",
-                                                "message": "장소 조회 성공",
-                                                "data": {
-                                                    "placeId": 127,
-                                                    "placeName": "파리바게뜨 강서점",
-                                                    "placeDesc": "파리바게뜨 강서점입니다",
-                                                    "address": "서울특별시 강서구 남부순환로 190 (외발산동,외 2필지 (지하 2층))",
-                                                    "latitude": 37.55,
-                                                    "longitude": 126.82,
-                                                    "benefitCategory": "할인",
-                                                    "startTime": 9,
-                                                    "endTime": 20,
-                                                    "categoryCode": "BAKERY",
-                                                    "markerCode": "FRANCHISE",
-                                                    "eventCode": "1",
-                                                    "franchiseName": "파리바게뜨",
-                                                    "distanceKm": 0.9,
-                                                    "favorite": false
+                                    {
+                                        "resultCode": 200,
+                                        "codeName": "SUCCESS",
+                                        "message": "장소 조회 성공",
+                                        "data": {
+                                            "placeId": 132,
+                                            "name": "GS THE FRESH 방화점",
+                                            "address": "서울특별시 강서구 양천로 19, 1층 104호 (방화동, 1동)",
+                                            "categoryCode": "SHOPPING",
+                                            "distanceKm": 3.9,
+                                            "latitude": 37.5800000,
+                                            "longitude": 126.8200000,
+                                            "startTime": 9,
+                                            "endTime": 20,
+                                            "favorite": false,
+                                            "markerCode": "FRANCHISE",
+                                            "eventTypeCode": "NONE",
+                                            "tel": "080-855-5525",
+                                            "discountPolicyDetailId": null,
+                                            "franchiseId": 6,
+                                            "benefitDesc": "3,000원 금액 할인 쿠폰 증정",
+                                            "coupons": [
+                                                {
+                                                    "couponTemplateId": 291,
+                                                    "couponName": "GS THE FRESH VIP 쿠폰",
+                                                    "discountCode": "COUPON_FIXED",
+                                                    "membershipCode": "VIP",
+                                                    "discountInfo": null,
+                                                    "couponStart": "2025-07-01T00:00:00",
+                                                    "couponEnd": "2025-07-31T00:00:00",
+                                                    "userCouponId": null,
+                                                    "downloaded": false
                                                 }
-                                            }
+                                            ]
+                                        }
+                                    }
                 """
                             ),
                             @ExampleObject(
@@ -418,7 +432,7 @@ public class PlaceApiDocs {
     @Operation(
             summary = "가까운장소 및 쿠폰 템플릿 조회",
             description = "사용자의 위도 경도를 기준으로 가까운장소 및 쿠폰 템플릿 조회합니다. 현재 coupon_template이 없는 장소는 coupons가 비어져있는 상태로 반환됩니다. \n"
-            +"downloaded == true 인 쿠폰은 현재 사용자가 다운받은 상태입니다. 쿠폰 상세조회시에는 userCouponId를 사용하면됩니다. "
+            +"downloaded == true 인 쿠폰은 현재 사용자가 다운받은 상태입니다. benefitDesc == null 인 곳은 할인헤택이 따로 존재하지않는 장소입니다"
     )
     @ApiResponse(
             responseCode = "200",
@@ -429,67 +443,134 @@ public class PlaceApiDocs {
                     examples = {
                             @ExampleObject(
                                     name = "DefaultFilter",
-                                    summary = "사용자의 즐겨찾기 장소 목록을 반환",
+                                    summary = "사용자 기준으로 가까운장소 및 쿠폰 템플릿 조회",
                                     value = """
-                                    {
-                                        "resultCode": 200,
-                                        "codeName": "SUCCESS",
-                                        "message": "주변 매장 및 쿠폰 조회 성공",
-                                        "data": [
                                             {
-                                                "placeId": 127,
-                                                "name": "파리바게뜨 강서점",
-                                                "address": "서울특별시 강서구 남부순환로 190 (외발산동,외 2필지 (지하 2층))",
-                                                "categoryCode": "BAKERY",
-                                                "distanceKm": 0.9,
-                                                "coupons": []
-                                            },
-                                            {
-                                                "placeId": 133,
-                                                "name": "GS25 강서희망점",
-                                                "address": "서울특별시 강서구 남부순환로 222, 사무동 (외발산동,서울자동차학원 (지상 1층))",
-                                                "categoryCode": "LIFE",
-                                                "distanceKm": 0.9,
-                                                "coupons": []
-                                            },
-                                            {
-                                                "placeId": 201,
-                                                "name": "파리크라상 공항동점",
-                                                "address": "서울특별시 강서구 오정로 443-83, 지하 1층 (오쇠동, 공항동)",
-                                                "categoryCode": "BAKERY",
-                                                "distanceKm": 1.0,
-                                                "coupons": []
-                                            },
-                                            {
-                                                "placeId": 128,
-                                                "name": "파리바게뜨 성서점",
-                                                "address": "서울특별시 강서구 방화동로 지하 30, 공항시장역(9호선) 지하 1층 (공항동)",
-                                                "categoryCode": "BAKERY",
-                                                "distanceKm": 1.6,
-                                                "coupons": []
-                                            },
-                                            {
-                                                "placeId": 209,
-                                                "name": "미스터피자 화곡시장점",
-                                                "address": "서울특별시 강서구 강서로45길 45, 1층 102호 (화곡동, 3동)",
-                                                "categoryCode": "FOOD",
-                                                "distanceKm": 1.8,
-                                                "coupons": [
+                                                "resultCode": 200,
+                                                "codeName": "SUCCESS",
+                                                "message": "주변 매장 및 쿠폰 조회 성공",
+                                                "data": [
                                                     {
-                                                        "couponTemplateId": 43,
-                                                        "couponName": "미스터피자 VIP 쿠폰",
-                                                        "discountCode": "COUPON_FIXED",
-                                                        "membershipCode": "VIP",
-                                                        "discountInfo": null,
-                                                        "couponStart": "2025-07-01T00:00:00",
-                                                        "couponEnd": "2025-07-31T00:00:00",
-                                                        "userCouponId": 10,
-                                                        "downloaded": true
+                                                        "placeId": 158,
+                                                        "name": "롯데월드 어드벤처 부산",
+                                                        "address": "부산 기장군 기장읍 동부산관광로 42",
+                                                        "categoryCode": "ACTIVITY",
+                                                        "distanceKm": 0.0,
+                                                        "latitude": 35.1900000,
+                                                        "longitude": 129.2100000,
+                                                        "startTime": 9,
+                                                        "endTime": 20,
+                                                        "favorite": false,
+                                                        "markerCode": "BASIC",
+                                                        "eventTypeCode": "NONE",
+                                                        "tel": "1600-2000",
+                                                        "discountPolicyDetailId": 12,
+                                                        "franchiseId": null,
+                                                        "benefitDesc": "25% 할인 쿠폰 증정 (최대 25,000원 할인)",
+                                                        "coupons": [
+                                                            {
+                                                                "couponTemplateId": 54,
+                                                                "couponName": "롯데월드 어드벤처 부산 전용 쿠폰",
+                                                                "discountCode": "COUPON_PERCENT",
+                                                                "membershipCode": "ALL",
+                                                                "discountInfo": null,
+                                                                "couponStart": "2025-07-01T00:00:00",
+                                                                "couponEnd": "2025-07-31T00:00:00",
+                                                                "userCouponId": null,
+                                                                "downloaded": false
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "placeId": 406,
+                                                        "name": "원더빌리지",
+                                                        "address": "경기 고양시 덕양구 고양대로 1955 3층 원더빌리지",
+                                                        "categoryCode": "ACTIVITY",
+                                                        "distanceKm": 4.9,
+                                                        "latitude": 35.1600000,
+                                                        "longitude": 129.1700000,
+                                                        "startTime": 9,
+                                                        "endTime": 20,
+                                                        "favorite": false,
+                                                        "markerCode": "BASIC",
+                                                        "eventTypeCode": "NONE",
+                                                        "tel": "031-5173-3455",
+                                                        "discountPolicyDetailId": null,
+                                                        "franchiseId": null,
+                                                        "benefitDesc": null,
+                                                        "coupons": []
+                                                    },
+                                                    {
+                                                        "placeId": 147,
+                                                        "name": "클럽디 오아시스",
+                                                        "address": "부산 해운대구 달맞이길 30 엘시티",
+                                                        "categoryCode": "ACTIVITY",
+                                                        "distanceKm": 4.9,
+                                                        "latitude": 35.1600000,
+                                                        "longitude": 129.1700000,
+                                                        "startTime": 9,
+                                                        "endTime": 20,
+                                                        "favorite": false,
+                                                        "markerCode": "BASIC",
+                                                        "eventTypeCode": "NONE",
+                                                        "tel": "080-855-5523",
+                                                        "discountPolicyDetailId": 1,
+                                                        "franchiseId": null,
+                                                        "benefitDesc": "10% 할인 쿠폰 증정 (최대 10,000원 할인)",
+                                                        "coupons": [
+                                                            {
+                                                                "couponTemplateId": 52,
+                                                                "couponName": "클럽디 오아시스 전용 쿠폰",
+                                                                "discountCode": "COUPON_PERCENT",
+                                                                "membershipCode": "ALL",
+                                                                "discountInfo": null,
+                                                                "couponStart": "2025-07-01T00:00:00",
+                                                                "couponEnd": "2025-07-31T00:00:00",
+                                                                "userCouponId": null,
+                                                                "downloaded": false
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "placeId": 359,
+                                                        "name": "바다횟집",
+                                                        "address": "부산시 해운대구 구남로41번길 15",
+                                                        "categoryCode": "FOOD",
+                                                        "distanceKm": 5.1,
+                                                        "latitude": 35.1700000,
+                                                        "longitude": 129.1600000,
+                                                        "startTime": 9,
+                                                        "endTime": 20,
+                                                        "favorite": false,
+                                                        "markerCode": "LOCAL",
+                                                        "eventTypeCode": "NONE",
+                                                        "tel": "0507-1346-7177\\n",
+                                                        "discountPolicyDetailId": 70,
+                                                        "franchiseId": null,
+                                                        "benefitDesc": "멤버십 혜택: 1,000원당 100원 할인",
+                                                        "coupons": []
+                                                    },
+                                                    {
+                                                        "placeId": 356,
+                                                        "name": "수산물직판장태화점",
+                                                        "address": "울산 중구 오산4길 15, 1층",
+                                                        "categoryCode": "FOOD",
+                                                        "distanceKm": 5.6,
+                                                        "latitude": 35.1600000,
+                                                        "longitude": 129.1600000,
+                                                        "startTime": 9,
+                                                        "endTime": 20,
+                                                        "favorite": false,
+                                                        "markerCode": "LOCAL",
+                                                        "eventTypeCode": "NONE",
+                                                        "tel": "052-222-8192\\n",
+                                                        "discountPolicyDetailId": 67,
+                                                        "franchiseId": null,
+                                                        "benefitDesc": "멤버십 혜택: 1,000원당 100원 할인",
+                                                        "coupons": []
                                                     }
                                                 ]
                                             }
-                                        ]
-                                    }
                 """
                             )
                     }

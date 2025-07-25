@@ -24,7 +24,7 @@ List<CouponTemplate> findByEventCoupon(
     @Param("discountCode") DiscountPolicy discountPolicy  
 );
 
-@Query("""
+    @Query("""
 SELECT ct FROM CouponTemplate ct
 WHERE (
     ct.markerCode = 'FRANCHISE'
@@ -32,7 +32,7 @@ WHERE (
         SELECT fdp.franchiseDiscountPolicyId
         FROM FranchiseDiscountPolicy fdp
         WHERE fdp.franchise IN :franchises
-          AND fdp.membershipCode = :membershipCode
+          AND (fdp.membershipCode = :membershipCode OR fdp.membershipCode = 'ALL')
     )
 ) OR (
     ct.markerCode != 'FRANCHISE'
@@ -40,15 +40,16 @@ WHERE (
         SELECT gdp.generalDiscountPolicyId
         FROM GeneralDiscountPolicy gdp
         WHERE gdp.place IN :places
-          AND gdp.membershipCode = :membershipCode
+          AND (gdp.membershipCode = :membershipCode OR gdp.membershipCode = 'ALL')
     )
 )
 """)
-List<CouponTemplate> findByPlacesAndMembership(
-    @Param("places") List<Place> places,
-    @Param("franchises") List<Franchise> franchises,
-    @Param("membershipCode") String membershipCode
-);
+    List<CouponTemplate> findByPlacesAndMembership(
+            @Param("places") List<Place> places,
+            @Param("franchises") List<Franchise> franchises,
+            @Param("membershipCode") String membershipCode
+    );
+
 
 
 }

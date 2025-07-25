@@ -172,29 +172,31 @@ public class CouponServiceImpl implements CouponService {
                 .map(uc -> {
                     CouponTemplate template = uc.getCouponTemplate();
                     String markerCode = template != null ? template.getMarkerCode() : null;
+                    Long policyId = (template != null) ? template.getDiscountPolicyDetailId() : null;
 
-                    Long policyId = template.getDiscountPolicyDetailId();
                     GeneralDiscountPolicy generalPolicy = null;
                     FranchiseDiscountPolicy franchisePolicy = null;
                     Franchise franchise = null;
                     Place place = null;
-                    PlaceType placeType = PlaceType.fromCode(markerCode);
 
-                    if (placeType.isFranchise()) {
-                        franchisePolicy = franchiseDiscountPolicyRepository.findById(policyId).orElse(null);
-                        franchise = franchisePolicy != null ? franchisePolicy.getFranchise() : null;
-                    } else {
-                        generalPolicy = generalDiscountPolicyRepository.findById(policyId).orElse(null);
-                        place = generalPolicy != null ? generalPolicy.getPlace() : null;
+                    if (markerCode != null && policyId != null) {
+                        PlaceType placeType = PlaceType.fromCode(markerCode);
+                        if (placeType.isFranchise()) {
+                            franchisePolicy = franchiseDiscountPolicyRepository.findById(policyId).orElse(null);
+                            franchise = franchisePolicy != null ? franchisePolicy.getFranchise() : null;
+                        } else {
+                            generalPolicy = generalDiscountPolicyRepository.findById(policyId).orElse(null);
+                            place = generalPolicy != null ? generalPolicy.getPlace() : null;
+                        }
                     }
 
                     return UserCouponResponseDto.builder()
                             .userCouponId(uc.getUserCouponId())
-                            .couponName(template.getCouponName())
+                            .couponName(template != null ? template.getCouponName() : null)
                             .barcodeNumber(uc.getBarcodeNumber())
                             .couponStatusCode(uc.getCouponStatusCode())
                             .createdAt(uc.getCreatedAt())
-                            .couponEnd(template.getCouponEnd())
+                            .couponEnd(template != null ? template.getCouponEnd() : null)
                             .name(resolveFranchiseName(place, franchise))
                             .imageUrl(franchise != null ? franchise.getImageUrl() : null)
                             .categoryCode(
@@ -208,6 +210,7 @@ public class CouponServiceImpl implements CouponService {
 
         return new UserCouponListResponseDto(dtoList);
     }
+
 
     private String resolveFranchiseName(Place place, Franchise franchise) {
         if (franchise != null) {
