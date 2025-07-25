@@ -1,5 +1,6 @@
 package com.unear.userservice.roulette.service.impl;
 
+import com.unear.userservice.common.exception.ErrorCode;
 import com.unear.userservice.roulette.entity.RouletteResult;
 import com.unear.userservice.event.entity.UnearEvent;
 import com.unear.userservice.event.repository.EventRepository;
@@ -33,7 +34,7 @@ public class RouletteResultServiceImpl implements RouletteResultService {
         UnearEvent event = getEventOrThrow(eventId);
 
         if (isAlreadyParticipated(eventId, user)) {
-            throw new IllegalStateException("이미 룰렛에 참여했습니다.");
+            throw new IllegalStateException(ErrorCode.ROULETTE_ALREADY_PARTICIPATED.getMessage());
         }
 
         RouletteResult result = RouletteResult.builder()
