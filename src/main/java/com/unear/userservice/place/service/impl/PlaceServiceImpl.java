@@ -334,13 +334,18 @@ public class PlaceServiceImpl implements PlaceService {
             }
         }
 
+        Set<Long> favoriteIds = userId != null
+                ? favoritePlaceRepository.findPlaceIdsByUserId(userId)
+                : Set.of();
+
         return projections.stream()
                 .map(p -> {
 
                     Place place = placeMap.get(p.getPlaceId());
                     if (place == null) return null;
 
-                    boolean isFavorite = favoritePlaceRepository.existsByUser_UserIdAndPlace_PlaceIdAndIsFavoritedTrue(userId, place.getPlaceId());
+                    boolean isFavorite = favoriteIds.contains(place.getPlaceId());
+
                     DiscountPolicyRef policyRef = policyRefMap.get(place.getPlaceId());
 
                     String benefitDesc = benefitDescriptionResolver.resolveBenefitDesc(policyRef, membershipCode);
