@@ -22,76 +22,66 @@ public class BenefitDescriptionResolver {
     private final GeneralDiscountPolicyRepository generalDiscountPolicyRepository;
 
     public String resolveBenefitDesc(PlaceServiceImpl.DiscountPolicyRef policyRef, String membershipCode) {
-        NumberFormat numberFormat = NumberFormat.getInstance();
+        if (policyRef == null) return null;
 
-        if (policyRef != null && policyRef.franchiseId() != null) {
+        // 프랜차이즈 정책인 경우
+        if (policyRef.franchiseId() != null) {
             List<FranchiseDiscountPolicy> policies = franchiseDiscountPolicyRepository
                     .findByFranchise_FranchiseId(policyRef.franchiseId());
 
             FranchiseDiscountPolicy matchedPolicy = policies.stream()
-                    .filter(p1 -> p1.getMembershipCode().equalsIgnoreCase(membershipCode))
+                    .filter(p -> p.getMembershipCode().equalsIgnoreCase(membershipCode))
                     .findFirst()
                     .orElse(null);
 
             if (matchedPolicy != null) {
-                Integer percent = matchedPolicy.getDiscountPercent();
-                Integer max = matchedPolicy.getMaxDiscountAmount();
-                Integer fixed = matchedPolicy.getFixedDiscount();
-                Integer unit = matchedPolicy.getUnitBaseAmount();
-
-                if (percent != null && max != null) {
-                    return percent + "% 할인 쿠폰 증정 (최대 " + numberFormat.format(max) + "원 할인)";
-                } else if (percent != null) {
-                    return percent + "% 할인 쿠폰 증정";
-                } else if (fixed != null) {
-                    String discountCode = matchedPolicy.getDiscountCode();
-                    DiscountPolicy discountPolicy = DiscountPolicy.fromCode(discountCode);
-                    if (discountPolicy.isMembershipFixed()) {
-                        return "멤버십 혜택: " + numberFormat.format(fixed) + "원 할인";
-                    } else {
-                        return numberFormat.format(fixed) + "원 금액 할인 쿠폰 증정";
-                    }
-                } else if (unit != null) {
-                    return "멤버십 혜택: 1,000원당 " + numberFormat.format(unit) + "원 할인";
-                } else {
-                    return "기본 멤버십 혜택 제공";
-                }
+                return formatBenefitDescription(
+                        matchedPolicy.getDiscountPercent(),
+                        matchedPolicy.getMaxDiscountAmount(),
+                        matchedPolicy.getFixedDiscount(),
+                        matchedPolicy.getUnitBaseAmount(),
+                        matchedPolicy.getDiscountCode()
+                );
             }
 
-        } else if (policyRef != null && policyRef.discountPolicyDetailId() != null) {
-            GeneralDiscountPolicy policy = generalDiscountPolicyRepository.findById(policyRef.discountPolicyDetailId())
+            // 일반 장소 정책인 경우
+        } else if (policyRef.discountPolicyDetailId() != null) {
+            return generalDiscountPolicyRepository.findById(policyRef.discountPolicyDetailId())
+                    .map(policy -> formatBenefitDescription(
+                            policy.getDiscountPercent(),
+                            policy.getMaxDiscountAmount(),
+                            policy.getFixedDiscount(),
+                            policy.getUnitBaseAmount(),
+                            policy.getDiscountCode()
+                    ))
                     .orElse(null);
-
-            if (policy != null) {
-                Integer percent = policy.getDiscountPercent();
-                Integer max = policy.getMaxDiscountAmount();
-                Integer fixed = policy.getFixedDiscount();
-                Integer unit = policy.getUnitBaseAmount();
-
-                if (percent != null && max != null) {
-                    return percent + "% 할인 쿠폰 증정 (최대 " + numberFormat.format(max) + "원 할인)";
-                } else if (percent != null) {
-                    return percent + "% 할인 쿠폰 증정";
-                } else if (fixed != null) {
-                    String discountCode = policy.getDiscountCode();
-                    DiscountPolicy discountPolicy = DiscountPolicy.fromCode(discountCode);
-                    if (discountPolicy.isMembershipFixed()) {
-                        return "멤버십 혜택: " + numberFormat.format(fixed) + "원 할인";
-                    } else {
-                        return numberFormat.format(fixed) + "원 금액 할인 쿠폰 증정";
-                    }
-                } else if (unit != null) {
-                    return "멤버십 혜택: 1,000원당 " + numberFormat.format(unit) + "원 할인";
-                } else {
-                    return "기본 멤버십 혜택 제공";
-                }
-            }
         }
 
         return null;
     }
 
 
+    private String formatBenefitDescription(Integer percent, Integer max, Integer fixed,
+                                            Integer unit, String discountCode) {
+        NumberFormat numberFormat = NumberFormat.getInstance();
+
+        if (percent != null && max != null) {
+            return percent + "% 할인 쿠폰 증정 (최대 " + numberFormat.format(max) + "원 할인)";
+        } else if (percent != null) {
+            return percent + "% 할인 쿠폰 증정";
+        } else if (fixed != null) {
+            DiscountPolicy discountPolicy = DiscountPolicy.fromCode(discountCode);
+            if (discountPolicy.isMembershipFixed()) {
+                return "멤버십 혜택: " + numberFormat.format(fixed) + "원 할인";
+            } else {
+                return numberFormat.format(fixed) + "원 금액 할인 쿠폰 증정";
+            }
+        } else if (unit != null) {
+            return "멤버십 혜택: 1,000원당 " + numberFormat.format(unit) + "원 할인";
+        } else {
+            return "기본 멤버십 혜택 제공";
+        }
+    }
 
     public List<Long> resolvePlaceIdFromTemplateList(CouponTemplate ct, List<Place> places) {
         PlaceType markerType = PlaceType.fromCode(ct.getMarkerCode());
