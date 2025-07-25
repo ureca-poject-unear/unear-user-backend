@@ -196,6 +196,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User getUserFromAccessToken(String accessToken) {
+        if (accessToken == null || accessToken.trim().isEmpty()) {
+            throw new InvalidTokenException("액세스 토큰이 유효하지 않습니다");
+        }
         Long userId = jwtTokenProvider.extractUserId(accessToken);
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
