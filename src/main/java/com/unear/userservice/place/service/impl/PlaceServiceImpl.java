@@ -24,6 +24,7 @@ import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,7 +32,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 @Service
 @AllArgsConstructor
@@ -46,12 +46,25 @@ public class PlaceServiceImpl implements PlaceService {
     private final GeneralDiscountPolicyRepository generalDiscountPolicyRepository;
     private final BenefitDescriptionResolver benefitDescriptionResolver;
 
+    private List<String> nullIfBlank(List<String> list) {
+        if (list == null) return List.of();
+        return list.stream()
+                .filter(s -> s != null && !s.trim().isEmpty())
+                .toList();
+    }
+
     @Override
     public List<PlaceRenderResponseDto> getFilteredPlaces(PlaceRequestDto requestDto, Long userId) {
+
+        List<String> categoryCode = nullIfBlank(requestDto.getCategoryCode());
+        List<String> benefitCategory = nullIfBlank(requestDto.getBenefitCategory());
+
         List<Place> places = placeRepository.findFilteredPlaces(
                 userId,
-                requestDto.getCategoryCode(),
-                requestDto.getBenefitCategory(),
+                categoryCode,
+                categoryCode.size(),
+                benefitCategory,
+                benefitCategory.size(),
                 requestDto.getIsFavorite(),
                 requestDto.getSouthWestLatitude(),
                 requestDto.getNorthEastLatitude(),
@@ -68,7 +81,6 @@ public class PlaceServiceImpl implements PlaceService {
                 .map(place -> PlaceRenderResponseDto.from(place, favorites.contains(place.getPlaceId())))
                 .toList();
     }
-
 
     @Override
     @org.springframework.transaction.annotation.Transactional(readOnly = true)

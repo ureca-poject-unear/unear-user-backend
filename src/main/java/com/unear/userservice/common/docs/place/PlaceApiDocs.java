@@ -93,7 +93,14 @@ public class PlaceApiDocs {
     @Documented
     @Operation(
             summary = "필터링된 장소 목록 조회",
-            description = "카테고리, 검색어, 좌표 범위 등을 통한 장소 목록을 조회합니다. ( distanceKm는 현재 사용자의 위치와 장소까지의 거리를 의미합니다. 0.9 -> 0.9km )"
+            description = """
+            카테고리, 검색어, 좌표 범위 등을 통한 장소 목록을 조회합니다. <br>
+            distanceKm는 현재 사용자의 위치와 장소까지의 거리를 의미합니다. (예: 0.9 → 0.9km)<br><br>
+            <b>categoryCode</b>: 음식점(FOOD), 카페(CAFE), 베이커리(BAKERY) 등 장소 유형을 지정합니다. <br>
+            여러 값을 동시에 전달하면 OR 조건으로 필터링됩니다. (예: categoryCode=FOOD&categoryCode=BAKERY)<br><br>
+            <b>benefitCategory</b>: 할인, 적립, 이벤트 등 혜택 유형을 기준으로 필터링합니다. <br>
+            여러 값을 함께 넘기면 OR 조건으로 처리됩니다. (예: benefitCategory=할인&benefitCategory=적립)
+            """
     )
     @ApiResponse(
             responseCode = "200",
@@ -106,73 +113,79 @@ public class PlaceApiDocs {
                                     name = "DefaultFilter",
                                     summary = "기본 필터링 조회 예시 ( 화면상의 좌하단,우상단 위도경도만 사용 )",
                                     value = """
+                                    {
+                                        "resultCode": 200,
+                                        "codeName": "SUCCESS",
+                                        "message": "장소 목록 조회 성공",
+                                        "data": [
                                             {
-                                                     "resultCode": 200,
-                                                     "codeName": "SUCCESS",
-                                                     "message": "장소 목록 조회 성공",
-                                                     "data": [
-                                                         {
-                                                             "placeId": 209,
-                                                             "latitude": 37.55,
-                                                             "longitude": 126.83,
-                                                             "categoryCode": "FOOD",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "할인",
-                                                             "favorite": false
-                                                         },
-                                                         {
-                                                             "placeId": 281,
-                                                             "latitude": 37.55,
-                                                             "longitude": 126.83,
-                                                             "categoryCode": "BAKERY",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "적립",
-                                                             "favorite": false
-                                                         },
-                                                         {
-                                                             "placeId": 176,
-                                                             "latitude": 37.56,
-                                                             "longitude": 126.83,
-                                                             "categoryCode": "BEAUTY",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "무료 서비스",
-                                                             "favorite": false
-                                                         },
-                                                         {
-                                                             "placeId": 127,
-                                                             "latitude": 37.55,
-                                                             "longitude": 126.82,
-                                                             "categoryCode": "BAKERY",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "할인",
-                                                             "favorite": false
-                                                         },
-                                                         {
-                                                             "placeId": 133,
-                                                             "latitude": 37.55,
-                                                             "longitude": 126.82,
-                                                             "categoryCode": "LIFE",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "할인",
-                                                             "favorite": false
-                                                         },
-                                                         {
-                                                             "placeId": 122,
-                                                             "latitude": 37.55,
-                                                             "longitude": 126.83,
-                                                             "categoryCode": "FOOD",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "적립",
-                                                             "favorite": true
-                                                         }
-                                                     ]
-                                                 }
+                                                "placeId": 176,
+                                                "placeName": "유앤아이피부과의원 마곡점",
+                                                "latitude": 37.5600000,
+                                                "longitude": 126.8300000,
+                                                "categoryCode": "BEAUTY",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "무료 서비스",
+                                                "favorite": false
+                                            },
+                                            {
+                                                "placeId": 281,
+                                                "placeName": "파리바게뜨 발산역점",
+                                                "latitude": 37.5500000,
+                                                "longitude": 126.8300000,
+                                                "categoryCode": "BAKERY",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "적립",
+                                                "favorite": false
+                                            },
+                                            {
+                                                "placeId": 122,
+                                                "placeName": "GS25 화곡점",
+                                                "latitude": 37.5500000,
+                                                "longitude": 126.8300000,
+                                                "categoryCode": "FOOD",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "적립",
+                                                "favorite": true
+                                            },
+                                            {
+                                                "placeId": 127,
+                                                "placeName": "파리바게뜨 강서점",
+                                                "latitude": 37.5500000,
+                                                "longitude": 126.8200000,
+                                                "categoryCode": "BAKERY",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "할인",
+                                                "favorite": false
+                                            },
+                                            {
+                                                "placeId": 133,
+                                                "placeName": "GS25 강서희망점",
+                                                "latitude": 37.5500000,
+                                                "longitude": 126.8200000,
+                                                "categoryCode": "LIFE",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "할인",
+                                                "favorite": false
+                                            },
+                                            {
+                                                "placeId": 209,
+                                                "placeName": "미스터피자 화곡시장점",
+                                                "latitude": 37.5500000,
+                                                "longitude": 126.8300000,
+                                                "categoryCode": "FOOD",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "할인",
+                                                "favorite": false
+                                            }
+                                        ]
+                                    }
                 """
                             ),
                             @ExampleObject(
@@ -210,35 +223,37 @@ public class PlaceApiDocs {
                             ),
                             @ExampleObject(
                                     name = "CategoryFilter",
-                                    summary = "장소 카테고리 코드기반 필터링 예시",
+                                    summary = "장소 카테고리 코드 & 혜택 카테고리 필터링 예시",
                                     value = """
+                                    {
+                                        "resultCode": 200,
+                                        "codeName": "SUCCESS",
+                                        "message": "장소 목록 조회 성공",
+                                        "data": [
                                             {
-                                                     "resultCode": 200,
-                                                     "codeName": "SUCCESS",
-                                                     "message": "장소 목록 조회 성공",
-                                                     "data": [
-                                                         {
-                                                             "placeId": 209,
-                                                             "latitude": 37.55,
-                                                             "longitude": 126.83,
-                                                             "categoryCode": "FOOD",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "할인",
-                                                             "favorite": false
-                                                         },
-                                                         {
-                                                             "placeId": 122,
-                                                             "latitude": 37.55,
-                                                             "longitude": 126.83,
-                                                             "categoryCode": "FOOD",
-                                                             "markerCode": "FRANCHISE",
-                                                             "eventCode": "NONE",
-                                                             "benefitCategory": "적립",
-                                                             "favorite": true
-                                                         }
-                                                     ]
-                                                 }
+                                                "placeId": 122,
+                                                "placeName": "GS25 화곡점",
+                                                "latitude": 37.5500000,
+                                                "longitude": 126.8300000,
+                                                "categoryCode": "FOOD",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "적립",
+                                                "favorite": true
+                                            },
+                                            {
+                                                "placeId": 209,
+                                                "placeName": "미스터피자 화곡시장점",
+                                                "latitude": 37.5500000,
+                                                "longitude": 126.8300000,
+                                                "categoryCode": "FOOD",
+                                                "markerCode": "FRANCHISE",
+                                                "eventCode": "NONE",
+                                                "benefitCategory": "할인",
+                                                "favorite": false
+                                            }
+                                        ]
+                                    }
                 """
                             ),
                             @ExampleObject(
