@@ -303,7 +303,10 @@ public class PlaceServiceImpl implements PlaceService {
                                         .map(f -> f.getFranchise().getFranchiseId())
                                         .orElse(null);
                             } else {
-                                franchiseId = placeMap.get(placeId).getFranchise().getFranchiseId();
+                                Place place = placeMap.get(placeId);
+                                franchiseId = (place != null && place.getFranchise() != null)
+                                        ? place.getFranchise().getFranchiseId()
+                                        : null;
                             }
 
                             return Map.entry(placeId, new DiscountPolicyRef(placeId, null, franchiseId));
