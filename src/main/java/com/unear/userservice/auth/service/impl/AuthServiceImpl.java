@@ -194,4 +194,10 @@ public class AuthServiceImpl implements AuthService {
         return ApiResponse.success("프로필 완성", ProfileUpdateResponseDto.from(user));
     }
 
+    @Override
+    public User getUserFromAccessToken(String accessToken) {
+        Long userId = jwtTokenProvider.extractUserId(accessToken);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+    }
 }

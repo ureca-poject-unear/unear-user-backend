@@ -29,7 +29,8 @@ public enum ErrorCode {
     COUPON_EXPIRED(HttpStatus.BAD_REQUEST, "COUPON_EXPIRED", "유효 기간이 지난 쿠폰입니다."),
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_USER", "인증되지 않은 사용자입니다."),
     USER_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_COUPON_NOT_FOUND", "다운받은 쿠폰을 찾을 수 없습니다."),
-    EVENT_NOT_FOUND(HttpStatus.NOT_FOUND,"EVENT_NOT_FOUND","이벤트를 찾지 못했습니다.")
+    EVENT_NOT_FOUND(HttpStatus.NOT_FOUND,"EVENT_NOT_FOUND","이벤트를 찾지 못했습니다."),
+    ROULETTE_ALREADY_PARTICIPATED(HttpStatus.BAD_REQUEST, "ROULETTE_ALREADY_PARTICIPATED", "이미 룰렛에 참여하였습니다.")
     ;
 
 
