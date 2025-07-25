@@ -17,26 +17,28 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
     @Query(value = """
         SELECT p.* FROM places p
-        LEFT JOIN favorite_places f 
-          ON f.place_id = p.place_id 
+        LEFT JOIN favorite_places f\s
+          ON f.place_id = p.place_id\s
           AND f.user_id = :userId
-        WHERE (:categoryCode IS NULL OR p.category_code = :categoryCode)
-        AND (:benefitCategory IS NULL OR p.benefit_category = :benefitCategory)
-        AND (
-          :isFavorite IS NULL
-          OR (:isFavorite = TRUE AND f.is_favorited = TRUE)
-          OR (:isFavorite = FALSE AND (f.favorite_place_id IS NULL OR f.is_favorited = FALSE))
-        )
-        AND (:southWestLatitude IS NULL OR p.latitude >= :southWestLatitude)
-        AND (:northEastLatitude IS NULL OR p.latitude <= :northEastLatitude)
-        AND (:southWestLongitude IS NULL OR p.longitude >= :southWestLongitude)
-        AND (:northEastLongitude IS NULL OR p.longitude <= :northEastLongitude)
-    AND (:keyword IS NULL OR p.place_name ILIKE CONCAT('%', :keyword, '%'))
+        WHERE (:categoryCodeSize = 0 OR p.category_code IN (:categoryCode))
+          AND (:benefitCategorySize = 0 OR p.benefit_category IN (:benefitCategory))
+          AND (
+            :isFavorite IS NULL
+            OR (:isFavorite = TRUE AND f.is_favorited = TRUE)
+            OR (:isFavorite = FALSE AND (f.favorite_place_id IS NULL OR f.is_favorited = FALSE))
+          )
+          AND (:southWestLatitude IS NULL OR p.latitude >= :southWestLatitude)
+          AND (:northEastLatitude IS NULL OR p.latitude <= :northEastLatitude)
+          AND (:southWestLongitude IS NULL OR p.longitude >= :southWestLongitude)
+          AND (:northEastLongitude IS NULL OR p.longitude <= :northEastLongitude)
+          AND (:keyword IS NULL OR p.place_name ILIKE ('%' || :keyword || '%'))
     """, nativeQuery = true)
     List<Place> findFilteredPlaces(
             @Param("userId") Long userId,
-            @Param("categoryCode") String categoryCode,
-            @Param("benefitCategory") String benefitCategory,
+            @Param("categoryCode") List<String> categoryCode,
+            @Param("categoryCodeSize") int categoryCodeSize,
+            @Param("benefitCategory") List<String> benefitCategory,
+            @Param("benefitCategorySize") int benefitCategorySize,
             @Param("isFavorite") Boolean isFavorite,
             @Param("southWestLatitude") Double southWestLatitude,
             @Param("northEastLatitude") Double northEastLatitude,
