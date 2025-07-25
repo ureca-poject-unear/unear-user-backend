@@ -12,7 +12,7 @@ import java.util.List;
 public interface PlaceService {
 
     List<PlaceRenderResponseDto> getFilteredPlaces(PlaceRequestDto requestDto, Long userId);
-    PlaceResponseDto getPlaceDetail(Long placeId, Long userId, Double latitude, Double longitude);
+    NearbyPlaceWithCouponsDto getPlaceDetail(Long placeId, Long userId, Double latitude, Double longitude);
     boolean toggleFavorite(Long userId, Long placeId);
     List<PlaceResponseDto> getUserFavoritePlaces(Long userId);
     List<NearestPlaceResponseDto> getNearbyPlaces(NearbyPlaceRequestDto requestDto, Long userId);
