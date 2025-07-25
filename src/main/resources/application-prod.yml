@@ -83,11 +83,11 @@ jwt:
 
 springdoc:
   api-docs:
-    path: /api/app/v3/api-docs
+    path: /v3/api-docs
   swagger-ui:
-    path: /api/app/swagger-ui.html
-    config-url: /api/app/v3/api-docs/swagger-config
-    url: /api/app/v3/api-docs
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
 
 logging:
   level:

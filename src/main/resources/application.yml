@@ -50,11 +50,3 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-
-springdoc:
-  api-docs:
-    path: /api/app/v3/api-docs
-  swagger-ui:
-    path: /api/app/swagger-ui.html
-    config-url: /api/app/v3/api-docs/swagger-config
-    url: /api/app/v3/api-docs
