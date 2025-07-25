@@ -13,4 +13,5 @@ public interface FranchiseDiscountPolicyRepository extends JpaRepository<Franchi
     @Query("SELECT f.franchiseDiscountPolicyId FROM FranchiseDiscountPolicy f WHERE f.franchise.franchiseId = :franchiseId")
     List<Long> findPolicyIdsByFranchiseId(@Param("franchiseId") Long franchiseId);
 
+    List<FranchiseDiscountPolicy> findByFranchise_FranchiseId(Long franchiseId);
 }
