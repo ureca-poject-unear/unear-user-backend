@@ -4,6 +4,7 @@ import com.unear.userservice.benefit.entity.FranchiseDiscountPolicy;
 import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
 import com.unear.userservice.benefit.repository.FranchiseDiscountPolicyRepository;
 import com.unear.userservice.benefit.repository.GeneralDiscountPolicyRepository;
+import com.unear.userservice.common.enums.DiscountPolicy;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.coupon.entity.CouponTemplate;
 import com.unear.userservice.place.entity.Place;
@@ -44,7 +45,8 @@ public class BenefitDescriptionResolver {
                     return percent + "% 할인 쿠폰 증정";
                 } else if (fixed != null) {
                     String discountCode = matchedPolicy.getDiscountCode();
-                    if ("MEMBERSHIP_FIXED".equals(discountCode)) {
+                    DiscountPolicy discountPolicy = DiscountPolicy.fromCode(discountCode);
+                    if (discountPolicy.isMembershipFixed()) {
                         return "멤버십 혜택: " + numberFormat.format(fixed) + "원 할인";
                     } else {
                         return numberFormat.format(fixed) + "원 금액 할인 쿠폰 증정";
@@ -72,7 +74,8 @@ public class BenefitDescriptionResolver {
                     return percent + "% 할인 쿠폰 증정";
                 } else if (fixed != null) {
                     String discountCode = policy.getDiscountCode();
-                    if ("MEMBERSHIP_FIXED".equals(discountCode)) {
+                    DiscountPolicy discountPolicy = DiscountPolicy.fromCode(discountCode);
+                    if (discountPolicy.isMembershipFixed()) {
                         return "멤버십 혜택: " + numberFormat.format(fixed) + "원 할인";
                     } else {
                         return numberFormat.format(fixed) + "원 금액 할인 쿠폰 증정";
