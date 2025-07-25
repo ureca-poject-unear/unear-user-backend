@@ -24,9 +24,9 @@ public class DiscountPolicyController {
     private final DiscountPolicyService discountPolicyService;
 
     @BenefitApiDocs.GetGeneralDiscountPolicyDetail
-    @GetMapping("/{id}")
+    @GetMapping("/{discount_policy_detail_id}")
     public ResponseEntity<ApiResponse<GeneralDiscountPolicyDetailResponseDto>> getDiscountPolicyDetail(
-            @PathVariable("id") Long discountPolicyDetailId
+            @PathVariable("discount_policy_detail_id") Long discountPolicyDetailId
     ) {
         GeneralDiscountPolicyDetailResponseDto response = discountPolicyService.getDiscountPolicyDetail(discountPolicyDetailId);
         return ResponseEntity.ok(ApiResponse.success("혜택 상세 조회 성공", response));
@@ -42,9 +42,9 @@ public class DiscountPolicyController {
     }
 
     @BenefitApiDocs.GetFranchiseDiscountPolicyDetail
-    @GetMapping("/franchise/{id}")
+    @GetMapping("/franchise/{franchise_id}")
     public ResponseEntity<ApiResponse<FranchiseDiscountPolicyDetailResponseDto>> getFranchiseDiscountPolicyDetail(
-            @PathVariable("id") Long franchiseId
+            @PathVariable("franchise_id") Long franchiseId
     ) {
         FranchiseDiscountPolicyDetailResponseDto response = discountPolicyService.getFranchiseDiscountPolicyDetail(franchiseId);
         return ResponseEntity.ok(ApiResponse.success("프랜차이즈 혜택 상세 조회 성공", response));
