@@ -28,6 +28,6 @@ public class UserServiceImpl implements UserService {
     public String getMembershipBarcode(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-        return user.getBarcodeNumber(); // 필드명이 다르면 여기에 맞게 수정
+        return user.getBarcodeNumber();
     }
 }
