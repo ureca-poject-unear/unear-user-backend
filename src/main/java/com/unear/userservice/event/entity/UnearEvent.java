@@ -1,8 +1,8 @@
 package com.unear.userservice.event.entity;
 
-import com.unear.userservice.benefit.entity.RouletteResult;
 import com.unear.userservice.coupon.entity.CouponTemplate;
 import com.unear.userservice.place.entity.EventPlace;
+import com.unear.userservice.roulette.entity.RouletteResult;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -29,4 +29,6 @@ public interface AuthService {
     void resetPassword(ResetPasswordRequestDto request);
 
     ApiResponse<ProfileUpdateResponseDto> completeOAuthProfile(Long userId, @Valid CompleteProfileRequestDto request);
+
+    User getUserFromAccessToken(String accessToken);
 }

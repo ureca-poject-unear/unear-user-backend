@@ -1,9 +1,9 @@
 package com.unear.userservice.user.entity;
 
-import com.unear.userservice.benefit.entity.RouletteResult;
 import com.unear.userservice.common.enums.LoginProvider;
 import com.unear.userservice.coupon.entity.UserCoupon;
 import com.unear.userservice.place.entity.FavoritePlace;
+import com.unear.userservice.roulette.entity.RouletteResult;
 import com.unear.userservice.stamp.entity.Stamp;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

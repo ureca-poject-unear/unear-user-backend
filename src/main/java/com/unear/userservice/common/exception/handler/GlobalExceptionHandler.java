@@ -57,4 +57,11 @@ public class GlobalExceptionHandler {
         log.error("Unexpected error at {}: {}", request.getRequestURI(), e.getMessage(), e);
         return ResponseEntity.ok(ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR));
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<Void>> handleIllegalState(IllegalStateException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.fail(ErrorCode.ROULETTE_ALREADY_PARTICIPATED));
+    }
 }
