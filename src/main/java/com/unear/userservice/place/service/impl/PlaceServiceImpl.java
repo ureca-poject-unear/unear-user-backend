@@ -1,10 +1,8 @@
 package com.unear.userservice.place.service.impl;
 
-import com.unear.userservice.benefit.entity.FranchiseDiscountPolicy;
 import com.unear.userservice.benefit.entity.GeneralDiscountPolicy;
 import com.unear.userservice.benefit.repository.FranchiseDiscountPolicyRepository;
 import com.unear.userservice.benefit.repository.GeneralDiscountPolicyRepository;
-import com.unear.userservice.common.enums.DiscountPolicy;
 import com.unear.userservice.common.enums.PlaceType;
 import com.unear.userservice.common.exception.exception.PlaceNotFoundException;
 import com.unear.userservice.common.exception.exception.UserNotFoundException;
@@ -26,17 +24,14 @@ import com.unear.userservice.user.entity.User;
 import com.unear.userservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.unear.userservice.common.enums.DiscountPolicy.*;
 
 @Service
 @AllArgsConstructor
@@ -97,7 +92,10 @@ public class PlaceServiceImpl implements PlaceService {
         List<Place> singlePlaceList = List.of(place);
         List<Franchise> franchises = place.getFranchise() != null ? List.of(place.getFranchise()) : List.of();
 
-        List<UserCoupon> userCoupons = userCouponRepository.findByUser_UserId(userId);
+        List<UserCoupon> userCoupons = userId != null
+                ? userCouponRepository.findByUser_UserId(userId)
+                : List.of();
+
         Map<Long, Long> templateToUserCouponId = userCoupons.stream()
                 .filter(uc -> uc.getCouponTemplate() != null)
                 .collect(Collectors.toMap(
@@ -105,9 +103,11 @@ public class PlaceServiceImpl implements PlaceService {
                         UserCoupon::getUserCouponId
                 ));
 
-        String membershipCode = userRepository.findById(userId)
+        String membershipCode = userId != null
+                ? userRepository.findById(userId)
                 .map(User::getMembershipCode)
-                .orElse(null);
+                .orElse(null)
+                : null;
 
         List<CouponTemplate> templates = couponTemplateRepository.findByPlacesAndMembership(
                 singlePlaceList, franchises, membershipCode);
