@@ -18,10 +18,19 @@ public class PlaceRequestDto {
     @Schema(description = "검색어", example = "GS")
     private String keyword;
 
-    @Schema(description = "카테고리 코드 리스트", example = "[\"FOOD\", \"LIFE\"]")
+
+    @Schema(
+            description = "카테고리 코드 리스트 (쿼리에서 ?categoryCode=FOOD&categoryCode=LIFE)",
+            example = "[\"FOOD\", \"LIFE\"]",
+            type = "array"
+    )
     private List<String> categoryCode;
 
-    @Schema(description = "혜택 카테고리 리스트", example = "[\"할인\", \"이벤트\"]")
+    @Schema(
+            description = "혜택 카테고리 리스트 (쿼리에서 ?benefitCategory=할인&benefitCategory=이벤트)",
+            example = "[\"할인\", \"이벤트\"]",
+            type = "array"
+    )
     private List<String> benefitCategory;
 
     @Schema(description = "즐겨찾기 여부", example = "true")
