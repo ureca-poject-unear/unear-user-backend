@@ -34,7 +34,7 @@ public class RouletteResultServiceImpl implements RouletteResultService {
         UnearEvent event = getEventOrThrow(eventId);
 
         if (isAlreadyParticipated(eventId, user)) {
-            throw new IllegalStateException(ErrorCode.ROULETTE_ALREADY_PARTICIPATED.getMessage());
+            throw new IllegalStateException("이미 룰렛에 참여했습니다.");
         }
 
         RouletteResult result = RouletteResult.builder()
@@ -58,6 +58,6 @@ public class RouletteResultServiceImpl implements RouletteResultService {
 
     private UnearEvent getEventOrThrow(Long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorCode.EVENT_NOT_FOUND.getMessage()));
     }
 }
