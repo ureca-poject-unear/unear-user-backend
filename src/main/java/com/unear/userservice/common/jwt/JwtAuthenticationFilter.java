@@ -52,27 +52,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 토큰이 유효하고 SecurityContext에 인증 정보가 없는 경우
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            try {
-                CustomUser userDetails = userDetailsService.loadUserByUserId(userId);
 
-                if (jwtTokenProvider.validateToken(token, userDetails)) {
+            CustomUser userDetails = userDetailsService.loadUserByUserId(userId);
 
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails,
-                                    null,
-                                    userDetails.getAuthorities()
-                            );
+            if (jwtTokenProvider.validateToken(token, userDetails)) {
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
 
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    log.debug("JWT 인증 성공: {}", userId);
-                }
+                SecurityContextHolder.getContext().setAuthentication(authToken);
 
-            } catch (Exception e) {
-                log.error("JWT 인증 처리 중 오류: {}", e.getMessage());
+                log.debug("JWT 인증 성공: {}", userId);
             }
         }
 
