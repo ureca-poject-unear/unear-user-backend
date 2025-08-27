@@ -93,7 +93,6 @@ unear-infra/
 
 ### 9.관리자 대시보드 연동
 - 행동 로그 요약(user_action_summary) 기반 통계 제공
-- 쿠폰/장소/이벤트 관리 기능과 연동 예정
 
 
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/ureca-poject-unear/unear-admin-backend?utm_source=oss&utm_medium=github&utm_campaign=ureca-poject-unear%2Funear-admin-backend&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
